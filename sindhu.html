@@ -189,6 +189,8 @@ button{cursor:pointer;border:none;background:none;font:inherit;}
 
 /* Rising animation */
 @keyframes ldRise{from{opacity:0;transform:translateY(18px) scale(.95);}to{opacity:1;transform:none;}}
+/* ldUp = alias for hero section inline animations */
+@keyframes ldUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
 @keyframes ldFade{from{opacity:0;}to{opacity:1;}}
 
 /* ═══════════════════════════════════════════════
@@ -338,18 +340,31 @@ button{cursor:pointer;border:none;background:none;font:inherit;}
 
 /* Countdown row */
 .cd-row{
-  display:flex;align-items:center;justify-content:center;gap:clamp(12px,3vw,28px);
-  padding:22px 28px;background:var(--white);border-radius:16px;
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
+  gap:clamp(8px,2vw,20px);
+  padding:18px 20px;background:var(--white);border-radius:16px;
   box-shadow:0 3px 16px rgba(44,31,24,.07);
-  max-width:460px;margin:0 auto;
+  max-width:400px;margin:0 auto;
 }
-.cd-unit{text-align:center;}
+.cd-unit{text-align:center;min-width:48px;}
 .cd-num{
-  font-family:'Playfair Display',serif;font-size:clamp(1.8rem,5vw,2.8rem);font-weight:700;
+  font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4vw,2.4rem);font-weight:700;
   color:var(--acc-mid);line-height:1;display:block;
 }
-.cd-lbl{font-family:'Cinzel',serif;font-size:.48rem;font-weight:300;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-4);margin-top:3px;}
-.cd-sep{font-size:1.8rem;color:var(--acc-pale);font-weight:300;margin-bottom:14px;}
+.cd-lbl{font-family:'Cinzel',serif;font-size:.44rem;font-weight:300;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-4);margin-top:3px;}
+.cd-sep{font-size:1.4rem;color:var(--acc-pale);font-weight:300;margin-bottom:10px;line-height:1;}
+
+/* Waiting page countdown — inline within card */
+.wec-countdown{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:6px;margin-top:8px;
+}
+.wcc-unit{text-align:center;background:var(--acc-pale);border-radius:8px;padding:8px 4px;}
+.wcc-num{
+  font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.5vw,1.6rem);font-weight:700;
+  color:var(--acc-mid);line-height:1;display:block;
+}
+.wcc-lbl{font-size:.42rem;font-weight:400;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-4);margin-top:2px;}
 
 /* Back nav pill */
 .year-nav{
@@ -1163,6 +1178,10 @@ const state = {
 /* ══════════════════════════════════════════════════════
    DETERMINE WHICH PAGE TO SHOW
 ══════════════════════════════════════════════════════ */
+
+// Minimum year a user can navigate back to (age 30 = year 2024, first year with custom content)
+const BDAY_MIN_YEAR  = BDAY.birthYear + 30;  // 2024
+const ANNIV_MIN_YEAR = ANNIV.startYear + 1;  // 2024
 function detectPage() {
   if (isToday(BDAY.month, BDAY.day)) {
     state.page = 'birthday';
@@ -1189,9 +1208,9 @@ function renderWaiting() {
   });
   startAnim('petals', ['#F0C8CC','#DDB890','#F8D8DC','#E8C8A0']);
 
-  // Build past events list for memory section
+  // Build past events list — birthday from age 30 (2024) onward; anniversary from year 1
   const memoryItems = [];
-  for(let yr=BDAY.birthYear+1; yr<=lastBdayYear; yr++){
+  for(let yr=BDAY_MIN_YEAR; yr<=lastBdayYear; yr++){
     const age = yr-BDAY.birthYear;
     const t = getBdayTheme(age);
     memoryItems.push(`<div class="memory-card" onclick="openMemory('birthday',${yr})">
@@ -1200,7 +1219,7 @@ function renderWaiting() {
       <div class="mc-label">${t.name.split('—')[0].trim() || ('Age '+age)}</div>
     </div>`);
   }
-  for(let yr=ANNIV.startYear+1; yr<=lastAnnivYear; yr++){
+  for(let yr=ANNIV_MIN_YEAR; yr<=lastAnnivYear; yr++){
     const yrs=yr-ANNIV.startYear;
     const t=getAnnivTheme(yrs);
     memoryItems.push(`<div class="memory-card" onclick="openMemory('anniversary',${yr})">
@@ -1244,14 +1263,11 @@ function renderWaiting() {
             <div class="wec-label">Birthday</div>
             <div class="wec-name">Sindhu's Birthday</div>
             <div class="wec-date">September 25th</div>
-            <div class="cd-row" style="padding:14px 0;box-shadow:none;background:transparent;max-width:100%;justify-content:flex-start;gap:16px;">
-              <div class="cd-unit"><span class="cd-num" id="bd-d">--</span><div class="cd-lbl">Days</div></div>
-              <span class="cd-sep">:</span>
-              <div class="cd-unit"><span class="cd-num" id="bd-h">--</span><div class="cd-lbl">Hrs</div></div>
-              <span class="cd-sep">:</span>
-              <div class="cd-unit"><span class="cd-num" id="bd-m">--</span><div class="cd-lbl">Min</div></div>
-              <span class="cd-sep">:</span>
-              <div class="cd-unit"><span class="cd-num" id="bd-s">--</span><div class="cd-lbl">Sec</div></div>
+            <div class="wec-countdown">
+              <div class="wcc-unit"><span class="wcc-num" id="bd-d">--</span><div class="wcc-lbl">Days</div></div>
+              <div class="wcc-unit"><span class="wcc-num" id="bd-h">--</span><div class="wcc-lbl">Hrs</div></div>
+              <div class="wcc-unit"><span class="wcc-num" id="bd-m">--</span><div class="wcc-lbl">Min</div></div>
+              <div class="wcc-unit"><span class="wcc-num" id="bd-s">--</span><div class="wcc-lbl">Sec</div></div>
             </div>
           </div>
           <div class="wait-ev-card" style="--ev-stripe:linear-gradient(90deg,#C09A52,#C07880)">
@@ -1259,14 +1275,11 @@ function renderWaiting() {
             <div class="wec-label">Anniversary</div>
             <div class="wec-name">Wedding Anniversary</div>
             <div class="wec-date">November 19th</div>
-            <div class="cd-row" style="padding:14px 0;box-shadow:none;background:transparent;max-width:100%;justify-content:flex-start;gap:16px;">
-              <div class="cd-unit"><span class="cd-num" id="an-d">--</span><div class="cd-lbl">Days</div></div>
-              <span class="cd-sep">:</span>
-              <div class="cd-unit"><span class="cd-num" id="an-h">--</span><div class="cd-lbl">Hrs</div></div>
-              <span class="cd-sep">:</span>
-              <div class="cd-unit"><span class="cd-num" id="an-m">--</span><div class="cd-lbl">Min</div></div>
-              <span class="cd-sep">:</span>
-              <div class="cd-unit"><span class="cd-num" id="an-s">--</span><div class="cd-lbl">Sec</div></div>
+            <div class="wec-countdown">
+              <div class="wcc-unit"><span class="wcc-num" id="an-d">--</span><div class="wcc-lbl">Days</div></div>
+              <div class="wcc-unit"><span class="wcc-num" id="an-h">--</span><div class="wcc-lbl">Hrs</div></div>
+              <div class="wcc-unit"><span class="wcc-num" id="an-m">--</span><div class="wcc-lbl">Min</div></div>
+              <div class="wcc-unit"><span class="wcc-num" id="an-s">--</span><div class="wcc-lbl">Sec</div></div>
             </div>
           </div>
         </div>
