@@ -36,46 +36,191 @@
 /* ── RESET ── */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{font-size:16px;scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
-body{font-family:'Lato',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;overflow-x:hidden;}
+body{font-family:'Lato',sans-serif;background:#FBF8F2;color:var(--ink);min-height:100vh;overflow-x:hidden;}
 a{color:inherit;text-decoration:none;}
 button{cursor:pointer;border:none;background:none;font:inherit;}
 
 /* ═══════════════════════════════════════════════
-   LOADER
+   LOADER  — full immersive cover
 ═══════════════════════════════════════════════ */
 #loader{
-  position:fixed;inset:0;z-index:9999;background:var(--bg);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;
-  transition:opacity .8s var(--ease),visibility .8s var(--ease);
+  position:fixed;inset:0;z-index:9999;
+  /* Hard-coded — never flickers regardless of CSS variable state */
+  background:#FBF8F2;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:0;
+  /* Smooth exit */
+  transition:opacity 1s cubic-bezier(.4,0,.2,1), visibility 1s cubic-bezier(.4,0,.2,1);
 }
 #loader.out{opacity:0;visibility:hidden;pointer-events:none;}
-.ld-svg{opacity:0;animation:ldUp .9s var(--spring) forwards .15s;}
-.ld-name{
-  font-family:'Great Vibes',cursive;font-size:clamp(2.2rem,6vw,3.2rem);
-  color:var(--acc-mid);
-  opacity:0;animation:ldUp .8s var(--ease) forwards .55s;
-  filter:drop-shadow(0 2px 12px rgba(192,120,128,.25));
+
+/* Decorative corner lines on loader */
+#loader::before,#loader::after{
+  content:'';position:absolute;
+  width:clamp(80px,15vw,140px);height:clamp(80px,15vw,140px);
+  border-color:rgba(192,120,128,.18);border-style:solid;
 }
-.ld-bar-wrap{width:160px;height:2px;background:var(--bg3);border-radius:2px;overflow:hidden;opacity:0;animation:ldFade .4s ease forwards .9s;}
-.ld-bar{height:100%;width:0;border-radius:2px;background:linear-gradient(90deg,var(--acc-mid),var(--gold));animation:ldFill 1.2s var(--ease) forwards 1s;}
-.ld-caption{font-size:.65rem;font-weight:300;letter-spacing:.45em;text-transform:uppercase;color:var(--ink-4);opacity:0;animation:ldFade .4s ease forwards 1s;}
-@keyframes ldUp{from{opacity:0;transform:translateY(14px) scale(.95);}to{opacity:1;transform:none;}}
+#loader::before{top:24px;left:24px;border-width:1px 0 0 1px;}
+#loader::after{bottom:24px;right:24px;border-width:0 1px 1px 0;}
+
+/* Inner corner (pseudo on a child) */
+.ld-corner-tr,.ld-corner-bl{
+  position:absolute;
+  width:clamp(80px,15vw,140px);height:clamp(80px,15vw,140px);
+  border-color:rgba(192,120,128,.12);border-style:solid;
+}
+.ld-corner-tr{top:24px;right:24px;border-width:1px 1px 0 0;}
+.ld-corner-bl{bottom:24px;left:24px;border-width:0 0 1px 1px;}
+
+/* Animated background petals inside loader */
+.ld-petal{
+  position:absolute;pointer-events:none;opacity:0;
+  animation:ldPetalDrift linear infinite;
+}
+@keyframes ldPetalDrift{
+  0%  {opacity:0;transform:translateY(-40px) rotate(0deg) translateX(0);}
+  8%  {opacity:.35;}
+  92% {opacity:.15;}
+  100%{opacity:0;transform:translateY(105vh) rotate(600deg) translateX(60px);}
+}
+
+/* Central logo mark */
+.ld-logo-wrap{
+  margin-bottom:28px;position:relative;
+  opacity:0;animation:ldRise 1s var(--spring) forwards .1s;
+}
+
+/* Outer rotating ring */
+.ld-ring-outer{
+  position:absolute;inset:-14px;border-radius:50%;
+  border:1px solid transparent;
+  border-top-color:rgba(192,154,82,.4);
+  border-right-color:rgba(192,154,82,.2);
+  animation:ldSpin 6s linear infinite;
+}
+/* Inner counter ring */
+.ld-ring-inner{
+  position:absolute;inset:-7px;border-radius:50%;
+  border:1px dashed rgba(192,120,128,.25);
+  animation:ldSpin 9s linear infinite reverse;
+}
+@keyframes ldSpin{to{transform:rotate(360deg);}}
+
+/* SVG heart logo */
+.ld-heart-svg{display:block;filter:drop-shadow(0 4px 24px rgba(192,120,128,.22));}
+.ld-heart-draw{
+  stroke-dasharray:160;stroke-dashoffset:160;
+  animation:ldDraw 1.8s cubic-bezier(.4,0,.2,1) forwards .4s;
+}
+.ld-heart-fill{
+  opacity:0;animation:ldFillHeart 1s ease forwards 1.6s;
+}
+@keyframes ldDraw{to{stroke-dashoffset:0;}}
+@keyframes ldFillHeart{from{opacity:0;}to{opacity:1;}}
+
+/* Orbiting dot */
+.ld-orbit{
+  position:absolute;inset:-20px;
+  animation:ldSpin 3s linear infinite;
+}
+.ld-orbit-dot{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:5px;height:5px;border-radius:50%;
+  background:var(--gold,#C09A52);
+  opacity:0;animation:ldFade .3s ease forwards 1.8s;
+  box-shadow:0 0 6px rgba(192,154,82,.5);
+}
+
+/* Name text */
+.ld-name{
+  font-family:'Great Vibes',cursive;
+  font-size:clamp(2.8rem,8vw,4.2rem);
+  color:#C07880;line-height:1;
+  filter:drop-shadow(0 2px 16px rgba(192,120,128,.2));
+  margin-bottom:6px;
+  opacity:0;animation:ldRise .9s ease forwards .8s;
+  letter-spacing:.02em;
+}
+.ld-tagline{
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
+  font-size:clamp(.85rem,2.5vw,1.05rem);
+  color:#9A7A6A;letter-spacing:.08em;
+  margin-bottom:36px;
+  opacity:0;animation:ldFade .7s ease forwards 1.2s;
+}
+
+/* Progress track */
+.ld-progress-wrap{
+  width:min(220px,55vw);
+  opacity:0;animation:ldFade .5s ease forwards 1.3s;
+  margin-bottom:14px;
+}
+.ld-progress-track{
+  width:100%;height:1px;
+  background:rgba(192,120,128,.15);
+  border-radius:2px;overflow:hidden;position:relative;
+}
+.ld-progress-fill{
+  height:100%;width:0;border-radius:2px;
+  background:linear-gradient(90deg,#C07880,#C09A52,#C07880);
+  background-size:200% 100%;
+  animation:ldFillBar 1.6s cubic-bezier(.4,0,.2,1) forwards 1.4s,
+            ldShimmer 2s linear infinite 1.4s;
+}
+@keyframes ldFillBar{from{width:0;}to{width:100%;}}
+@keyframes ldShimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+
+/* Caption dots */
+.ld-caption{
+  font-family:'Cinzel',serif;font-size:.55rem;font-weight:300;
+  letter-spacing:.55em;text-transform:uppercase;
+  color:rgba(154,122,106,.6);
+  display:flex;align-items:center;gap:8px;
+  opacity:0;animation:ldFade .5s ease forwards 1.5s;
+}
+.ld-caption-dot{
+  width:3px;height:3px;border-radius:50%;
+  background:rgba(192,120,128,.4);
+  animation:ldDotPulse 1.4s ease-in-out infinite alternate;
+}
+.ld-caption-dot:nth-child(2){animation-delay:.2s;}
+.ld-caption-dot:nth-child(4){animation-delay:.4s;}
+@keyframes ldDotPulse{from{opacity:.2;transform:scale(.7);}to{opacity:1;transform:scale(1.3);}}
+
+/* Rising animation */
+@keyframes ldRise{from{opacity:0;transform:translateY(18px) scale(.95);}to{opacity:1;transform:none;}}
 @keyframes ldFade{from{opacity:0;}to{opacity:1;}}
-@keyframes ldFill{from{width:0;}to{width:100%;}}
 
 /* ═══════════════════════════════════════════════
-   FIXED LAYERS
+   FIXED LAYERS — start invisible, fade in after loader exits
 ═══════════════════════════════════════════════ */
-.bg-base{position:fixed;inset:0;z-index:0;transition:background 1.2s var(--ease);}
-.bg-noise{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.022;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px 180px;}
+.bg-base{
+  position:fixed;inset:0;z-index:0;
+  transition:background 1.2s var(--ease), opacity .6s ease;
+  opacity:0;
+}
+.bg-base.in{opacity:1;}
+
+.bg-noise{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  opacity:0;transition:opacity .8s ease;
+}
+.bg-noise.in{opacity:.022;}
+.bg-noise-svg{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px 180px;}
+
 #fx-canvas{position:fixed;inset:0;z-index:1;pointer-events:none;}
 #petal-layer{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
 #shape-layer{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
 
 /* ═══════════════════════════════════════════════
-   APP + PAGE TRANSITIONS
+   APP — hidden until loader exits
 ═══════════════════════════════════════════════ */
-#app{position:relative;z-index:10;}
+#app{
+  position:relative;z-index:10;
+  opacity:0;transition:opacity .7s ease;
+}
+#app.in{opacity:1;}
+
 .page-enter{animation:pageIn .9s var(--ease) forwards;}
 @keyframes pageIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
 
@@ -332,38 +477,90 @@ button{cursor:pointer;border:none;background:none;font:inherit;}
 
 <!-- ════════ LOADER ════════ -->
 <div id="loader">
-  <div class="ld-svg">
-    <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-      <circle cx="40" cy="40" r="37" stroke="#F0D8D4" stroke-width="1" stroke-dasharray="5 7" opacity=".7"/>
-      <circle cx="40" cy="40" r="30" stroke="#F0D8D4" stroke-width=".5" opacity=".4"/>
-      <path d="M40 60 C40 60 18 46 18 30 C18 22 24 16 32 16 C36.5 16 39.5 18.5 40 22 C40.5 18.5 43.5 16 48 16 C56 16 62 22 62 30 C62 46 40 60 40 60 Z"
-        fill="url(#lg)" opacity=".9"
-        stroke-dasharray="140" stroke-dashoffset="140" stroke="none"/>
-      <path d="M40 56 C40 56 20 44 20 30 C20 23 25.5 18 32 18 C36 18 39 20 40 23 C41 20 44 18 48 18 C54.5 18 60 23 60 30 C60 44 40 56 40 56 Z"
-        fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1"
-        stroke-dasharray="120" stroke-dashoffset="120"
-        style="animation:drawPath 1.4s ease forwards .6s"/>
-      <circle cx="40" cy="10" r="2.5" fill="#C09A52" opacity=".5"/>
-      <circle cx="40" cy="70" r="2.5" fill="#C09A52" opacity=".5"/>
-      <path d="M40 4 L42 8 L40 12 L38 8 Z" fill="#C09A52" opacity=".35"/>
+
+  <!-- Decorative corners (CSS pseudo handles top-left & bottom-right) -->
+  <div class="ld-corner-tr" aria-hidden="true"></div>
+  <div class="ld-corner-bl" aria-hidden="true"></div>
+
+  <!-- Floating petals inside the loader -->
+  <div id="ld-petals" aria-hidden="true"></div>
+
+  <!-- Central logo -->
+  <div class="ld-logo-wrap" role="img" aria-label="Sindhu — heart logo">
+    <!-- Orbiting rings -->
+    <div class="ld-ring-outer"></div>
+    <div class="ld-ring-inner"></div>
+    <!-- Orbiting gold dot -->
+    <div class="ld-orbit"><div class="ld-orbit-dot"></div></div>
+
+    <!-- Heart SVG -->
+    <svg class="ld-heart-svg" width="92" height="92" viewBox="0 0 92 92" fill="none">
+      <!-- Decorative dashed outer circle -->
+      <circle cx="46" cy="46" r="43" stroke="#F0D0D4" stroke-width=".8"
+        stroke-dasharray="3 8" opacity=".5"/>
+      <!-- Filled heart (fades in after draw) -->
+      <path class="ld-heart-fill"
+        d="M46 70 C46 70 20 54 20 34 C20 25 26.5 18 35 18 C40 18 44 21 46 25 C48 21 52 18 57 18 C65.5 18 72 25 72 34 C72 54 46 70 46 70Z"
+        fill="url(#ldGrad)"/>
+      <!-- Stroke draw animation -->
+      <path class="ld-heart-draw"
+        d="M46 70 C46 70 20 54 20 34 C20 25 26.5 18 35 18 C40 18 44 21 46 25 C48 21 52 18 57 18 C65.5 18 72 25 72 34 C72 54 46 70 46 70Z"
+        fill="none" stroke="url(#ldStroke)" stroke-width="1.5"
+        stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Inner highlight arch -->
+      <path d="M35 30 Q46 23 57 30"
+        fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1"
+        stroke-linecap="round"
+        stroke-dasharray="30" stroke-dashoffset="30"
+        style="animation:ldDraw 1s ease forwards 1.8s"/>
+      <!-- Accent dots at cardinal points -->
+      <circle cx="46" cy="6"  r="2.5" fill="#C09A52" opacity="0" style="animation:ldFade .4s ease forwards 1.9s"/>
+      <circle cx="46" cy="86" r="2.5" fill="#C09A52" opacity="0" style="animation:ldFade .4s ease forwards 2s"/>
+      <circle cx="6"  cy="46" r="2"   fill="#C07880" opacity="0" style="animation:ldFade .4s ease forwards 2s"/>
+      <circle cx="86" cy="46" r="2"   fill="#C07880" opacity="0" style="animation:ldFade .4s ease forwards 2s"/>
+      <!-- Diamond top -->
+      <path d="M46 2 L48.5 6 L46 10 L43.5 6Z"
+        fill="#C09A52" opacity="0" style="animation:ldFade .4s ease forwards 1.9s"/>
       <defs>
-        <linearGradient id="lg" x1="18" y1="16" x2="62" y2="60" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#D4A85C"/>
-          <stop offset="45%" stop-color="#C07880"/>
-          <stop offset="100%" stop-color="#A05060"/>
+        <linearGradient id="ldGrad" x1="20" y1="18" x2="72" y2="70" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#DDB870"/>
+          <stop offset="40%"  stop-color="#C07880"/>
+          <stop offset="100%" stop-color="#9A4858"/>
+        </linearGradient>
+        <linearGradient id="ldStroke" x1="20" y1="18" x2="72" y2="70" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"  stop-color="#D4A860"/>
+          <stop offset="50%" stop-color="#C07880"/>
+          <stop offset="100%" stop-color="#A85870"/>
         </linearGradient>
       </defs>
     </svg>
   </div>
+
+  <!-- Name -->
   <div class="ld-name">Sindhu</div>
-  <div class="ld-bar-wrap"><div class="ld-bar"></div></div>
-  <div class="ld-caption">Opening with love…</div>
-  <style>@keyframes drawPath{to{stroke-dashoffset:0;}}</style>
+  <div class="ld-tagline">My Love · My Life · My Home</div>
+
+  <!-- Progress bar -->
+  <div class="ld-progress-wrap">
+    <div class="ld-progress-track">
+      <div class="ld-progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Animated caption -->
+  <div class="ld-caption">
+    <div class="ld-caption-dot"></div>
+    <span>Opening with love</span>
+    <div class="ld-caption-dot"></div>
+    <span>for you</span>
+    <div class="ld-caption-dot"></div>
+  </div>
+
 </div>
 
 <!-- ════════ FIXED LAYERS ════════ -->
 <div class="bg-base" id="bg-base"></div>
-<div class="bg-noise"></div>
+<div class="bg-noise bg-noise-svg"></div>
 <canvas id="fx-canvas"></canvas>
 <div id="petal-layer"></div>
 <div id="shape-layer"></div>
@@ -1684,9 +1881,46 @@ function animConfetti(cv, colors) {
 /* ══════════════════════════════════════════════════════
    INIT
 ══════════════════════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded',()=>{
+
+/* Spawn soft petals inside the loader while it's visible */
+function spawnLoaderPetals() {
+  const layer = document.getElementById('ld-petals');
+  if (!layer) return;
+  const colors = ['#F0C8CC','#F4DEC8','#FAE8DC','#EDD8D0','#F8E0DC'];
+  for (let i = 0; i < 14; i++) {
+    const el = document.createElement('div');
+    el.className = 'ld-petal';
+    const sz = 7 + Math.random() * 14;
+    const c  = colors[Math.floor(Math.random() * colors.length)];
+    const dur = 8 + Math.random() * 7;
+    el.style.cssText = `
+      left:${Math.random()*100}%;
+      top:-40px;
+      animation-duration:${dur}s;
+      animation-delay:${Math.random()*5}s;
+    `;
+    el.innerHTML = `<svg width="${sz}" height="${sz*1.4}" viewBox="0 0 20 28">
+      <ellipse cx="10" cy="14" rx="6" ry="13" fill="${c}" opacity=".6"
+        transform="rotate(${Math.random()*25-12},10,14)"/>
+    </svg>`;
+    layer.appendChild(el);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  spawnLoaderPetals();
   detectPage();
-  setTimeout(()=>document.getElementById('loader').classList.add('out'), 2000);
+
+  // Reveal bg + app after loader exit
+  setTimeout(() => {
+    document.getElementById('loader').classList.add('out');
+    // Slight delay so loader starts fading before content appears
+    setTimeout(() => {
+      document.getElementById('bg-base').classList.add('in');
+      document.querySelector('.bg-noise').classList.add('in');
+      document.getElementById('app').classList.add('in');
+    }, 200);
+  }, 2400);
 });
 </script>
 </body>
