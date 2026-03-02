@@ -793,6 +793,84 @@ a{color:inherit;text-decoration:none;}
   .c-event-highlight{margin-top:16px;}
   .ph-pillars{gap:12px;}
 }
+
+/* ── WEDDING INVITATION CARD ── */
+.wedding-card {
+  background: var(--white); border-radius: var(--r);
+  box-shadow: var(--shadow-md); overflow: hidden;
+  display: block; text-decoration: none; color: inherit;
+  position: relative; grid-column: 1 / -1;
+  opacity: 0; transform: translateY(28px);
+  transition: opacity .7s var(--ease), transform .7s var(--ease), box-shadow .5s var(--ease);
+}
+.wedding-card.in { opacity: 1; transform: none; }
+.wedding-card:hover { transform: translateY(-6px) scale(1.005); box-shadow: var(--shadow-lg); }
+.wedding-card::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255,255,255,.16) 50%, transparent 65%);
+  transform: translateX(-120%); transition: transform .8s var(--ease);
+  pointer-events: none; z-index: 5;
+}
+.wedding-card:hover::after { transform: translateX(120%); }
+.wc-header {
+  position: relative; overflow: hidden;
+  padding: clamp(28px,4vw,44px) clamp(24px,4vw,48px) clamp(22px,3vw,36px);
+  background: linear-gradient(120deg, #2C1F18 0%, #4A2E24 45%, #3A2318 100%);
+  display: flex; align-items: center; gap: clamp(16px,3vw,32px); flex-wrap: wrap;
+}
+.wc-header::before {
+  content: ''; position: absolute; width: 300px; height: 300px; border-radius: 50%;
+  background: rgba(192,154,82,.07); top: -100px; right: -80px; pointer-events: none;
+}
+.wc-header-stripe {
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gold), var(--rose), var(--gold), transparent);
+}
+.wc-rings { flex-shrink: 0; position: relative; z-index: 2; width: clamp(60px,8vw,80px); height: clamp(60px,8vw,80px); }
+.wc-identity { flex: 1; min-width: 160px; position: relative; z-index: 2; }
+.wc-eyebrow {
+  font-size: .58rem; font-weight: 300; letter-spacing: .65em; text-transform: uppercase;
+  color: rgba(192,154,82,.7); margin-bottom: 8px;
+}
+.wc-title {
+  font-family: 'Great Vibes', cursive; font-size: clamp(1.8rem,4.5vw,3rem);
+  color: var(--gold-lt); line-height: 1.1; margin-bottom: 6px;
+  filter: drop-shadow(0 2px 12px rgba(192,154,82,.3));
+}
+.wc-subtitle {
+  font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300;
+  font-size: clamp(.85rem,2vw,1.05rem); color: rgba(255,255,255,.5);
+}
+.wc-date-badge {
+  flex-shrink: 0; position: relative; z-index: 2; text-align: center;
+  padding: 14px 20px; border-radius: 14px;
+  border: 1px solid rgba(192,154,82,.3); background: rgba(192,154,82,.08);
+}
+.wc-date-day {
+  font-family: 'Playfair Display', serif; font-size: clamp(1.8rem,4vw,2.6rem);
+  font-weight: 900; color: var(--gold-lt); line-height: 1;
+}
+.wc-date-month { font-size: .6rem; font-weight: 300; letter-spacing: .45em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-top: 2px; }
+.wc-date-year { font-size: .65rem; font-weight: 300; letter-spacing: .25em; color: rgba(192,154,82,.6); margin-top: 4px; }
+.wc-body {
+  padding: clamp(20px,3vw,32px) clamp(24px,4vw,48px);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+}
+.wc-desc {
+  font-family: 'Cormorant Garamond', serif; font-weight: 300; font-style: italic;
+  font-size: clamp(.9rem,2vw,1.1rem); color: var(--ink-2); line-height: 1.85; max-width: 520px;
+}
+.wc-cta {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+  padding: 12px 28px; border-radius: 50px;
+  font-size: .68rem; font-weight: 400; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--white); background: linear-gradient(135deg, #C09A52, #A07830);
+  box-shadow: 0 4px 18px rgba(160,120,48,.35);
+  transition: transform .3s var(--spring), box-shadow .3s;
+}
+.wedding-card:hover .wc-cta { transform: scale(1.06); box-shadow: 0 6px 24px rgba(160,120,48,.45); }
+@media(max-width:520px) { .wc-date-badge { display: none; } .wc-body { flex-direction: column; align-items: flex-start; } }
+
 </style>
 </head>
 <body>
@@ -1094,6 +1172,7 @@ a{color:inherit;text-decoration:none;}
     <div class="ft-links">
       <a href="sindhu.html"   class="ft-link">Sindhu</a>
       <a href="yokshith.html" class="ft-link">Yokshith</a>
+	  <a href="https://chandusindhu.web.app/" class="ft-link">💍 Wedding Invitation</a>
     </div>
     <div class="ft-copy">
       © <strong id="ft-year"></strong> All Rights Reserved<br>
@@ -1311,6 +1390,39 @@ function buildCards(){
     // Stagger observer trigger
     setTimeout(()=>card.classList.add('in'), 100+i*140);
   });
+  
+  // ── Wedding Invitation Card ──
+const wc = document.createElement('a');
+wc.href = 'https://chandusindhu.web.app/';
+wc.className = 'wedding-card';
+wc.innerHTML = `
+  <div class="wc-header">
+    <div class="wc-header-stripe"></div>
+    <div class="wc-rings">
+      <svg viewBox="0 0 80 80" fill="none" width="100%" height="100%">
+        <circle cx="30" cy="40" r="20" stroke="#C09A52" stroke-width="3" fill="none" opacity=".9"/>
+        <circle cx="50" cy="40" r="20" stroke="#C07880" stroke-width="3" fill="none" opacity=".9"/>
+        <path d="M40 10 L41.5 14 L45 12 L42.5 15.5 L46 17 L42 17 L40 20.5 L38 17 L34 17 L37.5 15.5 L35 12 L38.5 14 Z"
+          fill="#DCC080" opacity=".85"/>
+      </svg>
+    </div>
+    <div class="wc-identity">
+      <div class="wc-eyebrow">💍 Wedding Invitation</div>
+      <div class="wc-title">Chandu &amp; Sindhu</div>
+      <div class="wc-subtitle">A celebration of love, union &amp; forever</div>
+    </div>
+    <div class="wc-date-badge">
+      <div class="wc-date-day">19</div>
+      <div class="wc-date-month">November</div>
+      <div class="wc-date-year">2023</div>
+    </div>
+  </div>
+  <div class="wc-body">
+    <p class="wc-desc">On the 19th of November, 2023, two hearts became one. Relive the magic — every detail of our wedding day, beautifully captured and preserved forever.</p>
+    <div class="wc-cta">View Invitation <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M8 3l3.5 3.5L8 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>`;
+grid.appendChild(wc);
+setTimeout(()=>wc.classList.add('in'), 100 + FAMILY.length*140 + 80);
 
   // Add member card
   const add = document.createElement('div');
