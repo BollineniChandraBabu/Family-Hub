@@ -2,488 +2,774 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Yokshith — Our Star 🌟</title>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@300;400;600;700;800;900&family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Yokshith — Our Little Superstar ⭐</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600;700&family=Nunito:ital,wght@0,300;0,400;0,600;0,700;0,800;0,900;1,400;1,700&family=Baloo+2:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --yellow:#FFD23F; --orange:#FF6B35; --blue:#3FA7D6;
-  --purple:#9B5DE5; --green:#06D6A0; --pink:#F72585;
-  --white:#ffffff; --bg:#07070f; --card:#10102a;
-  --text:rgba(255,255,255,0.9); --muted:rgba(255,255,255,0.45);
+  --c1: #FF6B35;
+  --c2: #FFD23F;
+  --c3: #06D6A0;
+  --c4: #3FA7D6;
+  --c5: #9B5DE5;
+  --card: rgba(255,255,255,.06);
+  --card-border: rgba(255,255,255,.1);
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.45);
+  --ease: cubic-bezier(.4,0,.2,1);
+  --spring: cubic-bezier(.34,1.56,.64,1);
 }
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body { background:var(--bg); min-height:100vh; font-family:'Nunito',sans-serif; overflow-x:hidden; }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:16px;scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{font-family:'Nunito',sans-serif;background:#07070f;color:var(--text);min-height:100vh;overflow-x:hidden;}
+a{color:inherit;text-decoration:none;}
+button{cursor:pointer;border:none;background:none;font:inherit;}
 
-/* ─── BG ─── */
-.bg-base {
-  position:fixed; inset:0; z-index:0;
-  background:
-    radial-gradient(ellipse at 10% 20%, rgba(155,93,229,.18) 0%, transparent 40%),
-    radial-gradient(ellipse at 90% 75%, rgba(247,37,133,.12) 0%, transparent 40%),
-    radial-gradient(ellipse at 50% 50%, rgba(63,167,214,.07) 0%, transparent 50%),
-    #07070f;
+/* ══ LOADER ══ */
+#loader{
+  position:fixed;inset:0;z-index:9999;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 30% 40%,rgba(255,107,53,.22) 0%,transparent 50%),
+             radial-gradient(ellipse at 70% 60%,rgba(155,93,229,.18) 0%,transparent 50%),
+             radial-gradient(ellipse at 50% 20%,rgba(255,210,63,.14) 0%,transparent 40%), #07070f;
+  transition:opacity 1s var(--ease),visibility 1s var(--ease);
 }
+#loader.out{opacity:0;visibility:hidden;pointer-events:none;}
 
-/* Floating shapes */
-#shapes { position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden; }
-.shape {
-  position:absolute; bottom:-100px;
-  animation:shapeFloat linear infinite;
-  opacity:0;
-}
-@keyframes shapeFloat {
-  0%{transform:translateY(0) rotate(0deg) scale(1);opacity:0;}
-  8%{opacity:.7;}
-  92%{opacity:.4;}
-  100%{transform:translateY(-115vh) rotate(720deg) scale(.5);opacity:0;}
-}
+.ld-orbit-ring{position:absolute;border-radius:50%;border:1px solid transparent;}
+.ld-orbit-ring-1{width:220px;height:220px;border-color:rgba(255,107,53,.3);animation:orbitSpin 6s linear infinite;}
+.ld-orbit-ring-2{width:170px;height:170px;border-color:rgba(255,210,63,.2);border-style:dashed;animation:orbitSpin 9s linear infinite reverse;}
+.ld-orbit-ring-3{width:130px;height:130px;border-color:rgba(155,93,229,.25);animation:orbitSpin 4s linear infinite;}
+@keyframes orbitSpin{to{transform:rotate(360deg);}}
 
-#confetti { position:fixed;inset:0;z-index:2;pointer-events:none; }
+.ld-orbit-dot{position:absolute;width:180px;height:180px;animation:orbitSpin 3.5s linear infinite;}
+.ld-orbit-dot::before{content:'⭐';position:absolute;top:-10px;left:50%;transform:translateX(-50%);font-size:20px;animation:orbitSpin 3.5s linear infinite reverse;filter:drop-shadow(0 0 8px rgba(255,210,63,.8));}
 
-/* ─── PAGES ─── */
-.page { display:none; position:relative; z-index:10; min-height:calc(100vh - 70px); flex-direction:column; align-items:center; justify-content:center; padding:50px 20px 30px; }
-.page.active { display:flex; }
+.ld-star{font-size:clamp(4rem,12vw,6rem);display:block;animation:ldStarPulse 2s ease-in-out infinite,ldPop 1s var(--spring) forwards;filter:drop-shadow(0 0 30px rgba(255,210,63,.6));}
+@keyframes ldStarPulse{0%,100%{transform:scale(1) rotate(-5deg);}50%{transform:scale(1.15) rotate(5deg);}}
+@keyframes ldPop{from{opacity:0;transform:scale(.3) rotate(-30deg);}to{opacity:1;}}
 
-/* ─── WAITING PAGE ─── */
-#page-wait { text-align:center; gap:0; }
-.wait-rocket { font-size:clamp(3rem,12vw,6rem); display:block; margin-bottom:20px; animation:rocketFloat 2.5s ease-in-out infinite; }
-@keyframes rocketFloat { 0%,100%{transform:translateY(0) rotate(-5deg);} 50%{transform:translateY(-20px) rotate(5deg);} }
+.ld-name{font-family:'Baloo 2',cursive;font-size:clamp(2.5rem,10vw,4rem);font-weight:800;background:linear-gradient(135deg,#FFD23F,#FF6B35,#F72585,#9B5DE5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 2px 20px rgba(255,107,53,.4));margin-top:12px;opacity:0;animation:ldUp .9s var(--spring) forwards .5s;}
+.ld-tagline{font-size:clamp(.72rem,3vw,.92rem);font-weight:600;color:rgba(255,255,255,.4);letter-spacing:.1em;margin-top:6px;opacity:0;animation:ldFade .8s ease forwards .9s;}
+.ld-bar-wrap{width:min(200px,55vw);height:3px;background:rgba(255,255,255,.1);border-radius:4px;overflow:hidden;margin-top:32px;opacity:0;animation:ldFade .5s ease forwards 1s;}
+.ld-bar{height:100%;width:0%;border-radius:4px;background:linear-gradient(90deg,#FFD23F,#FF6B35,#F72585,#9B5DE5);animation:ldBarFill 1.5s var(--ease) forwards 1.1s;}
+@keyframes ldBarFill{from{width:0%;}to{width:100%;}}
+.ld-dots{display:flex;gap:10px;margin-top:14px;opacity:0;animation:ldFade .5s ease forwards 1.2s;}
+.ld-dot{width:6px;height:6px;border-radius:50%;animation:ldDotBounce 1.2s ease-in-out infinite alternate;}
+.ld-dot:nth-child(1){background:#FFD23F;animation-delay:0s;}
+.ld-dot:nth-child(2){background:#FF6B35;animation-delay:.2s;}
+.ld-dot:nth-child(3){background:#F72585;animation-delay:.4s;}
+@keyframes ldDotBounce{from{opacity:.3;transform:scale(.6);}to{opacity:1;transform:scale(1.4);}}
+@keyframes ldUp{from{opacity:0;transform:translateY(20px) scale(.9);}to{opacity:1;transform:none;}}
+@keyframes ldFade{from{opacity:0;}to{opacity:1;}}
 
-.wait-title {
-  font-family:'Fredoka One',cursive; font-size:clamp(2rem,9vw,4.5rem); line-height:1.1; text-align:center;
-  background:linear-gradient(135deg,var(--yellow),var(--orange),var(--pink),var(--purple));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  margin-bottom:10px;
-  opacity:0;animation:popIn .9s cubic-bezier(.34,1.56,.64,1) forwards .2s;
-}
-.wait-sub {
-  font-size:clamp(.85rem,3.5vw,1.1rem); font-weight:600; color:var(--muted); margin-bottom:36px;
-  opacity:0;animation:popIn .9s cubic-bezier(.34,1.56,.64,1) forwards .4s;
-}
+/* ══ CANVAS / LAYERS ══ */
+#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#shape-layer{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
+#confetti{position:fixed;inset:0;z-index:20;pointer-events:none;}
 
-.countdown-card {
-  background:var(--card); border-radius:20px; padding:28px 36px; min-width:260px;
-  border:2px solid; position:relative; overflow:hidden; margin-bottom:32px;
-  opacity:0;animation:popIn .9s cubic-bezier(.34,1.56,.64,1) forwards .6s;
-}
-.countdown-card-inner { position:relative; }
-.countdown-card::before {
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(135deg,rgba(255,210,63,.06),rgba(247,37,133,.04),rgba(155,93,229,.04));
-}
-.cc-label {
-  font-family:'Fredoka One',cursive; font-size:1rem; color:var(--yellow);
-  margin-bottom:6px; letter-spacing:.05em;
-}
-.cc-date { font-size:.8rem; font-weight:700; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); margin-bottom:20px; }
-.cc-nums { display:flex; gap:14px; justify-content:center; }
-.cc-unit { text-align:center; }
-.cc-num {
-  font-family:'Fredoka One',cursive; font-size:2.4rem; line-height:1;
-  background:linear-gradient(135deg,var(--yellow),var(--orange));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.cc-lbl { font-size:.55rem; font-weight:800; letter-spacing:.25em; text-transform:uppercase; color:var(--muted); margin-top:4px; }
+/* ══ APP ══ */
+#app{position:relative;z-index:10;opacity:0;transition:opacity .8s ease;min-height:100vh;}
+#app.in{opacity:1;}
 
-.wait-message {
-  max-width:420px; font-size:clamp(.85rem,3.5vw,1rem); font-weight:600; color:var(--muted);
-  line-height:1.8; text-align:center;
-  opacity:0;animation:popIn .9s cubic-bezier(.34,1.56,.64,1) forwards .8s;
-}
+/* ══ LAYOUT ══ */
+.sec{padding:clamp(50px,8vw,90px) clamp(16px,5vw,60px);position:relative;}
+.sec-inner{max-width:700px;margin:0 auto;}
+.sec-inner-wide{max-width:920px;margin:0 auto;}
 
-/* ─── BIRTHDAY PAGE ─── */
-#page-bday { gap:0; }
+.sec-label{display:flex;align-items:center;gap:14px;margin-bottom:clamp(32px,5vw,50px);}
+.sl-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--c1));opacity:.4;}
+.sl-line-r{background:linear-gradient(to left,transparent,var(--c1));}
+.sl-text{font-family:'Fredoka',sans-serif;font-size:.75rem;font-weight:500;letter-spacing:.4em;text-transform:uppercase;white-space:nowrap;color:var(--c1);padding:5px 16px;border:1px solid var(--c1);border-radius:50px;background:rgba(0,0,0,.3);opacity:.8;}
 
-.bday-banner {
-  opacity:0; animation:popIn .8s cubic-bezier(.34,1.56,.64,1) forwards .2s;
-  margin-bottom:10px;
-}
-.bday-banner-inner {
-  font-family:'Fredoka One',cursive; font-size:clamp(.7rem,3vw,.9rem); letter-spacing:.3em; text-transform:uppercase;
-  color:var(--bg); background:linear-gradient(135deg,var(--yellow),var(--orange));
-  padding:7px 22px; border-radius:50px; display:inline-block;
-  box-shadow:0 0 25px rgba(255,107,53,.4);
-}
+/* Reveal */
+.sr{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
+.sr.in{opacity:1;transform:none;}
 
-.bday-age-chip {
-  opacity:0; animation:popIn .8s cubic-bezier(.34,1.56,.64,1) forwards .4s;
-  font-family:'Fredoka One',cursive; font-size:clamp(.75rem,3vw,.95rem); letter-spacing:.15em;
-  background:rgba(247,37,133,.12); border:2px solid rgba(247,37,133,.3);
-  color:var(--pink); padding:7px 22px; border-radius:50px; margin-bottom:12px;
-  display:inline-block;
-}
+/* ══ HERO ══ */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:clamp(80px,12vw,140px) clamp(16px,5vw,60px) clamp(60px,8vw,100px);position:relative;overflow:hidden;}
 
-.bday-title {
-  font-family:'Fredoka One',cursive;
-  font-size:clamp(3rem,14vw,8rem); line-height:1; text-align:center;
-  background:linear-gradient(135deg,var(--yellow) 0%,var(--orange) 30%,var(--pink) 60%,var(--purple) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 4px 30px rgba(247,37,133,.35));
-  display:block;
-  opacity:0; animation:popIn .9s cubic-bezier(.34,1.56,.64,1) forwards .6s, titleBounce 2s ease-in-out infinite 2.5s;
-}
-@keyframes titleBounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);} }
+.hero-eyebrow{font-family:'Space Grotesk',sans-serif;font-size:.65rem;font-weight:500;letter-spacing:.55em;text-transform:uppercase;color:var(--c2);margin-bottom:16px;opacity:0;animation:ldFade .8s ease forwards 2.6s;text-shadow:0 0 20px var(--c2);}
 
-.bday-sub {
-  font-family:'Fredoka One',cursive; font-size:clamp(1.4rem,6vw,3.2rem);
-  color:var(--blue); display:block; text-align:center;
-  filter:drop-shadow(0 0 20px rgba(63,167,214,.5));
-  opacity:0; animation:popIn .9s cubic-bezier(.34,1.56,.64,1) forwards .9s;
-  margin-bottom:10px;
-}
+.hero-emoji-row{display:flex;gap:clamp(10px,3vw,20px);justify-content:center;margin-bottom:clamp(16px,3vw,24px);opacity:0;animation:ldPop .8s var(--spring) forwards 2.8s;}
+.her{font-size:clamp(2rem,7vw,4rem);display:inline-block;animation:herFloat 2s ease-in-out infinite alternate;}
+.her:nth-child(1){animation-delay:0s;}
+.her:nth-child(2){animation-delay:.25s;}
+.her:nth-child(3){animation-delay:.5s;}
+.her:nth-child(4){animation-delay:.75s;}
+.her:nth-child(5){animation-delay:1s;}
+@keyframes herFloat{from{transform:translateY(0) rotate(-6deg) scale(1);}to{transform:translateY(-14px) rotate(6deg) scale(1.12);}}
 
-.emoji-dance {
-  display:flex; gap:10px; justify-content:center; margin:16px 0;
-  opacity:0; animation:popIn .8s cubic-bezier(.34,1.56,.64,1) forwards 1.1s;
-}
-.ed-item {
-  font-size:clamp(1.6rem,6vw,2.5rem); display:inline-block;
-  animation:emojiDance 1.4s ease-in-out infinite alternate;
-}
-.ed-item:nth-child(1){animation-delay:0s;}
-.ed-item:nth-child(2){animation-delay:.18s;}
-.ed-item:nth-child(3){animation-delay:.36s;}
-.ed-item:nth-child(4){animation-delay:.54s;}
-.ed-item:nth-child(5){animation-delay:.72s;}
-@keyframes emojiDance { from{transform:translateY(0) rotate(-8deg) scale(1);} to{transform:translateY(-12px) rotate(8deg) scale(1.15);} }
+.hero-title-l1{display:block;font-family:'Baloo 2',cursive;font-size:clamp(3.5rem,16vw,10rem);font-weight:800;line-height:.9;background:linear-gradient(135deg,var(--c2) 0%,var(--c1) 50%,var(--c5) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 4px 30px rgba(255,107,53,.4));opacity:0;animation:ldUp 1s var(--spring) forwards 3s;}
+.hero-title-l2{display:block;font-family:'Baloo 2',cursive;font-size:clamp(2rem,9vw,5.5rem);font-weight:600;line-height:1;background:linear-gradient(135deg,var(--c3) 0%,var(--c4) 60%,var(--c5) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 4px 30px rgba(63,167,214,.3));margin-top:4px;opacity:0;animation:ldUp .9s var(--spring) forwards 3.2s;}
 
-.year-theme-card {
-  max-width:540px; width:100%; margin-bottom:18px;
-  opacity:0; animation:popIn .9s cubic-bezier(.34,1.56,.64,1) forwards 1.3s;
-}
-.ytc-inner {
-  background:var(--card); border-radius:18px; padding:16px 24px; text-align:center;
-  border:2px solid; position:relative; overflow:hidden;
-}
-.ytc-label { font-size:.65rem; font-weight:800; letter-spacing:.35em; text-transform:uppercase; color:var(--yellow); margin-bottom:4px; }
-.ytc-theme { font-family:'Fredoka One',cursive; font-size:clamp(1rem,4vw,1.4rem); }
+.hero-name-badge{display:inline-flex;align-items:center;gap:10px;margin:clamp(16px,3vw,24px) 0;padding:12px 28px;border-radius:50px;background:linear-gradient(135deg,rgba(255,210,63,.12),rgba(255,107,53,.1));border:1px solid rgba(255,210,63,.25);backdrop-filter:blur(10px);opacity:0;animation:ldUp .9s var(--spring) forwards 3.4s;}
+.hnb-label{font-size:.6rem;font-weight:700;letter-spacing:.4em;text-transform:uppercase;color:var(--muted);}
+.hnb-name{font-family:'Fredoka',sans-serif;font-size:clamp(1.3rem,4vw,1.9rem);font-weight:600;color:var(--c2);text-shadow:0 0 20px var(--c2);}
+.hnb-sep{color:rgba(255,255,255,.2);}
 
-.message-card {
-  max-width:540px; width:100%; background:var(--card);
-  border-radius:20px; padding:clamp(24px,5vw,40px);
-  border:2px solid rgba(255,255,255,.07); margin-bottom:20px; position:relative; overflow:hidden;
-  opacity:0; animation:popIn .9s cubic-bezier(.34,1.56,.64,1) forwards 1.5s;
-}
-.message-card::before {
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(135deg,rgba(255,210,63,.04),rgba(247,37,133,.04),rgba(155,93,229,.04));
-}
-.msg-glow {
-  position:absolute; inset:-3px; border-radius:23px;
-  background:linear-gradient(135deg,var(--yellow),var(--orange),var(--pink),var(--purple),var(--blue),var(--green));
-  z-index:-1; opacity:.35; animation:glowSpin 5s linear infinite;
-  filter:blur(6px);
-}
-@keyframes glowSpin { from{filter:hue-rotate(0deg) blur(6px);} to{filter:hue-rotate(360deg) blur(6px);} }
-.message-text {
-  position:relative; font-size:clamp(.95rem,3.5vw,1.15rem); font-weight:600; color:var(--text);
-  text-align:center; line-height:1.85;
-}
-.message-text em { font-style:normal; color:var(--yellow); font-weight:800; }
-.message-text strong { color:var(--orange); }
+.hero-tagline{max-width:500px;font-family:'Nunito',sans-serif;font-style:italic;font-weight:700;font-size:clamp(1rem,3.5vw,1.3rem);color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:clamp(24px,4vw,40px);opacity:0;animation:ldFade .9s ease forwards 3.6s;}
 
-.wish-grid {
-  max-width:540px; width:100%; display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:20px;
-  opacity:0; animation:popIn .9s cubic-bezier(.34,1.56,.64,1) forwards 1.7s;
-}
-.wg-card {
-  background:var(--card); border-radius:16px; padding:18px 12px; text-align:center;
-  border:2px solid; transition:transform .3s cubic-bezier(.34,1.56,.64,1);
-}
-.wg-card:hover,.wg-card:active { transform:scale(1.06) rotate(-1.5deg); }
-.wg-card:nth-child(1){border-color:rgba(255,107,53,.25);}
-.wg-card:nth-child(2){border-color:rgba(155,93,229,.25);}
-.wg-card:nth-child(3){border-color:rgba(6,214,160,.25);}
-.wg-card:nth-child(4){border-color:rgba(63,167,214,.25);}
-.wg-emoji { font-size:1.8rem; display:block; margin-bottom:7px; }
-.wg-title { font-family:'Fredoka One',cursive; font-size:clamp(.85rem,3.5vw,1.05rem); margin-bottom:3px; }
-.wg-card:nth-child(1) .wg-title{color:var(--orange);}
-.wg-card:nth-child(2) .wg-title{color:var(--purple);}
-.wg-card:nth-child(3) .wg-title{color:var(--green);}
-.wg-card:nth-child(4) .wg-title{color:var(--blue);}
-.wg-sub { font-size:.65rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+/* Age ring */
+.age-ring-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;margin-bottom:clamp(30px,5vw,50px);opacity:0;animation:ldPop .9s var(--spring) forwards 3.8s;}
+.age-ring-svg{animation:orbitSpin 12s linear infinite;}
+.age-num{position:absolute;display:flex;flex-direction:column;align-items:center;}
+.age-big{font-family:'Baloo 2',cursive;font-size:clamp(2rem,7vw,3.2rem);font-weight:800;line-height:1;}
+.age-lbl{font-family:'Space Grotesk',sans-serif;font-size:.5rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-top:3px;}
 
-.cta-btn-wrap {
-  opacity:0; animation:popIn .9s cubic-bezier(.34,1.56,.64,1) forwards 1.9s; margin-bottom:18px;
-}
-.cta-btn {
-  font-family:'Fredoka One',cursive; font-size:clamp(1rem,4vw,1.3rem); letter-spacing:.05em;
-  color:var(--bg); background:linear-gradient(135deg,var(--yellow),var(--orange));
-  border:none; border-radius:50px; padding:16px 44px; cursor:pointer;
-  box-shadow:0 8px 30px rgba(255,107,53,.4); transition:transform .25s,box-shadow .25s;
-  position:relative; overflow:hidden;
-}
-.cta-btn::before { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,.25),transparent); }
-.cta-btn:hover,.cta-btn:active { transform:scale(1.06) translateY(-3px); box-shadow:0 14px 40px rgba(255,107,53,.6); }
+.scroll-cue{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;opacity:0;animation:ldFade 1.2s ease forwards 4.5s;}
+.sc-txt{font-size:.54rem;font-weight:700;letter-spacing:.4em;text-transform:uppercase;color:rgba(255,255,255,.25);}
+.sc-line{width:1px;height:32px;background:linear-gradient(to bottom,rgba(255,255,255,.3),transparent);animation:scPulse 2s ease-in-out infinite;}
+@keyframes scPulse{0%,100%{opacity:.5;transform:scaleY(1);}50%{opacity:1;transform:scaleY(.6);}}
 
-.sig-block {
-  text-align:center;
-  opacity:0; animation:popIn .9s cubic-bezier(.34,1.56,.64,1) forwards 2.1s;
-}
-.sig-lbl { font-size:.65rem; font-weight:800; letter-spacing:.35em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
-.sig-name {
-  font-family:'Fredoka One',cursive; font-size:clamp(1.6rem,7vw,2.8rem);
-  background:linear-gradient(135deg,var(--green),var(--blue));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:drop-shadow(0 0 20px rgba(63,167,214,.4));
-}
+/* ══ POEM ══ */
+.poem-block{position:relative;padding:clamp(28px,5vw,44px);background:var(--card);border-radius:24px;border:1px solid var(--card-border);overflow:hidden;text-align:center;}
+.poem-block::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,210,63,.05),rgba(155,93,229,.05));pointer-events:none;}
+.poem-glow{position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--c2),transparent 70%);opacity:.12;filter:blur(20px);pointer-events:none;}
+.poem-icon{font-size:clamp(2rem,6vw,3rem);display:block;margin-bottom:16px;animation:herFloat 2.5s ease-in-out infinite alternate;}
+.poem-line{font-family:'Nunito',sans-serif;font-style:italic;font-weight:700;font-size:clamp(.95rem,3vw,1.2rem);color:rgba(255,255,255,.75);line-height:2.1;display:block;}
+.poem-line em{font-style:normal;color:var(--c2);}
+.poem-attr{font-size:.6rem;font-weight:700;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.2);margin-top:20px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.poem-attr::before,.poem-attr::after{content:'';width:20px;height:1px;background:currentColor;opacity:.5;}
 
-/* ─── FOOTER ─── */
-.footer {
-  position:relative; z-index:10; text-align:center; padding:18px 16px 26px;
-  border-top:1px solid rgba(255,255,255,.05); width:100%;
-}
-.footer-love { font-size:.85rem; font-weight:600; color:rgba(255,255,255,.2); margin-bottom:4px; }
-.footer-copy { font-size:.65rem; font-weight:700; letter-spacing:.12em; color:rgba(255,255,255,.15); }
-.footer-copy span { color:rgba(255,210,63,.35); }
+/* ══ MESSAGE ══ */
+.msg-card{position:relative;background:var(--card);border-radius:24px;padding:clamp(28px,5vw,48px);overflow:hidden;}
+.msg-stripe{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--c1),var(--c2),var(--c3),var(--c4),var(--c5));}
+.msg-glow-ring{position:absolute;inset:-2px;border-radius:26px;background:linear-gradient(135deg,var(--c1),var(--c2),var(--c3),var(--c4),var(--c5),var(--c1));z-index:-1;opacity:.22;animation:glowSpin 6s linear infinite;filter:blur(4px);}
+@keyframes glowSpin{from{filter:hue-rotate(0deg) blur(4px);}to{filter:hue-rotate(360deg) blur(4px);}}
+.msg-icon{font-size:clamp(2rem,6vw,2.8rem);display:block;margin-bottom:20px;text-align:center;animation:herFloat 3s ease-in-out infinite alternate;}
+.msg-para{font-family:'Nunito',sans-serif;font-size:clamp(1rem,3vw,1.15rem);font-weight:600;color:rgba(255,255,255,.8);line-height:1.9;margin-bottom:18px;text-align:center;}
+.msg-para:last-child{margin-bottom:0;}
+.msg-para em{font-style:normal;color:var(--c2);font-weight:800;}
+.msg-para strong{color:var(--c1);}
 
-@keyframes popIn { 0%{opacity:0;transform:scale(.65) translateY(22px);} 100%{opacity:1;transform:scale(1) translateY(0);} }
+/* ══ MILESTONE ══ */
+.milestone-banner{padding:clamp(22px,4vw,36px);border-radius:20px;background:linear-gradient(135deg,rgba(255,210,63,.08),rgba(255,107,53,.06),rgba(155,93,229,.06));border:1px solid rgba(255,210,63,.2);display:flex;gap:20px;align-items:flex-start;position:relative;overflow:hidden;}
+.milestone-banner::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--c2),var(--c1),var(--c5));}
+.ms-icon{font-size:clamp(2rem,6vw,3rem);flex-shrink:0;margin-top:2px;}
+.ms-label{font-family:'Space Grotesk',sans-serif;font-size:.58rem;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--c2);margin-bottom:5px;}
+.ms-title{font-family:'Fredoka',sans-serif;font-size:clamp(1rem,3.5vw,1.35rem);font-weight:600;margin-bottom:6px;}
+.ms-text{font-size:.9rem;font-weight:600;color:var(--muted);line-height:1.75;}
 
-@media(max-width:400px){
-  .wish-grid { gap:8px; }
-  .wg-card { padding:14px 8px; }
-}
+/* ══ WISHES ══ */
+.wishes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:14px;}
+.wish-card{background:var(--card);border-radius:18px;padding:22px 16px;border:1px solid var(--card-border);text-align:center;transition:transform .4s var(--spring),box-shadow .4s,border-color .3s;cursor:default;}
+.wish-card:hover{transform:translateY(-8px) scale(1.03);box-shadow:0 20px 50px rgba(0,0,0,.4);border-color:var(--c1);}
+.wc-emoji{font-size:2rem;display:block;margin-bottom:10px;animation:herFloat 2s ease-in-out infinite alternate;}
+.wc-title{font-family:'Fredoka',sans-serif;font-size:1.05rem;font-weight:600;margin-bottom:5px;}
+.wc-text{font-size:.8rem;font-weight:600;color:var(--muted);line-height:1.6;}
+
+/* ══ YEAR NAV ══ */
+.year-nav{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;}
+.yn-btn{display:flex;align-items:center;gap:8px;padding:12px 24px;border-radius:50px;font-family:'Fredoka',sans-serif;font-size:.9rem;font-weight:500;border:1.5px solid var(--card-border);background:var(--card);color:var(--text);transition:all .35s var(--ease);backdrop-filter:blur(10px);}
+.yn-btn:hover{background:var(--c1);border-color:var(--c1);color:#000;transform:translateY(-3px) scale(1.04);box-shadow:0 10px 30px rgba(0,0,0,.3);}
+.yn-btn svg{flex-shrink:0;transition:transform .3s;}
+.yn-btn:hover svg{transform:translateX(-3px);}
+.yn-btn.fwd:hover svg{transform:translateX(3px);}
+.yn-btn.home:hover svg{transform:none;}
+
+.locked-box{max-width:380px;margin:0 auto;padding:28px;text-align:center;border:2px dashed rgba(255,255,255,.1);border-radius:20px;}
+.locked-emoji{font-size:2.5rem;display:block;margin-bottom:12px;animation:herFloat 2s ease-in-out infinite alternate;}
+.locked-title{font-family:'Fredoka',sans-serif;font-size:1.2rem;font-weight:600;color:var(--c2);margin-bottom:8px;}
+.locked-text{font-size:.85rem;font-weight:600;color:var(--muted);line-height:1.75;}
+
+.past-banner{margin-bottom:20px;padding:10px 20px;border-radius:50px;background:rgba(255,210,63,.08);border:1px solid rgba(255,210,63,.2);font-family:'Fredoka',sans-serif;font-size:.95rem;color:rgba(255,255,255,.6);display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;}
+
+/* ══ WAITING ══ */
+.wait-hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:clamp(80px,12vw,140px) clamp(16px,5vw,60px) clamp(80px,10vw,120px);position:relative;overflow:hidden;}
+.wait-rocket{font-size:clamp(4rem,14vw,7rem);display:block;animation:rocketFloat 2.5s ease-in-out infinite;margin-bottom:24px;filter:drop-shadow(0 0 30px rgba(255,107,53,.5));}
+@keyframes rocketFloat{0%,100%{transform:translateY(0) rotate(-8deg);}50%{transform:translateY(-22px) rotate(8deg);}}
+.wait-title{font-family:'Baloo 2',cursive;font-size:clamp(2.5rem,11vw,6rem);font-weight:800;line-height:1.05;background:linear-gradient(135deg,#FFD23F,#FF6B35,#F72585,#9B5DE5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 4px 30px rgba(255,107,53,.4));margin-bottom:12px;opacity:0;animation:ldUp 1s var(--spring) forwards .2s;}
+.wait-sub{font-size:clamp(.9rem,3.5vw,1.1rem);font-weight:700;color:var(--muted);margin-bottom:40px;max-width:480px;line-height:1.7;opacity:0;animation:ldFade .9s ease forwards .5s;}
+.wait-sub em{color:var(--c2);font-style:normal;}
+
+.cd-widget{background:var(--card);border-radius:24px;padding:clamp(24px,4vw,40px) clamp(28px,5vw,48px);border:1px solid var(--card-border);margin-bottom:40px;min-width:min(340px,90vw);position:relative;overflow:hidden;}
+.cd-widget::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,210,63,.05),rgba(155,93,229,.04));}
+.cd-widget-title{font-family:'Fredoka',sans-serif;font-size:1.1rem;font-weight:600;color:var(--c2);margin-bottom:4px;text-align:center;}
+.cd-widget-date{font-size:.72rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-bottom:24px;text-align:center;}
+.cd-nums{display:flex;gap:clamp(10px,3vw,20px);justify-content:center;align-items:flex-end;position:relative;}
+.cd-unit{text-align:center;}
+.cd-num{font-family:'Baloo 2',cursive;font-size:clamp(2rem,8vw,3rem);font-weight:800;line-height:1;background:linear-gradient(135deg,var(--c2),var(--c1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;transition:transform .2s var(--spring);}
+.cd-lbl{font-size:.55rem;font-weight:800;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+.cd-sep{font-family:'Baloo 2',cursive;font-size:clamp(1.5rem,5vw,2.2rem);font-weight:800;color:rgba(255,255,255,.15);margin-bottom:8px;}
+
+.wait-love-note{max-width:560px;margin:0 auto 40px;background:var(--card);border-radius:20px;padding:clamp(24px,4vw,36px);border:1px solid var(--card-border);}
+.wln-top{font-family:'Space Grotesk',sans-serif;font-size:.6rem;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:var(--c2);margin-bottom:14px;}
+.wln-text{font-family:'Nunito',sans-serif;font-size:clamp(.9rem,3vw,1.05rem);font-weight:600;color:rgba(255,255,255,.65);line-height:1.9;margin-bottom:12px;}
+.wln-text em{color:var(--c2);font-style:normal;}
+.wln-sig{font-family:'Fredoka',sans-serif;font-size:1.1rem;font-weight:600;color:rgba(255,255,255,.3);margin-top:16px;}
+
+.memory-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,165px),1fr));gap:12px;}
+.memory-card{background:var(--card);border-radius:16px;padding:20px 14px;border:1px solid var(--card-border);text-align:center;cursor:pointer;transition:transform .35s var(--spring),box-shadow .35s,border-color .3s;}
+.memory-card:hover{transform:translateY(-6px) scale(1.05);box-shadow:0 16px 40px rgba(0,0,0,.4);border-color:var(--c1);}
+.mc-emoji{font-size:1.8rem;display:block;margin-bottom:8px;}
+.mc-year{font-family:'Fredoka',sans-serif;font-size:.9rem;font-weight:600;color:var(--c2);}
+.mc-lbl{font-size:.7rem;font-weight:600;color:var(--muted);margin-top:2px;}
+
+/* ══ SIGNATURE / FOOTER ══ */
+.signature{text-align:center;padding:clamp(30px,5vw,50px) 20px clamp(20px,3vw,30px);}
+.sig-from{font-family:'Space Grotesk',sans-serif;font-size:.58rem;font-weight:500;letter-spacing:.4em;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:10px;}
+.sig-name{font-family:'Baloo 2',cursive;font-size:clamp(1.8rem,7vw,2.8rem);font-weight:800;color:var(--c3);text-shadow:0 0 24px rgba(6,214,160,.4),0 0 60px rgba(63,167,214,.2);}
+.sig-heart{font-size:1.4rem;display:inline-block;animation:sigHeart 2.2s ease-in-out infinite;}
+@keyframes sigHeart{0%,100%{transform:scale(1);}50%{transform:scale(1.25);}}
+
+footer{position:relative;z-index:10;text-align:center;padding:clamp(30px,5vw,50px) clamp(16px,5vw,40px);border-top:1px solid rgba(255,255,255,.04);}
+footer::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 100%,rgba(155,93,229,.08) 0%,transparent 60%);pointer-events:none;}
+.ft-inner{position:relative;max-width:600px;margin:0 auto;}
+.ft-star{font-size:clamp(1.5rem,5vw,2.5rem);display:block;margin-bottom:10px;filter:drop-shadow(0 0 20px rgba(255,210,63,.4));animation:sigHeart 3s ease-in-out infinite;}
+.ft-name{font-family:'Baloo 2',cursive;font-size:clamp(1.5rem,5vw,2.2rem);font-weight:800;background:linear-gradient(135deg,#FFD23F,#FF6B35);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px;}
+.ft-tagline{font-family:'Nunito',sans-serif;font-style:italic;font-size:clamp(.85rem,3vw,1rem);font-weight:700;color:rgba(255,255,255,.25);margin-bottom:20px;}
+.ft-copy{font-size:.62rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.15);line-height:2;}
+.ft-copy strong{color:rgba(255,210,63,.35);font-weight:700;}
+
+@media(max-width:520px){.wishes-grid{grid-template-columns:1fr 1fr;}.milestone-banner{flex-direction:column;}.year-nav{gap:8px;}}
+@media(max-width:360px){.wishes-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 
-<div class="bg-base"></div>
-<div id="shapes"></div>
+<div id="loader">
+  <div class="ld-orbit-ring ld-orbit-ring-1"></div>
+  <div class="ld-orbit-ring ld-orbit-ring-2"></div>
+  <div class="ld-orbit-ring ld-orbit-ring-3"></div>
+  <div class="ld-orbit-dot"></div>
+  <span class="ld-star">⭐</span>
+  <div class="ld-name">Yokshith</div>
+  <div class="ld-tagline">Our Little Superstar · Born 2nd September 2025</div>
+  <div class="ld-bar-wrap"><div class="ld-bar"></div></div>
+  <div class="ld-dots"><div class="ld-dot"></div><div class="ld-dot"></div><div class="ld-dot"></div></div>
+</div>
+
+<canvas id="bg-canvas"></canvas>
+<div id="shape-layer"></div>
 <canvas id="confetti"></canvas>
+<div id="app"></div>
 
-<!-- ════════ WAITING PAGE ════════ -->
-<div class="page" id="page-wait">
-  <span class="wait-rocket">🚀</span>
-  <div class="wait-title">Something Epic<br>Is Coming!</div>
-  <div class="wait-sub">Come back on Yokshith's special day 🎂</div>
-  <div class="countdown-card" style="border-color:rgba(255,210,63,.2);">
-    <div class="countdown-card-inner">
-      <div class="cc-label">🎂 Yokshith's Birthday</div>
-      <div class="cc-date">2nd September</div>
-      <div class="cc-nums">
-        <div class="cc-unit"><div class="cc-num" id="w-d">--</div><div class="cc-lbl">Days</div></div>
-        <div class="cc-unit"><div class="cc-num" id="w-h">--</div><div class="cc-lbl">Hrs</div></div>
-        <div class="cc-unit"><div class="cc-num" id="w-m">--</div><div class="cc-lbl">Min</div></div>
-        <div class="cc-unit"><div class="cc-num" id="w-s">--</div><div class="cc-lbl">Sec</div></div>
-      </div>
+<footer>
+  <div class="ft-inner">
+    <span class="ft-star">⭐</span>
+    <div class="ft-name">Yokshith</div>
+    <p class="ft-tagline">"You are our greatest adventure, our brightest star."</p>
+    <div class="ft-copy">
+      &copy; <strong id="ft-year"></strong> All Rights Reserved &middot;
+      Made with <strong>&#9829; by Chandu</strong><br>
+      Every year, a brand new celebration &mdash; just for you.
     </div>
   </div>
-  <p class="wait-message">
-    Yokshith's big birthday surprise is being saved for the <strong style="color:var(--yellow);">2nd of September!</strong><br>
-    Come back then for something truly amazing! 🎉✨
-  </p>
-</div>
-
-<!-- ════════ BIRTHDAY PAGE ════════ -->
-<div class="page" id="page-bday">
-  <div class="bday-banner"><span class="bday-banner-inner">🎉 Happy Birthday Yokshith! 🎉</span></div>
-  <div class="bday-age-chip" id="age-chip">Loading…</div>
-  <span class="bday-title">Happy</span>
-  <span class="bday-sub">Birthday, Champ! 🎊</span>
-  <div class="emoji-dance">
-    <span class="ed-item">🎈</span>
-    <span class="ed-item">⭐</span>
-    <span class="ed-item">🎁</span>
-    <span class="ed-item">🚀</span>
-    <span class="ed-item">🎈</span>
-  </div>
-  <div class="year-theme-card">
-    <div class="ytc-inner" id="ytc-inner" style="border-color:rgba(255,210,63,.2);">
-      <div class="ytc-label" id="ytc-label">Year Theme</div>
-      <div class="ytc-theme" id="ytc-theme">…</div>
-    </div>
-  </div>
-  <div class="message-card">
-    <div class="msg-glow"></div>
-    <p class="message-text" id="bday-msg">…</p>
-  </div>
-  <div class="wish-grid">
-    <div class="wg-card"><span class="wg-emoji">🚀</span><div class="wg-title">Shoot for Stars</div><div class="wg-sub">Dream Big</div></div>
-    <div class="wg-card"><span class="wg-emoji">💪</span><div class="wg-title">Stay Strong</div><div class="wg-sub">You've Got This</div></div>
-    <div class="wg-card"><span class="wg-emoji">😄</span><div class="wg-title">Stay Happy</div><div class="wg-sub">Always Laughing</div></div>
-    <div class="wg-card"><span class="wg-emoji">💖</span><div class="wg-title">So Loved</div><div class="wg-sub">Mom & Dad</div></div>
-  </div>
-  <div class="cta-btn-wrap">
-    <button class="cta-btn" onclick="burst()">🎊 Let's Celebrate! 🎊</button>
-  </div>
-  <div class="sig-block">
-    <div class="sig-lbl">— with all our hearts —</div>
-    <div class="sig-name">Mom & Dad 💙</div>
-  </div>
-</div>
-
-<!-- ════════ FOOTER ════════ -->
-<footer class="footer">
-  <div class="footer-love">Our little star who lights up our whole world ⭐</div>
-  <div class="footer-copy">© <span id="footer-year"></span> All Rights Reserved · <span>Developed with ❤️ by Chandu</span></div>
 </footer>
 
 <script>
-// ─── CONSTANTS ───────────────────────────────────────────
-const BDAY_MONTH=9, BDAY_DAY=2, BIRTH_YEAR=2025;
+'use strict';
 
-// ─── YEAR-SPECIFIC CONTENT ───────────────────────────────
-const yearData = {
+const BIRTH_MONTH=9, BIRTH_DAY=2, BIRTH_YEAR=2025;
+const NOW=new Date(), TODAY=new Date(NOW.getFullYear(),NOW.getMonth(),NOW.getDate());
+const CY=NOW.getFullYear(), CM=NOW.getMonth()+1, CD=NOW.getDate();
+
+function isToday(m,d){return CM===m&&CD===d;}
+function nextOcc(m,d){let dt=new Date(CY,m-1,d);if(dt<=TODAY)dt=new Date(CY+1,m-1,d);return dt;}
+function cdTo(m,d){const diff=nextOcc(m,d)-new Date();return{d:Math.floor(diff/86400000),h:Math.floor((diff%86400000)/3600000),m:Math.floor((diff%3600000)/60000),s:Math.floor((diff%60000)/1000)};}
+function pad(n){return String(n).padStart(2,'0');}
+function ordinal(n){const s=['th','st','nd','rd'];const v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);}
+const lastBdayYear=(new Date(CY,BIRTH_MONTH-1,BIRTH_DAY)<=TODAY)?CY:CY-1;
+document.getElementById('ft-year').textContent=CY;
+
+/* ══ YEAR THEMES ══ */
+const THEMES={
   1:{
-    theme:"The Magnificent First! 🌟",
-    themeColor:"rgba(255,210,63,.25)",
-    emojiSet:["🎂","🍰","🎈","⭐","🎊"],
-    message:"One whole year of <em>YOU</em>, Yokshith! You've filled our home with the most extraordinary laughter, the most beautiful smiles, and a joy we never knew was possible. <strong>Happy 1st birthday, our greatest treasure!</strong>"
+    name:"One Year of Pure Wonder!",
+    tagline:"You arrived and you changed everything — completely, permanently, perfectly.",
+    emojis:["🎂","⭐","🍼","🌈","🎈"],
+    c1:"#FF6B35",c2:"#FFD23F",c3:"#06D6A0",c4:"#3FA7D6",c5:"#F72585",
+    bgType:"starfield",bgColors:["rgba(255,107,53,.18)","rgba(255,210,63,.12)","rgba(247,37,133,.1)"],
+    ageRingColors:["#FFD23F","#FF6B35","#F72585"],shapes:"stars",
+    poem:["One candle, <em>one whole year</em> of you —","of giggles that stopped the room mid-air,","of the weight of you in sleeping arms,","of discovering love beyond compare."],
+    msgA:"One. A single, extraordinary number that holds a universe inside it. <em>You have been alive for one whole year</em>, Yokshith, and we are still finding new ways to describe what you mean to us. You arrived on a September morning and the world we knew rearranged itself — quietly, completely, permanently — to make room for you at the centre of everything.",
+    msgB:"Every first has been monumental: your first real laugh that made us both burst into tears, your first curious reach for the world outside your little hands, your first deliberate smile aimed right at us. <em>A whole year of firsts</em>, and we were there for every single one. That is the most precious thing we own.",
+    msgC:"Happy first birthday, our magnificent, miraculous, absolutely extraordinary little superstar. You are one year old today — and you have already lived a lifetime of love. <strong>Every single day of that year has been the best day of our lives.</strong>",
+    milestone:"🎂",mileTitle:"One Full Revolution Around the Sun!",
+    mileText:"You have officially completed your very first trip around the sun, and what a trip it has been. Every mile of it was magic — because you were in it.",
+    wishes:[
+      {emoji:"🌟",title:"Born to Shine",color:"#FFD23F",text:"May your light only grow brighter with every year, little star. You were born to illuminate the world."},
+      {emoji:"🚀",title:"Big Adventures",color:"#FF6B35",text:"May every day ahead be a new adventure, a new discovery, a new reason to clap those tiny hands in delight."},
+      {emoji:"💙",title:"Loved Forever",color:"#3FA7D6",text:"May you always know, in the deepest part of you, that you are loved beyond every measure we have."},
+      {emoji:"😄",title:"Pure Joy",color:"#06D6A0",text:"May the whole world smile as wide as you do — because your smile is the best thing we have ever seen."}
+    ]
   },
   2:{
-    theme:"Terrific Two — Double the Fun! 🎈",
-    themeColor:"rgba(247,37,133,.2)",
-    emojiSet:["🎈","🎈","🚂","⭐","🎉"],
-    message:"Two years of you, and we are <em>completely obsessed</em>! Every word you say, every step you take, every big laugh — it's the best show on earth. <strong>Happy 2nd birthday, our tiny tornado!</strong>"
+    name:"Terrific Two — Double the Magic!",
+    tagline:"Two years of the most wonderful chaos the world has ever seen.",
+    emojis:["🎈","🎈","🚂","🦁","🎉"],
+    c1:"#F72585",c2:"#7209B7",c3:"#3A0CA3",c4:"#4361EE",c5:"#4CC9F0",
+    bgType:"bubbles",bgColors:["rgba(247,37,133,.2)","rgba(114,9,183,.15)","rgba(76,201,240,.12)"],
+    ageRingColors:["#F72585","#7209B7","#4CC9F0"],shapes:"bubbles",
+    poem:["Two — and the world is still <em>too small</em>","for all the curiosity you carry,","you touch every surface, taste every word,","and make ordinary things extraordinary."],
+    msgA:"TWO. The year of the word 'no', the year of running before walking was really finished, the year of the face that asks questions the mouth hasn't yet learned to form. <em>Two is the year of you deciding who you are</em> — and who you are, Yokshith, is absolutely spectacular.",
+    msgB:"You have learned to walk, to run (immediately), to point at the moon and say its name, to demand things by their exact correct type, to hug with the full force of a tiny person who has more feeling than most adults know what to do with. <em>Two years of this</em>, and we are completely, helplessly, delightedly your parents.",
+    msgC:"Happy second birthday, our terrific, tremendous, totally-unstoppable little tornado. Two looks excellent on you. <strong>Everything looks excellent on you.</strong> May this year hold double the joy, double the discoveries, and double the reasons to dance.",
+    milestone:"🎈",mileTitle:"Two Trips Around the Sun!",
+    mileText:"Two full years of you, and the universe is still catching up. Every room you walk into is instantly better. Every day you're in it is a gift.",
+    wishes:[
+      {emoji:"🦁",title:"Brave & Bold",color:"#F72585",text:"May you always be exactly as fearless as you are right now — charging at the world like it belongs to you."},
+      {emoji:"🌈",title:"Colourful Days",color:"#4CC9F0",text:"May every day ahead be full of the colours you love most, in every shade you've never yet imagined."},
+      {emoji:"🍰",title:"Sweetest Life",color:"#7209B7",text:"May every year add more sweetness to your already extraordinary little life."},
+      {emoji:"🤗",title:"Hugs Always",color:"#4361EE",text:"May you always know that the best thing about coming home is the hug waiting at the door."}
+    ]
   },
   3:{
-    theme:"Three Cheers for Three! 🎉",
-    themeColor:"rgba(155,93,229,.2)",
-    emojiSet:["🦁","⭐","🎠","🎈","🌈"],
-    message:"Three years of wonder, questions, and pure magic. You are <em>so curious, so brave, so brilliantly you</em>. Every day you surprise us. <strong>Happy 3rd birthday, our little lion!</strong>"
+    name:"Three — The Year of Big Questions!",
+    tagline:"Why, how, what, when, who — you ask everything and we love every word of it.",
+    emojis:["🦕","🌍","🔍","⭐","🚀"],
+    c1:"#2DC653",c2:"#00B4D8",c3:"#FFC300",c4:"#FF5733",c5:"#8338EC",
+    bgType:"particles",bgColors:["rgba(45,198,83,.18)","rgba(0,180,216,.12)","rgba(255,195,0,.1)"],
+    ageRingColors:["#2DC653","#00B4D8","#FFC300"],shapes:"leaves",
+    poem:["'Why?' you ask — <em>a thousand times</em> —","and every time we love you more,","three years of questions, three years of wonders,","of a mind that is hungry to the core."],
+    msgA:"Three is the year of the question — and you, Yokshith, ask them all. Why is the sky blue? Why does rain fall down? Why do we sleep? <em>Every question you ask is evidence of a mind that refuses to take the world at face value</em>, and that is one of the most magnificent things about you.",
+    msgB:"You are three years old and you are already reshaping how we see the world. You point at things we walk past every day and make them new. You find wonder in everything — puddles, pigeons, the way shadows stretch in the afternoon. <em>You are the best teacher we have ever had</em>, and you don't even know it yet.",
+    msgC:"Happy third birthday, our curious, brilliant, endlessly-questioning little explorer. <strong>May every question you ask find a beautiful answer — and may the answers lead you to even more wonderful questions.</strong>",
+    milestone:"🔍",mileTitle:"Three Years of Magnificent Questions!",
+    mileText:"At three, you hold a PhD in curiosity — asking the questions that genuinely matter, the ones that remind us all how extraordinary ordinary life truly is.",
+    wishes:[
+      {emoji:"🦕",title:"Dino Brave",color:"#2DC653",text:"May you be as mighty as a dinosaur and twice as fascinating — because you already are."},
+      {emoji:"🌍",title:"World Explorer",color:"#00B4D8",text:"May this whole beautiful world open its doors for you, one wonderful question at a time."},
+      {emoji:"📚",title:"Curious Mind",color:"#FFC300",text:"May your love of learning grow stronger every year, fuelled by all the questions only you can ask."},
+      {emoji:"🌟",title:"You're Magic",color:"#8338EC",text:"May you always know that the curiosity inside you is one of your greatest, most irreplaceable gifts."}
+    ]
   },
   4:{
-    theme:"Four & Absolutely Fantastic! ⚡",
-    themeColor:"rgba(63,167,214,.2)",
-    emojiSet:["⚡","🦸","🎮","🚀","⭐"],
-    message:"Four years of the most <em>incredible adventures</em> with you! You're becoming your own little person — funny, bold, and full of light. <strong>Happy 4th birthday, our superhero!</strong>"
+    name:"Four & Absolutely Fearless!",
+    tagline:"Capes, superpowers, and the biggest imagination on the block.",
+    emojis:["🦸","⚡","🛡️","🌟","💥"],
+    c1:"#EF233C",c2:"#FFC300",c3:"#3A86FF",c4:"#8338EC",c5:"#06D6A0",
+    bgType:"aurora",bgColors:["rgba(239,35,60,.2)","rgba(255,195,0,.15)","rgba(58,134,255,.12)"],
+    ageRingColors:["#EF233C","#FFC300","#3A86FF"],shapes:"stars",
+    poem:["Four — and you are <em>the superhero</em>","of every story you decide to tell,","you save the room by walking into it,","and cast the world completely under your spell."],
+    msgA:"Four years old — and you are already a superhero. Not the kind in movies, though you'd argue otherwise at bedtime. The real kind: <em>the child who charges into situations without fear, who gives every hug like it's a rescue mission, who laughs with the full power of someone who has decided joy is compulsory</em>.",
+    msgB:"At four you are learning that you can make people laugh on purpose, that stories are yours to change in the middle, that running is for arriving somewhere wonderful and also just for the running itself. <em>You are bold and funny and soft and stubborn and we wouldn't change one single thing</em>.",
+    msgC:"Happy fourth birthday, our superhero, our adventurer, our spectacular four-year-old force of nature. <strong>The world is genuinely better because you're in it doing your excellent, unstoppable, wonderful thing.</strong>",
+    milestone:"⚡",mileTitle:"Four Years of Superhero Power!",
+    mileText:"At four, your superpower is obvious: you make everyone around you feel the specific, irreplaceable joy of knowing you. That is the greatest power there is.",
+    wishes:[
+      {emoji:"🦸",title:"Super You",color:"#EF233C",text:"May you always know that your real superpower — your laugh, your love, your spirit — is mightier than any cape."},
+      {emoji:"⚡",title:"Unstoppable",color:"#FFC300",text:"May nothing ever dim the electric, extraordinary energy that makes you unmistakably, magnificently you."},
+      {emoji:"🛡️",title:"Protected",color:"#3A86FF",text:"May you always feel safe, loved, and shielded by the arms of everyone who is lucky enough to know you."},
+      {emoji:"🌟",title:"Born to Lead",color:"#8338EC",text:"May the courage in you keep growing — brave enough to try, bold enough to fail, brilliant enough to try again."}
+    ]
   },
   5:{
-    theme:"Five Years — High Five, Champ! 🙌",
-    themeColor:"rgba(6,214,160,.2)",
-    emojiSet:["🏆","⭐","🌈","🎉","🦊"],
-    message:"FIVE! You are <em>five years old</em> and the coolest kid we know. School days, big ideas, endless energy — you're ready for everything. <strong>Happy 5th birthday, our champion!</strong>"
+    name:"Five — High Five for Being You!",
+    tagline:"School days, big ideas, and the best high-five in the business.",
+    emojis:["🏫","✏️","🎒","⭐","🙌"],
+    c1:"#FB5607",c2:"#FFBE0B",c3:"#3A86FF",c4:"#8338EC",c5:"#06D6A0",
+    bgType:"starfield",bgColors:["rgba(251,86,7,.18)","rgba(255,190,11,.12)","rgba(6,214,160,.1)"],
+    ageRingColors:["#FB5607","#FFBE0B","#06D6A0"],shapes:"confetti",
+    poem:["<em>Five years old</em> — and school begins,","the biggest adventure of your days so far,","you walk through those doors with your whole heart open,","and everyone in there sees your star."],
+    msgA:"Five! The year of the big backpack, the shiny shoes, the slightly terrifying first day. <em>The year school begins</em> — and we watched you walk in with your heart so open and your eyes so wide and we couldn't breathe from pride for a full minute. You were ready. You were always going to be ready.",
+    msgB:"At five you are learning to read letters and numbers, but you have always been fluent in the most important language: <em>the language of kindness, of enthusiasm, of finding something worth celebrating in almost any ordinary moment</em>. Your teachers are going to adore you. They won't be able to help themselves.",
+    msgC:"Happy fifth birthday, our brilliant, backpack-wearing, high-fiving little champion. <strong>Five is the year the whole world starts to see what we have always known: that you are something completely, magnificently special.</strong>",
+    milestone:"🎒",mileTitle:"Five — The Year School Begins!",
+    mileText:"At five you cross the threshold into a world of learning — and you bring with you every single thing a child needs: curiosity, warmth, and a laugh that makes every room better.",
+    wishes:[
+      {emoji:"📚",title:"Love Learning",color:"#FB5607",text:"May every book you open lead you somewhere wonderful, and every lesson stick like the most exciting story."},
+      {emoji:"🎒",title:"New Beginnings",color:"#FFBE0B",text:"May every first day you ever face be the beginning of something incredible — because it always will be."},
+      {emoji:"🤝",title:"Good Friends",color:"#3A86FF",text:"May school bring you friends who make you laugh until you can't breathe and stick with you for decades."},
+      {emoji:"⭐",title:"Your Best",color:"#06D6A0",text:"May you always try your very best — and know that your very best is already extraordinary."}
+    ]
   },
   6:{
-    theme:"Six & Absolutely Brilliant! 🌟",
-    themeColor:"rgba(255,107,53,.2)",
-    emojiSet:["🦅","🎯","⚽","🚀","🌟"],
-    message:"Six is the year of discovery, Yokshith! You're reading, learning, growing — and you do it all with <em>such incredible spirit</em>. <strong>Happy 6th birthday, our brilliant star!</strong>"
+    name:"Six & Absolutely Brilliant!",
+    tagline:"Six years of a mind that never stops and a heart that never shrinks.",
+    emojis:["🌟","⚽","🎯","🦅","🎮"],
+    c1:"#0077B6",c2:"#00B4D8",c3:"#90E0EF",c4:"#CAF0F8",c5:"#48CAE4",
+    bgType:"aurora",bgColors:["rgba(0,119,182,.2)","rgba(0,180,216,.15)","rgba(144,224,239,.1)"],
+    ageRingColors:["#0077B6","#00B4D8","#48CAE4"],shapes:"geometric",
+    poem:["Six years — and the world is your playing field,","every day a game <em>you're built to win</em>,","there is no obstacle too large to tackle,","no adventure too far out to begin."],
+    msgA:"Six is the year of the athlete, the artist, the builder, the strategist, the friend who already knows how to really listen. <em>At six you are discovering what you love</em> — and watching that discovery happen is one of the most thrilling things two parents can witness.",
+    msgB:"You've grown so much this year — not just in height (though that too, astonishingly) but in the depth of your thinking, the width of your kindness, the range of your interests. <em>Six-year-old Yokshith is full of opinions, passions, questions, and the most excellent jokes we have ever heard</em>.",
+    msgC:"Happy sixth birthday, our brilliant, athletic, creative, wonderful six-year-old. <strong>You are already so much more than we could have imagined, and the best is still completely, thrillingly ahead.</strong>",
+    milestone:"🦅",mileTitle:"Six Years of Soaring Higher!",
+    mileText:"At six you learn what you love — and when you find it, you pursue it with the whole force of your extraordinary self. That is a gift beyond measure.",
+    wishes:[
+      {emoji:"⚽",title:"Play & Win",color:"#0077B6",text:"May every game you play teach you something wonderful — about teamwork, courage, and trying again."},
+      {emoji:"🎨",title:"Create Freely",color:"#00B4D8",text:"May your creativity roam without limits, making things only you could have thought of."},
+      {emoji:"🦅",title:"Fly High",color:"#48CAE4",text:"May you always aim for the highest branch — and trust that you have the wings to reach it."},
+      {emoji:"💪",title:"Keep Growing",color:"#90E0EF",text:"May every year make you stronger, wiser, kinder — and still the best hugger in the family."}
+    ]
   },
+  7:{
+    name:"Seven — Lucky Stars & Big Dreams!",
+    tagline:"Seven is for the ones bold enough to dream and brave enough to chase.",
+    emojis:["🌙","💫","🧲","🎲","🌟"],
+    c1:"#6A0572",c2:"#AB83A1",c3:"#F7AEF8",c4:"#B388FF",c5:"#EA80FC",
+    bgType:"particles",bgColors:["rgba(106,5,114,.2)","rgba(183,131,251,.15)","rgba(234,128,252,.1)"],
+    ageRingColors:["#6A0572","#B388FF","#EA80FC"],shapes:"stars",
+    poem:["Seven — the luckiest number of all,","and you are the luckiest thing <em>we know</em>,","you carry the good fortune in your laughter,","the gold in everything you show."],
+    msgA:"Seven! The lucky number — and we have never believed in luck more than we believe in you. <em>At seven, you are the specific, irreplaceable combination of everything we love most</em>: clever enough to outsmart us sometimes, kind enough to pretend you didn't, funny enough to make us forget we were tired.",
+    msgB:"This year you have developed opinions about everything — music, food, which route to take home, whether certain movies are actually as good as people say. <em>You are becoming a person who thinks for themselves</em>, who has taste, who has preferences that are entirely and wonderfully yours. We couldn't be more proud.",
+    msgC:"Happy seventh birthday, our magical, dreaming, star-counting, lucky seven. <strong>May every wish you make on every star you see come back to you, exactly when you need it most.</strong>",
+    milestone:"🌙",mileTitle:"Seven — The Lucky Star Year!",
+    mileText:"At seven, you are luck embodied — the thing that happens when the universe decides to give a family everything it needs in one extraordinary person.",
+    wishes:[
+      {emoji:"💫",title:"Wish Big",color:"#6A0572",text:"May every wish you make come true, and may the ones that don't turn into something even better."},
+      {emoji:"🌙",title:"Dream Always",color:"#B388FF",text:"May your dreams be wild, wide, and wonderful — and may sleep always bring you the best adventures."},
+      {emoji:"🎲",title:"Love the Game",color:"#EA80FC",text:"May life be the best game you ever play — full of surprises, great moves, and excellent comebacks."},
+      {emoji:"🧲",title:"Draw Others In",color:"#AB83A1",text:"May your kindness and spark continue to draw people toward you like the most wonderful magnet."}
+    ]
+  },
+  8:{
+    name:"Eight — The Science Wizard!",
+    tagline:"Experiments, inventions, and a mind that runs on pure curiosity.",
+    emojis:["🔬","⚗️","🧪","💡","🤖"],
+    c1:"#52B788",c2:"#40916C",c3:"#1B4332",c4:"#74C69D",c5:"#D8F3DC",
+    bgType:"particles",bgColors:["rgba(82,183,136,.18)","rgba(64,145,108,.12)","rgba(116,198,157,.1)"],
+    ageRingColors:["#52B788","#74C69D","#D8F3DC"],shapes:"geometric",
+    poem:["Eight — and <em>you experiment</em> with everything,","testing theories the world hasn't thought of yet,","your hypotheses are spectacular,","your conclusions even better yet."],
+    msgA:"Eight is the year of the scientist, the inventor, the tinkerer who needs to know how everything works and is willing to take things apart to find out. <em>At eight you are running experiments on the world</em> — and your findings are consistently, brilliantly surprising.",
+    msgB:"We watch you think — actually watch the moment when something clicks, when a question meets its answer, when understanding arrives on your face like sunrise — <em>and it is one of the most beautiful things we have ever witnessed</em>. Your mind is extraordinary. It moves like something engineered specifically for joy.",
+    msgC:"Happy eighth birthday, our scientist, our inventor, our brilliant and endlessly-experimenting eight-year-old. <strong>May this year be full of discoveries that astonish even you.</strong>",
+    milestone:"💡",mileTitle:"Eight — The Year of Discovery!",
+    mileText:"At eight you run experiments on the world and make discoveries that the rest of us missed completely. That is the particular brilliance of being exactly, magnificently you.",
+    wishes:[
+      {emoji:"🔬",title:"Discover More",color:"#52B788",text:"May you keep finding the extraordinary inside the ordinary, the science inside the everyday."},
+      {emoji:"💡",title:"Big Ideas",color:"#40916C",text:"May your ideas keep coming — wild and specific and completely yours — because the world needs them."},
+      {emoji:"🤖",title:"Build Things",color:"#74C69D",text:"May you build and create and make things that couldn't have existed without your exact imagination."},
+      {emoji:"⚗️",title:"Keep Testing",color:"#1B4332",text:"May you always be brave enough to try an experiment, even the ones that end with a mess to clean up."}
+    ]
+  },
+  9:{
+    name:"Nine — The Mountain Climber!",
+    tagline:"Nine years of a person who was always going to reach the top.",
+    emojis:["🏔️","🧗","🌄","🦅","⭐"],
+    c1:"#E07A5F",c2:"#F2CC8F",c3:"#3D405B",c4:"#81B29A",c5:"#F4F1DE",
+    bgType:"aurora",bgColors:["rgba(224,122,95,.2)","rgba(242,204,143,.12)","rgba(129,178,154,.1)"],
+    ageRingColors:["#E07A5F","#F2CC8F","#81B29A"],shapes:"leaves",
+    poem:["Nine — and <em>the mountain calls you</em>,","you've always been the one who sees the peak,","not as impossible but as inevitable —","the summit is exactly what you seek."],
+    msgA:"Nine feels like a summit year — the year before the enormous round number, the year where you can look back at how far you've come and look forward at how much further you can go. <em>At nine you are standing on a ledge of something magnificent</em>, and the view from here is extraordinary.",
+    msgB:"You've climbed so much already: the learning curves, the social complexities, the questions about who you are and who you want to be. <em>Nine-year-old Yokshith is already someone with depth</em> — with a sense of justice, a sense of humour, a sense of self that most people spend decades trying to find.",
+    msgC:"Happy ninth birthday, our mountain-climbing, summit-seeking, nothing-stops-me nine-year-old. <strong>One more year to ten, and you have never been more completely, magnificently yourself.</strong>",
+    milestone:"🏔️",mileTitle:"Nine — Almost a Decade of You!",
+    mileText:"Nine years — and you stand on the eve of your first decade with the quiet confidence of someone who has already climbed much harder mountains than this.",
+    wishes:[
+      {emoji:"🏔️",title:"Reach Peaks",color:"#E07A5F",text:"May every mountain you decide to climb turn out to be even more beautiful at the top than it looked from below."},
+      {emoji:"🦅",title:"See Far",color:"#81B29A",text:"May you always keep your eyes on the horizon — because the view keeps getting better the higher you go."},
+      {emoji:"🌄",title:"Beautiful Journey",color:"#F2CC8F",text:"May the climb always be as beautiful as the summit — because the getting there is half the magnificent point."},
+      {emoji:"💪",title:"Never Stop",color:"#3D405B",text:"May you face every obstacle with the same steady, smiling determination you've shown us from day one."}
+    ]
+  },
+  10:{
+    name:"TEN — A Whole Decade of Wonderful!",
+    tagline:"Ten years of the most extraordinary person we have ever known.",
+    emojis:["🏆","🎊","🌟","👑","🥂"],
+    c1:"#D4AF37",c2:"#FFD700",c3:"#B8860B",c4:"#FFF1A8",c5:"#DAA520",
+    bgType:"starfield",bgColors:["rgba(212,175,55,.25)","rgba(255,215,0,.15)","rgba(184,134,11,.1)"],
+    ageRingColors:["#D4AF37","#FFD700","#FFF1A8"],shapes:"confetti",
+    poem:["Ten — and the trumpets are playing <em>for you</em>,","a decade of extraordinary, singular grace,","ten years of learning who you are becoming,","and you are becoming someone without parallel or pace."],
+    msgA:"TEN. We have to write it in capitals because ten years deserves capitals. <em>Ten years of the most extraordinary human being either of us has ever had the privilege of knowing</em>. Ten years of watching you arrive — in every room, at every age, in every version of yourself — and taking the breath clean away.",
+    msgB:"A decade. Ten trips around the sun, ten winters and springs, ten years of growing taller and deeper and more astonishingly yourself. <em>We have loved every version of you</em> — the tiny, sleeping, barely-there version and this magnificent ten-year-old who knows exactly what they think and isn't afraid to say it.",
+    msgC:"Happy tenth birthday, our golden, glorious, decade-old wonder. <strong>Here's to the next ten — which will somehow, impossibly, be even more extraordinary than the first.</strong>",
+    milestone:"👑",mileTitle:"TEN — One Complete, Golden Decade!",
+    mileText:"Ten years is not a number. Ten years is a life fully lived, a person fully formed, a love story between a family and a child that will never have an ending.",
+    wishes:[
+      {emoji:"👑",title:"You Are the Crown",color:"#D4AF37",text:"May you always wear your ten years like the crown they are — because you have earned every single year of it."},
+      {emoji:"🏆",title:"Champion Always",color:"#FFD700",text:"May the next decade bring trophies you haven't yet imagined and victories that take even you by surprise."},
+      {emoji:"🌟",title:"Golden Light",color:"#FFF1A8",text:"May your golden year be the brightest one yet — because you have never needed permission to shine."},
+      {emoji:"🥂",title:"Celebrate You",color:"#B8860B",text:"Today the whole world pauses to celebrate exactly what you are: irreplaceable, extraordinary, and entirely loved."}
+    ]
+  }
 };
 
-function getYearData(age) {
-  return yearData[age] || {
-    theme:`${age} Years of Pure Awesomeness! 🏆`,
-    themeColor:"rgba(255,210,63,.2)",
-    emojiSet:["🌟","🎉","🚀","🏆","🎈"],
-    message:`${age} years of <em>YOU</em>, Yokshith — and every single one has been the best year of our lives. You keep growing into someone more <strong>extraordinary</strong> than we could have ever imagined. Happy Birthday, our shining star!`
+function genTheme(age){
+  const palettes=[
+    {c1:"#FF6B35",c2:"#FFD23F",c3:"#06D6A0",c4:"#3FA7D6",c5:"#9B5DE5",bt:"starfield",bc:["rgba(255,107,53,.18)","rgba(255,210,63,.12)"],sh:"stars"},
+    {c1:"#F72585",c2:"#7209B7",c3:"#3A0CA3",c4:"#4361EE",c5:"#4CC9F0",bt:"particles",bc:["rgba(247,37,133,.18)","rgba(114,9,183,.12)"],sh:"bubbles"},
+    {c1:"#2DC653",c2:"#00B4D8",c3:"#FFC300",c4:"#FF5733",c5:"#8338EC",bt:"aurora",bc:["rgba(45,198,83,.18)","rgba(0,180,216,.12)"],sh:"leaves"},
+    {c1:"#E07A5F",c2:"#F2CC8F",c3:"#3D405B",c4:"#81B29A",c5:"#F4F1DE",bt:"particles",bc:["rgba(224,122,95,.18)","rgba(129,178,154,.12)"],sh:"geometric"},
+  ];
+  const p=palettes[age%palettes.length];
+  return{
+    name:`${age} Years of Being Absolutely You!`,tagline:`${age} extraordinary years — and every single one has been the best year of our lives.`,
+    emojis:["🌟","🎉","🚀","🏆","🎈"],c1:p.c1,c2:p.c2,c3:p.c3,c4:p.c4,c5:p.c5,
+    bgType:p.bt,bgColors:p.bc,ageRingColors:[p.c1,p.c2,p.c3],shapes:p.sh,
+    poem:[`${age} years — and the count barely does you justice,`,"<em>you are more than any number can contain</em>,","every year adds a layer to the wonder,","every birthday proves it once again."],
+    msgA:`${age} years of you — and we are still discovering new things to love. <em>You keep surprising us</em>, Yokshith. The laugh that arrived this year is different from the one the year before — richer, like you added something new to your own joy and kept it.`,
+    msgB:`Every version of you has been our favourite. <em>This one most of all.</em> The questions you ask now, the opinions you hold, the way you have settled into yourself like someone who knows exactly which shape they are and is completely at peace with every angle of it.`,
+    msgC:`Happy ${ordinal(age)} birthday, our spectacular, unstoppable, entirely irreplaceable ${age}-year-old. <strong>May this year be the most extraordinary one yet — and may it be followed by one even better.</strong>`,
+    milestone:"🌟",mileTitle:`${age} Years of the Most Wonderful You!`,
+    mileText:`${age} years of you is ${age} years of the world being a richer, funnier, warmer, more extraordinary place — and that is entirely because you are in it.`,
+    wishes:[
+      {emoji:"🌟",title:"Keep Shining",color:p.c1,text:"May your light only grow brighter with every year — it was always, always meant to be seen."},
+      {emoji:"🚀",title:"Fly Higher",color:p.c2,text:"May this year launch you toward dreams you haven't yet had the words to describe."},
+      {emoji:"💙",title:"Loved Deeply",color:p.c3,text:"May you always know, completely and without doubt, that you are loved beyond every measure."},
+      {emoji:"😄",title:"Pure Joy",color:p.c4,text:"May your laughter keep being the most beautiful sound in every room you walk into."}
+    ]
   };
 }
 
-// ─── DATE DETECTION ──────────────────────────────────────
-const now = new Date();
-const month = now.getMonth()+1;
-const day = now.getDate();
-const year = now.getFullYear();
-document.getElementById('footer-year').textContent = year;
+function getTheme(age){return THEMES[age]||genTheme(age);}
 
-function isBirthday(){ return month===BDAY_MONTH && day===BDAY_DAY; }
-
-function getCountdown(){
-  const today=new Date(); today.setHours(0,0,0,0);
-  let target=new Date(today.getFullYear(),BDAY_MONTH-1,BDAY_DAY);
-  if(target<=today) target.setFullYear(target.getFullYear()+1);
-  const diff=target-new Date();
-  return {
-    d:Math.floor(diff/86400000),
-    h:Math.floor((diff%86400000)/3600000),
-    m:Math.floor((diff%3600000)/60000),
-    s:Math.floor((diff%60000)/1000)
-  };
+function applyTheme(t){
+  const r=document.documentElement;
+  r.style.setProperty('--c1',t.c1);r.style.setProperty('--c2',t.c2);
+  r.style.setProperty('--c3',t.c3);r.style.setProperty('--c4',t.c4);r.style.setProperty('--c5',t.c5);
 }
 
-function pad(n){return String(n).padStart(2,'0');}
+/* ══ ANIMATION ENGINE ══ */
+let _animId=null,_shapeTimer=null;
+function stopAnim(){if(_animId){cancelAnimationFrame(_animId);_animId=null;}if(_shapeTimer){clearInterval(_shapeTimer);_shapeTimer=null;}document.getElementById('shape-layer').innerHTML='';const cv=document.getElementById('bg-canvas');cv.getContext('2d').clearRect(0,0,cv.width,cv.height);}
 
-function updateCountdown(){
-  const c=getCountdown();
-  document.getElementById('w-d').textContent=pad(c.d);
-  document.getElementById('w-h').textContent=pad(c.h);
-  document.getElementById('w-m').textContent=pad(c.m);
-  document.getElementById('w-s').textContent=pad(c.s);
+function startAnim(type,bgColors){
+  stopAnim();
+  const cv=document.getElementById('bg-canvas');
+  function resize(){cv.width=innerWidth;cv.height=innerHeight;}
+  resize();window.addEventListener('resize',resize);
+  const ctx=cv.getContext('2d');
+  if(type==='starfield')animStarfield(ctx,cv,bgColors);
+  else if(type==='bubbles')animBubbles(ctx,cv,bgColors);
+  else if(type==='aurora')animAurora(ctx,cv,bgColors);
+  else animParticles(ctx,cv,bgColors);
 }
 
-function renderBirthday(){
-  const age = year-BIRTH_YEAR;
-  const data = getYearData(age);
-  document.getElementById('age-chip').textContent = `🎂 Turning ${age} Today!`;
-  document.getElementById('ytc-label').textContent = `${year} — Birthday Theme`;
-  document.getElementById('ytc-theme').textContent = data.theme;
-  document.getElementById('ytc-inner').style.borderColor = data.themeColor;
-  document.getElementById('bday-msg').innerHTML = data.message;
-  // Update emoji row
-  const emojis = document.querySelectorAll('.ed-item');
-  data.emojiSet.forEach((e,i)=>{ if(emojis[i]) emojis[i].textContent=e; });
-  document.getElementById('page-bday').classList.add('active');
+function animStarfield(ctx,cv,bgColors){
+  const stars=Array.from({length:80},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:.5+Math.random()*2,vy:.2+Math.random()*.5,a:Math.random(),aa:.007+Math.random()*.012,c:bgColors[Math.floor(Math.random()*bgColors.length)]}));
+  function frame(){ctx.clearRect(0,0,cv.width,cv.height);stars.forEach(s=>{s.y+=s.vy;s.a+=s.aa;if(s.y>cv.height+10){s.y=-10;s.x=Math.random()*cv.width;s.a=0;}const al=.6*Math.abs(Math.sin(s.a));const hex=Math.round(al*255).toString(16).padStart(2,'0');ctx.save();ctx.translate(s.x,s.y);const col=s.c.replace(/[\d.]+\)$/,`${al.toFixed(2)})`);ctx.fillStyle=col;const r=s.r*2,ri=s.r*.4;ctx.beginPath();for(let i=0;i<8;i++){const ang=i*Math.PI/4,rad=i%2===0?r:ri;i===0?ctx.moveTo(Math.cos(ang)*rad,Math.sin(ang)*rad):ctx.lineTo(Math.cos(ang)*rad,Math.sin(ang)*rad);}ctx.closePath();ctx.fill();ctx.restore();});_animId=requestAnimationFrame(frame);}
+  frame();
 }
 
-if(isBirthday()){
-  renderBirthday();
-  setTimeout(()=>burst(180),2000);
-} else {
-  document.getElementById('page-wait').classList.add('active');
-  updateCountdown();
-  setInterval(updateCountdown,1000);
+function animBubbles(ctx,cv,bgColors){
+  const bubs=Array.from({length:45},()=>({x:Math.random()*cv.width,y:cv.height+50,r:4+Math.random()*14,vy:-(0.3+Math.random()*.6),a:Math.random(),aa:.005+Math.random()*.008,wobble:Math.random()*Math.PI*2,ws:(Math.random()-.5)*.03,c:bgColors[Math.floor(Math.random()*bgColors.length)]}));
+  function frame(){ctx.clearRect(0,0,cv.width,cv.height);bubs.forEach(b=>{b.y+=b.vy;b.wobble+=b.ws;b.a+=b.aa;if(b.y<-30){b.y=cv.height+30;b.x=Math.random()*cv.width;b.a=0;}b.x+=Math.sin(b.wobble)*.5;const al=.45*Math.sin(Math.PI*Math.min(b.a,1));ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.strokeStyle=b.c.replace(/[\d.]+\)$/,`${al.toFixed(2)})`);ctx.lineWidth=1.5;ctx.stroke();ctx.beginPath();ctx.arc(b.x-b.r*.3,b.y-b.r*.3,b.r*.2,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${(al*.4).toFixed(2)})`;ctx.fill();});_animId=requestAnimationFrame(frame);}
+  frame();
 }
 
-// ─── CONFETTI ────────────────────────────────────────────
-const cvs=document.getElementById('confetti');
-const ctx=cvs.getContext('2d');
-let particles=[];
-let animId=null;
-function resize(){ cvs.width=window.innerWidth; cvs.height=window.innerHeight; }
-resize();
-window.addEventListener('resize',resize);
+function animParticles(ctx,cv,bgColors){
+  const pts=Array.from({length:65},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:.8+Math.random()*2.5,vx:(Math.random()-.5)*.25,vy:-(0.12+Math.random()*.35),a:Math.random(),aa:.005+Math.random()*.012,c:bgColors[Math.floor(Math.random()*bgColors.length)]}));
+  function frame(){ctx.clearRect(0,0,cv.width,cv.height);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a+=p.aa;if(p.y<-10||p.a>1.1){p.x=Math.random()*cv.width;p.y=cv.height+10;p.a=0;}const al=.5*Math.sin(Math.PI*p.a);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c.replace(/[\d.]+\)$/,`${al.toFixed(2)})`);ctx.fill();});_animId=requestAnimationFrame(frame);}
+  frame();
+}
 
-const colors=['#FFD23F','#FF6B35','#3FA7D6','#9B5DE5','#06D6A0','#F72585','#ffffff'];
-function burst(n=130){
-  for(let i=0;i<n;i++){
-    particles.push({
-      x:Math.random()*cvs.width,
-      y:-20,
-      vx:(Math.random()-.5)*5,
-      vy:2+Math.random()*5,
-      w:5+Math.random()*10,
-      h:7+Math.random()*6,
-      rot:Math.random()*Math.PI*2,
-      rs:(Math.random()-.5)*.25,
-      color:colors[Math.floor(Math.random()*colors.length)],
-      op:1, shape:Math.random()<.45?'rect':'circle'
-    });
+function animAurora(ctx,cv,bgColors){
+  const blobs=bgColors.map((c,i)=>({x:cv.width*(0.2+i*.25),y:cv.height*(0.3+i*.2),vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.35,r:cv.width*.2+i*40,c}));
+  let tick=0;
+  function frame(){tick++;ctx.clearRect(0,0,cv.width,cv.height);blobs.forEach((b,i)=>{b.x+=b.vx+Math.sin(tick*.006+i)*.6;b.y+=b.vy+Math.cos(tick*.008+i)*.4;if(b.x<0||b.x>cv.width)b.vx*=-1;if(b.y<0||b.y>cv.height)b.vy*=-1;const g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);g.addColorStop(0,b.c.replace(/[\d.]+\)$/,'.18)'));g.addColorStop(1,b.c.replace(/[\d.]+\)$/,'0)'));ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();});_animId=requestAnimationFrame(frame);}
+  frame();
+}
+
+function spawnShapes(type){
+  const layer=document.getElementById('shape-layer');
+  const maps={stars:['⭐','✨','💫','🌟'],bubbles:['🫧','💧','🔵','🟣'],leaves:['🍃','🌿','🍀','🌱'],geometric:['◆','◇','▲','▸'],confetti:['🎊','🎉','✨','🎈']};
+  const emojis=maps[type]||maps.stars;
+  if(!document.getElementById('shapeKF')){const s=document.createElement('style');s.id='shapeKF';s.textContent='@keyframes sfRise{0%{opacity:0;transform:translateY(0) rotate(0deg)}6%{opacity:.7}94%{opacity:.3}100%{opacity:0;transform:translateY(-115vh) rotate(720deg) translateX(60px)}}@keyframes sfFall{0%{opacity:0;transform:translateY(-80px) rotate(0)}6%{opacity:.6}94%{opacity:.2}100%{opacity:0;transform:translateY(115vh) rotate(-540deg) translateX(-40px)}}';document.head.appendChild(s);}
+  function mk(){if(!document.getElementById('shape-layer'))return;const el=document.createElement('div');const sz=14+Math.random()*22,e=emojis[Math.floor(Math.random()*emojis.length)],dur=10+Math.random()*10,anim=Math.random()<.5?'sfRise':'sfFall',start=anim==='sfRise'?'bottom:-60px;':'top:-60px;';el.style.cssText=`position:absolute;left:${Math.random()*100}%;${start}font-size:${sz}px;animation:${anim} ${dur}s ${Math.random()*4}s linear forwards;`;el.textContent=e;layer.appendChild(el);setTimeout(()=>el.remove(),(dur+5)*1000);}
+  for(let i=0;i<12;i++)setTimeout(mk,i*500);
+  _shapeTimer=setInterval(mk,1400);
+}
+
+/* ══ CONFETTI ══ */
+const CCV=document.getElementById('confetti'),CCTX=CCV.getContext('2d');
+let cps=[],cid=null;
+function resizeC(){CCV.width=innerWidth;CCV.height=innerHeight;}resizeC();window.addEventListener('resize',resizeC);
+function burst(n=140){
+  const cols=['#FFD23F','#FF6B35','#F72585','#9B5DE5','#06D6A0','#3FA7D6','#ffffff'];
+  for(let i=0;i<n;i++)cps.push({x:Math.random()*CCV.width,y:-20,vx:(Math.random()-.5)*6,vy:2+Math.random()*5,w:5+Math.random()*10,h:7+Math.random()*5,rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.22,c:cols[Math.floor(Math.random()*cols.length)],op:1,shape:Math.random()<.45?'rect':'circle'});
+  if(!cid)cFrame();
+}
+function cFrame(){CCTX.clearRect(0,0,CCV.width,CCV.height);cps=cps.filter(p=>p.y<CCV.height+40&&p.op>0);cps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.rot+=p.rs;p.vy+=.05;if(p.y>CCV.height*.75)p.op-=.018;CCTX.save();CCTX.translate(p.x,p.y);CCTX.rotate(p.rot);CCTX.globalAlpha=p.op;CCTX.fillStyle=p.c;if(p.shape==='rect')CCTX.fillRect(-p.w/2,-p.h/2,p.w,p.h);else{CCTX.beginPath();CCTX.arc(0,0,p.w/2,0,Math.PI*2);CCTX.fill();}CCTX.restore();});if(cps.length>0)cid=requestAnimationFrame(cFrame);else{CCTX.clearRect(0,0,CCV.width,CCV.height);cid=null;}}
+
+/* ══ SCROLL REVEAL ══ */
+function initReveal(){const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.1});document.querySelectorAll('.sr').forEach(el=>io.observe(el));}
+
+/* ══ INJECT PAGE ANIMATION ══ */
+(function(){const s=document.createElement('style');s.textContent='@keyframes pageEnter{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:none;}}';document.head.appendChild(s);})();
+
+/* ══ WAITING PAGE ══ */
+function renderWaiting(){
+  applyTheme({c1:'#FF6B35',c2:'#FFD23F',c3:'#06D6A0',c4:'#3FA7D6',c5:'#F72585'});
+  startAnim('starfield',["rgba(255,107,53,.15)","rgba(255,210,63,.1)","rgba(247,37,133,.08)"]);
+  spawnShapes('stars');
+
+  const memories=[];
+  for(let yr=BIRTH_YEAR+1;yr<=lastBdayYear;yr++){
+    const age=yr-BIRTH_YEAR,t=getTheme(age);
+    memories.push(`<div class="memory-card" onclick="renderBirthday(${yr},true)"><span class="mc-emoji">${t.emojis[0]}</span><div class="mc-year">${yr}</div><div class="mc-lbl">Age ${age}</div></div>`);
   }
-  if(!animId) animate();
+
+  document.getElementById('app').innerHTML=`<div style="animation:pageEnter .7s var(--ease) forwards;">
+<div class="wait-hero">
+  <span class="wait-rocket">🚀</span>
+  <div class="wait-title">Something Epic<br>Is Coming!</div>
+  <p class="wait-sub">Yokshith's birthday surprise is saved for<br><em>2nd September &mdash; come back then!</em></p>
+  <div class="cd-widget">
+    <div class="cd-widget-title">🎂 Yokshith's Birthday</div>
+    <div class="cd-widget-date">2nd September &middot; ${nextOcc(BIRTH_MONTH,BIRTH_DAY).getFullYear()}</div>
+    <div class="cd-nums">
+      <div class="cd-unit"><span class="cd-num" id="w-d">--</span><div class="cd-lbl">Days</div></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit"><span class="cd-num" id="w-h">--</span><div class="cd-lbl">Hours</div></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit"><span class="cd-num" id="w-m">--</span><div class="cd-lbl">Mins</div></div>
+      <span class="cd-sep">:</span>
+      <div class="cd-unit"><span class="cd-num" id="w-s">--</span><div class="cd-lbl">Secs</div></div>
+    </div>
+  </div>
+  <div class="scroll-cue"><div class="sc-txt">Scroll Down</div><div class="sc-line"></div></div>
+</div>
+
+<div class="sec" style="background:rgba(255,255,255,.02);">
+  <div class="sec-inner">
+    <div class="sec-label sr"><div class="sl-line"></div><span class="sl-text">A Note While You Wait</span><div class="sl-line sl-line-r"></div></div>
+    <div class="wait-love-note sr">
+      <div class="wln-top">💌 To Our Star</div>
+      <p class="wln-text">Yokshith, this page was built entirely for you. On your birthday — <em>2nd September</em> — it transforms into something made especially for exactly how old you are in exactly that year.</p>
+      <p class="wln-text">Every year brings a completely new celebration: new colours, new animations, new words written just for you. <em>Because you deserve something that knows you — not just any child, but specifically, wonderfully you.</em></p>
+      <p class="wln-text">Until then, come back on the day. The surprise is being saved. The best things always are.</p>
+      <div class="wln-sig">— Always, Amma &amp; Nanna 💛</div>
+    </div>
+  </div>
+</div>
+
+${memories.length>0?`<div class="sec sr">
+  <div class="sec-inner">
+    <div class="sec-label sr"><div class="sl-line"></div><span class="sl-text">Relive the Memories</span><div class="sl-line sl-line-r"></div></div>
+    <p style="text-align:center;font-size:.9rem;font-weight:600;color:var(--muted);margin-bottom:24px;" class="sr">Tap any year to revisit that birthday celebration.</p>
+    <div class="memory-grid sr">${memories.join('')}</div>
+  </div>
+</div>`:`<div class="sec sr"><div class="sec-inner" style="text-align:center;"><div class="locked-box"><span class="locked-emoji">🔮</span><div class="locked-title">First Birthday Coming!</div><div class="locked-text">Yokshith turns 1 on 2nd September ${BIRTH_YEAR+1}. When that magical day arrives, this page comes alive with something made entirely for him.</div></div></div></div>`}
+
+<div class="signature sr">
+  <div class="sig-from">&mdash; counting down the days with so much love &mdash;</div>
+  <div class="sig-name">Amma &amp; Nanna <span class="sig-heart">⭐</span></div>
+</div>
+</div>`;
+  initReveal();tickWaiting();setInterval(tickWaiting,1000);
 }
 
-function animate(){
-  ctx.clearRect(0,0,cvs.width,cvs.height);
-  particles=particles.filter(p=>p.y<cvs.height+40&&p.op>0);
-  particles.forEach(p=>{
-    p.x+=p.vx; p.y+=p.vy; p.rot+=p.rs; p.vy+=.06;
-    if(p.y>cvs.height*.75) p.op-=.02;
-    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot); ctx.globalAlpha=p.op; ctx.fillStyle=p.color;
-    if(p.shape==='rect') ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
-    else { ctx.beginPath(); ctx.arc(0,0,p.w/2,0,Math.PI*2); ctx.fill(); }
-    ctx.restore();
+function tickWaiting(){
+  const c=cdTo(BIRTH_MONTH,BIRTH_DAY);
+  [['w-d',c.d],['w-h',c.h],['w-m',c.m],['w-s',c.s]].forEach(([id,val])=>{
+    const el=document.getElementById(id);if(!el)return;const v=pad(val);
+    if(el.textContent!==v){el.style.opacity='.2';el.style.transform='translateY(-5px)';setTimeout(()=>{el.textContent=v;el.style.opacity='';el.style.transform='';},150);}
   });
-  if(particles.length>0){ animId=requestAnimationFrame(animate); }
-  else { ctx.clearRect(0,0,cvs.width,cvs.height); animId=null; }
 }
 
-// ─── FLOATING SHAPES ─────────────────────────────────────
-const shapesEl=document.getElementById('shapes');
-const shapeTypes=['🎈','⭐','🎊','💫','✨','🌟'];
-function mkShape(){
-  const s=document.createElement('div'); s.className='shape';
-  const sz=20+Math.random()*30;
-  s.style.cssText=`left:${Math.random()*100}%;font-size:${sz}px;animation-duration:${9+Math.random()*8}s;animation-delay:${Math.random()*5}s;`;
-  s.textContent=shapeTypes[Math.floor(Math.random()*shapeTypes.length)];
-  shapesEl.appendChild(s);
-  setTimeout(()=>s.remove(),20000);
+/* ══ BIRTHDAY PAGE ══ */
+function renderBirthday(year,fromWaiting){
+  fromWaiting=!!fromWaiting;
+  const age=year-BIRTH_YEAR,t=getTheme(age);
+  applyTheme(t);startAnim(t.bgType,t.bgColors);spawnShapes(t.shapes);
+
+  const isCurrent=(year===lastBdayYear);
+  const canBack=(year-1)>BIRTH_YEAR;
+  const canFwd=!isCurrent&&(year+1)<=lastBdayYear;
+
+  const wishCards=t.wishes.map((w,i)=>`<div class="wish-card"><span class="wc-emoji" style="animation-delay:${i*.2}s">${w.emoji}</span><div class="wc-title" style="color:${w.color}">${w.title}</div><div class="wc-text">${w.text}</div></div>`).join('');
+
+  document.getElementById('app').innerHTML=`<div style="animation:pageEnter .7s var(--ease) forwards;">
+
+<div class="hero">
+  ${!isCurrent?`<div style="margin-bottom:20px;opacity:0;animation:ldFade .7s ease forwards 2.4s;"><span class="past-banner">📅 Viewing ${year} &middot; Age ${age} <button onclick="renderBirthday(${lastBdayYear},false)" style="background:var(--c1);color:#000;border:none;cursor:pointer;padding:5px 16px;border-radius:50px;font-family:'Fredoka',sans-serif;font-size:.85rem;font-weight:600;">&rarr; Latest</button></span></div>`:''}
+  <div class="hero-eyebrow">2nd September ${year} &middot; ${ordinal(age)} Birthday</div>
+  <div class="hero-emoji-row">${t.emojis.map(e=>`<span class="her">${e}</span>`).join('')}</div>
+  <span class="hero-title-l1">Happy</span>
+  <span class="hero-title-l2">Birthday, Yokshith!</span>
+  <div class="hero-name-badge">
+    <span class="hnb-label">Our Star</span><span class="hnb-sep">&middot;</span>
+    <span class="hnb-name">Yokshith</span><span class="hnb-sep">&middot;</span>
+    <span class="hnb-label">Age ${age}</span>
+  </div>
+  <p class="hero-tagline">${t.tagline}</p>
+  <div class="age-ring-wrap">
+    <svg class="age-ring-svg" width="140" height="140" viewBox="0 0 140 140">
+      <defs>
+        <linearGradient id="rg${age}" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="${t.ageRingColors[0]}"/>
+          <stop offset="50%" stop-color="${t.ageRingColors[1]}"/>
+          <stop offset="100%" stop-color="${t.ageRingColors[2]}"/>
+        </linearGradient>
+      </defs>
+      <circle cx="70" cy="70" r="60" fill="none" stroke="url(#rg${age})" stroke-width="3" stroke-dasharray="6 6" opacity=".7"/>
+      <circle cx="70" cy="70" r="46" fill="rgba(255,255,255,.03)" stroke="url(#rg${age})" stroke-width="1.5" opacity=".4"/>
+    </svg>
+    <div class="age-num">
+      <span class="age-big" style="color:${t.c2};text-shadow:0 0 28px ${t.c2};">${age}</span>
+      <span class="age-lbl">Years Old</span>
+    </div>
+  </div>
+  <div class="scroll-cue"><div class="sc-txt">Scroll for More</div><div class="sc-line"></div></div>
+</div>
+
+<div class="sec"><div class="sec-inner sr">
+  <div class="poem-block">
+    <div class="poem-glow"></div>
+    <span class="poem-icon">${t.emojis[2]}</span>
+    ${t.poem.map(l=>`<span class="poem-line">${l}</span>`).join('')}
+    <div class="poem-attr">&mdash; A Birthday Poem for Yokshith &mdash;</div>
+  </div>
+</div></div>
+
+<div class="sec" style="background:rgba(255,255,255,.02);"><div class="sec-inner">
+  <div class="sec-label sr"><div class="sl-line"></div><span class="sl-text">A Message From Amma &amp; Nanna</span><div class="sl-line sl-line-r"></div></div>
+  <div class="msg-card sr">
+    <div class="msg-stripe"></div>
+    <div class="msg-glow-ring"></div>
+    <span class="msg-icon">💌</span>
+    <p class="msg-para">${t.msgA}</p>
+    <p class="msg-para">${t.msgB}</p>
+    <p class="msg-para">${t.msgC}</p>
+  </div>
+</div></div>
+
+<div class="sec"><div class="sec-inner sr">
+  <div class="milestone-banner">
+    <div class="ms-icon">${t.milestone}</div>
+    <div>
+      <div class="ms-label">This Year's Milestone</div>
+      <div class="ms-title">${t.mileTitle}</div>
+      <div class="ms-text">${t.mileText}</div>
+    </div>
+  </div>
+</div></div>
+
+<div class="sec" style="background:rgba(255,255,255,.02);"><div class="sec-inner-wide">
+  <div class="sec-label sr"><div class="sl-line"></div><span class="sl-text">Birthday Wishes</span><div class="sl-line sl-line-r"></div></div>
+  <div class="wishes-grid sr">${wishCards}</div>
+</div></div>
+
+<div class="sec" style="padding-top:0;text-align:center;">
+  <div class="sr">
+    <button onclick="burst(200)" style="font-family:'Baloo 2',cursive;font-size:1.1rem;font-weight:700;color:#000;background:linear-gradient(135deg,var(--c2),var(--c1));padding:16px 40px;border-radius:50px;border:none;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.3);transition:transform .25s,box-shadow .25s;" onmouseover="this.style.transform='scale(1.07) translateY(-3px)'" onmouseout="this.style.transform=''">
+      🎊 Make It Rain Confetti! 🎊
+    </button>
+  </div>
+</div>
+
+<div class="sec"><div class="sec-inner" style="text-align:center;">
+  ${canBack||canFwd||fromWaiting?`
+  <div style="font-family:'Space Grotesk',sans-serif;font-size:.6rem;font-weight:500;letter-spacing:.35em;text-transform:uppercase;color:var(--muted);margin-bottom:18px;">Browse Birthdays</div>
+  <div class="year-nav sr">
+    ${canBack?`<button class="yn-btn" onclick="renderBirthday(${year-1},false)"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H4M6 4l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>${year-1} &middot; Age ${age-1}</button>`:''}
+    ${canFwd?`<button class="yn-btn fwd" onclick="renderBirthday(${year+1},false)">${year+1} &middot; Age ${age+1}<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 7h6M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`:''}
+    ${fromWaiting?`<button class="yn-btn home" onclick="renderWaiting()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2L2 6v6h3.5V9h3v3H12V6L7 2z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Back Home</button>`:''}
+  </div>
+  ${!canFwd&&!fromWaiting?`<div class="locked-box sr" style="margin-top:24px;"><span class="locked-emoji">🔮</span><div class="locked-title">Next Year is a Surprise!</div><div class="locked-text">Come back on 2nd September ${year+1} to discover what Age ${age+1} holds for Yokshith. Some things are worth waiting for. ✨</div></div>`:''}
+  `:''}
+</div></div>
+
+<div class="signature sr">
+  <div class="sig-from">&mdash; with every piece of our hearts, always and forever &mdash;</div>
+  <div class="sig-name">Amma &amp; Nanna <span class="sig-heart">${t.emojis[1]}</span></div>
+</div>
+
+</div>`;
+  window.scrollTo({top:0,behavior:'smooth'});initReveal();
 }
-for(let i=0;i<8;i++) setTimeout(mkShape,i*900);
-setInterval(mkShape,1800);
+
+/* ══ LAUNCH ══ */
+window.addEventListener('DOMContentLoaded',()=>{
+  if(isToday(BIRTH_MONTH,BIRTH_DAY)){renderBirthday(CY,false);setTimeout(()=>burst(180),2200);}
+  else renderWaiting();
+  setTimeout(()=>{document.getElementById('loader').classList.add('out');setTimeout(()=>{document.getElementById('app').classList.add('in');},200);},2600);
+});
 </script>
 </body>
 </html>
