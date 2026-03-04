@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7X8J9M550J"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-7X8J9M550J');
+</script>
 <title>Chandu & Family — Celebrations of Love</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -883,15 +891,12 @@ a{color:inherit;text-decoration:none;}
 <div id="loader">
   <div class="ld-mark">
     <svg width="70" height="70" viewBox="0 0 70 70" fill="none">
-      <!-- Animated heart rings -->
       <circle cx="35" cy="35" r="32" stroke="#F0D8D4" stroke-width="1" opacity="0.6"/>
       <circle cx="35" cy="35" r="26" stroke="#F0D8D4" stroke-width="0.5" opacity="0.4"/>
-      <!-- Heart path -->
       <path d="M35 50 C35 50 14 38 14 24 C14 17 20 12 27 12 C31 12 34 14 35 17 C36 14 39 12 43 12 C50 12 56 17 56 24 C56 38 35 50 35 50Z"
         fill="none" stroke="#C09A52" stroke-width="1.5"
         stroke-dasharray="100" stroke-dashoffset="100"
         style="animation:drawHeart 1.8s ease forwards .4s"/>
-      <!-- Inner flourish -->
       <path d="M28 28 Q35 22 42 28" fill="none" stroke="#C07880" stroke-width="1" opacity="0.5"
         stroke-dasharray="30" stroke-dashoffset="30"
         style="animation:drawHeart 1s ease forwards 1.5s"/>
@@ -922,7 +927,6 @@ a{color:inherit;text-decoration:none;}
 
 <!-- ── HERO ── -->
 <section class="hero">
-  <!-- Corner vines (SVG) -->
   <svg class="hero-deco hero-deco-tl" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M10 190 Q10 10 190 10" stroke="#C09A52" stroke-width="1" fill="none" opacity=".6"/>
     <path d="M30 190 Q30 30 190 30" stroke="#C07880" stroke-width=".7" fill="none" opacity=".35"/>
@@ -945,24 +949,19 @@ a{color:inherit;text-decoration:none;}
 
   <div class="logo-mark" role="img" aria-label="Chandu and Family — Heart logo">
     <svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- Outer ring with dashes -->
       <circle cx="50" cy="50" r="46" stroke="#E8D4BC" stroke-width="1" stroke-dasharray="4 6"/>
       <circle cx="50" cy="50" r="40" stroke="#F0D9B0" stroke-width=".5" opacity=".6"/>
-      <!-- Main heart -->
       <path class="logo-heart-path"
         d="M50 72 C50 72 22 56 22 36 C22 27 29 20 38 20 C43 20 48 23 50 27 C52 23 57 20 62 20 C71 20 78 27 78 36 C78 56 50 72 50 72 Z"
         fill="url(#heartGrad)" stroke="none" opacity=".9"/>
-      <!-- Inner heart outline -->
       <path d="M50 62 C50 62 32 52 32 40 C32 35 36 31 41 31 C44.5 31 47 33 50 36 C53 33 55.5 31 59 31 C64 31 68 35 68 40 C68 52 50 62 50 62 Z"
         fill="none" stroke="rgba(255,255,255,.5)" stroke-width="1"
         stroke-dasharray="80" stroke-dashoffset="80"
         style="animation:drawHeart 1.5s ease forwards 2.8s"/>
-      <!-- Small accent dots -->
       <circle cx="50" cy="14" r="2.5" fill="#C09A52" opacity=".6"/>
       <circle cx="50" cy="86" r="2.5" fill="#C09A52" opacity=".6"/>
       <circle cx="14" cy="50" r="2.5" fill="#C07880" opacity=".5"/>
       <circle cx="86" cy="50" r="2.5" fill="#C07880" opacity=".5"/>
-      <!-- Corner diamonds -->
       <path d="M50 6 L52.5 10 L50 14 L47.5 10 Z" fill="#C09A52" opacity=".4"/>
       <path d="M50 86 L52.5 90 L50 94 L47.5 90 Z" fill="#C09A52" opacity=".4"/>
       <defs>
@@ -1158,7 +1157,6 @@ a{color:inherit;text-decoration:none;}
 <!-- ── FOOTER ── -->
 <footer class="footer">
   <div class="ft-inner">
-    <!-- Footer SVG logo -->
     <div class="ft-logo">
       <svg width="52" height="52" viewBox="0 0 52 52" fill="none">
         <circle cx="26" cy="26" r="24" stroke="rgba(192,154,82,.25)" stroke-width="1"/>
@@ -1174,9 +1172,9 @@ a{color:inherit;text-decoration:none;}
       <div class="ft-div-line"></div>
     </div>
     <div class="ft-links">
-      <a href="sindhu.html"   class="ft-link">Sindhu</a>
-      <a href="yokshith.html" class="ft-link">Yokshith</a>
-	  <a href="https://chandusindhu.web.app/" class="ft-link">💍 Wedding Invitation</a>
+      <a href="sindhu.html"   class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'sindhu'})">Sindhu</a>
+      <a href="yokshith.html" class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'yokshith'})">Yokshith</a>
+      <a href="https://chandusindhu.web.app/" class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'wedding_site'})">💍 Wedding Invitation</a>
     </div>
     <div class="ft-copy">
       © <strong id="ft-year"></strong> All Rights Reserved<br>
@@ -1185,15 +1183,11 @@ a{color:inherit;text-decoration:none;}
   </div>
 </footer>
 
-</main><!-- /page -->
+</main>
 
 <script>
 /* ═══════════════════════════════════════════════════════════
-   ╔══════════════════════════════════════════╗
-   ║   FAMILY DATA  ← EDIT HERE TO ADD MORE  ║
-   ╚══════════════════════════════════════════╝
-   Add a new member by copying one block.
-   Everything — countdowns, stats, upcoming — auto-updates.
+   FAMILY DATA
 ═══════════════════════════════════════════ */
 const FAMILY = [
   {
@@ -1228,23 +1222,7 @@ const FAMILY = [
     events: [
       { type:'birthday', label:'Birthday', month:9, day:2, startYear:2025 }
     ]
-  },
-  /* ── ADD NEW MEMBER HERE ────────────────────────
-  {
-    id: 'mom',
-    name: 'Amma',
-    relation: 'Mother',
-    emoji: '🌺',
-    page: 'amma.html',
-    gradient: 'linear-gradient(135deg,#F0FBF7,#FBF7F2)',
-    accent: '#1A8060',
-    evBg: '#F0FBF7',
-    evBorder: '#B8EDDA',
-    evStripe: 'linear-gradient(90deg,#06C898,#3FA7D6)',
-    desc: 'The foundation of everything we are.',
-    events: [{ type:'birthday', label:'Birthday', month:3, day:8, startYear:1965 }]
-  },
-  ─────────────────────────────────────────────── */
+  }
 ];
 
 /* ═══════════════════════════════════════════
@@ -1318,7 +1296,16 @@ function buildCards(){
     card.style.transitionDelay = `${i*0.12}s`;
     card.style.setProperty('--c-accent', m.accent);
 
-    // Events list
+    /* ── GA: track member card click ── */
+    card.addEventListener('click', () => {
+      gtag('event', 'member_card_click', {
+        member_name: m.name,
+        member_relation: m.relation,
+        next_event: ev.label,
+        days_to_next_event: days
+      });
+    });
+
     const evList = m.events.slice()
       .sort((a,b)=>daysTo(a.month,a.day)-daysTo(b.month,b.day))
       .map(e=>{
@@ -1391,15 +1378,22 @@ function buildCards(){
         </div>
       </div>`;
     grid.appendChild(card);
-    // Stagger observer trigger
     setTimeout(()=>card.classList.add('in'), 100+i*140);
   });
-  
-  // ── Wedding Invitation Card ──
-const wc = document.createElement('a');
-wc.href = 'https://chandusindhu.web.app/';
-wc.className = 'wedding-card';
-wc.innerHTML = `
+
+  /* ── Wedding Invitation Card ── */
+  const wc = document.createElement('a');
+  wc.href = 'https://chandusindhu.web.app/';
+  wc.className = 'wedding-card';
+
+  /* ── GA: track wedding card click ── */
+  wc.addEventListener('click', () => {
+    gtag('event', 'wedding_card_click', {
+      destination: 'https://chandusindhu.web.app/'
+    });
+  });
+
+  wc.innerHTML = `
   <div class="wc-header">
     <div class="wc-header-stripe"></div>
     <div class="wc-rings">
@@ -1425,10 +1419,10 @@ wc.innerHTML = `
     <p class="wc-desc">On the 19th of November, 2023, two hearts became one. Relive the magic — every detail of our wedding day, beautifully captured and preserved forever.</p>
     <div class="wc-cta">View Invitation <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M8 3l3.5 3.5L8 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
   </div>`;
-grid.appendChild(wc);
-setTimeout(()=>wc.classList.add('in'), 100 + FAMILY.length*140 + 80);
+  grid.appendChild(wc);
+  setTimeout(()=>wc.classList.add('in'), 100 + FAMILY.length*140 + 80);
 
-  // Add member card
+  /* Add member card */
   const add = document.createElement('div');
   add.className = 'add-card';
   add.innerHTML = `
@@ -1477,6 +1471,12 @@ function goQ(idx){
   currentQ = idx;
   slides[currentQ].classList.add('active');
   dots[currentQ].classList.add('active');
+
+  /* ── GA: track quote carousel interaction ── */
+  gtag('event', 'quote_carousel_change', {
+    quote_index: idx,
+    quote_attribution: QUOTES[idx].attr
+  });
 }
 let qTimer = setInterval(()=>goQ((currentQ+1)%QUOTES.length), 5000);
 
@@ -1527,6 +1527,17 @@ function buildUpcoming(){
     el.style.opacity='0'; el.style.transform='translateY(20px)';
     el.style.transition=`opacity .7s var(--ease), transform .7s var(--ease), box-shadow .3s, transform .3s`;
     setTimeout(()=>{ el.style.opacity='1'; el.style.transform='none'; }, 300+i*100);
+
+    /* ── GA: track upcoming event click ── */
+    el.addEventListener('click', () => {
+      gtag('event', 'upcoming_event_click', {
+        member_name: item.m.name,
+        event_label: item.e.label,
+        event_type: item.e.type,
+        days_away: item.ds
+      });
+    });
+
     const yr = nextOcc(item.e.month,item.e.day).getFullYear();
     const bg = item.ds===0?'#1A8060':item.m.accent;
     const badge = item.ds===0?'TODAY!':item.ds===1?'1 DAY':`${item.ds} DAYS`;
@@ -1566,7 +1577,7 @@ function tick(){
 }
 
 /* ═══════════════════════════════════════════
-   SCROLL REVEAL (Intersection Observer)
+   SCROLL REVEAL
 ═══════════════════════════════════════════ */
 function initReveal(){
   const io = new IntersectionObserver((entries)=>{
@@ -1576,7 +1587,7 @@ function initReveal(){
 }
 
 /* ═══════════════════════════════════════════
-   PARTICLE CANVAS — floating sparkles
+   PARTICLE CANVAS
 ═══════════════════════════════════════════ */
 function initParticles(){
   const canvas = document.getElementById('particle-canvas');
@@ -1625,7 +1636,6 @@ function spawnPetal(){
   el.style.cssText=`position:fixed;left:${Math.random()*100}%;top:-60px;pointer-events:none;z-index:1;opacity:0;animation:petalF ${14+Math.random()*10}s ${Math.random()*3}s linear forwards;`;
   el.innerHTML=`<svg width="${sz}" height="${sz*1.35}" viewBox="0 0 20 27"><ellipse cx="10" cy="13.5" rx="6" ry="12.5" fill="${c}" opacity=".7" transform="rotate(${Math.random()*30-15},10,13.5)"/></svg>`;
 
-  // inject keyframes if not done
   if(!document.getElementById('petalStyle')){
     const style=document.createElement('style');
     style.id='petalStyle';
@@ -1673,8 +1683,14 @@ window.addEventListener('DOMContentLoaded',()=>{
   setInterval(tick, 1000);
   setInterval(rotateHeroQuote, 6000);
 
-  // Remove loader with a smooth fade
   setTimeout(()=>document.getElementById('loader').classList.add('out'), 2200);
+
+  /* ── GA: track homepage view with next event info ── */
+  gtag('event', 'homepage_view', {
+    next_event_days: Math.min(...FAMILY.flatMap(m=>m.events.map(e=>daysTo(e.month,e.day)))),
+    family_members: FAMILY.length,
+    events_this_month: thisMo || 0
+  });
 });
 </script>
 </body>
