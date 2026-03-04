@@ -1423,6 +1423,61 @@ function buildCards(){
   grid.appendChild(wc);
   setTimeout(()=>wc.classList.add('in'), 100 + FAMILY.length*140 + 80);
 
+  /* ── Yokshith Annaprasan Card ── */
+  const ya = document.createElement('a');
+  ya.href = 'https://yokshith-42777.web.app/';
+  ya.target = '_blank';
+  ya.rel = 'noopener noreferrer';
+  ya.className = 'wedding-card';
+
+  /* ── GA: track Annaprasan card click ── */
+  ya.addEventListener('click', () => {
+    gtag('event', 'annaprasan_card_click', {
+      destination: 'https://yokshith-42777.web.app/'
+    });
+  });
+
+  ya.innerHTML = `
+  <div class="wc-header">
+    <div class="wc-header-stripe"></div>
+    <div class="wc-rings">
+      <svg viewBox="0 0 80 80" fill="none" width="100%" height="100%" aria-hidden="true">
+        <defs>
+          <radialGradient id="annaRing" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(40 40) rotate(90) scale(26)">
+            <stop offset="0" stop-color="#E8CF8E"/>
+            <stop offset="1" stop-color="#B88B3E"/>
+          </radialGradient>
+          <linearGradient id="annaDrop" x1="40" y1="18" x2="40" y2="50" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#8B5065"/>
+            <stop offset="1" stop-color="#6A3C51"/>
+          </linearGradient>
+        </defs>
+        <circle cx="27" cy="42" r="18" stroke="url(#annaRing)" stroke-width="2.5" fill="none"/>
+        <path d="M27 24 C31.8 30.5 37.5 34 37.5 41.5 C37.5 48 32.7 52.8 27 52.8 C21.3 52.8 16.5 48 16.5 41.5 C16.5 34 22.2 30.5 27 24 Z" fill="url(#annaDrop)"/>
+        <circle cx="27" cy="42" r="4.3" fill="#D8B070"/>
+        <circle cx="56" cy="17" r="3.1" fill="#B85A74"/>
+        <circle cx="54.9" cy="15.7" r="1.15" fill="#F6E6EF" opacity=".95"/>
+        <path d="M65 13.5 L66.2 15.8 L68.8 16.2 L66.9 18 L67.3 20.6 L65 19.4 L62.7 20.6 L63.1 18 L61.2 16.2 L63.8 15.8 Z" fill="#B88B3E" opacity=".9"/>
+      </svg>
+    </div>
+    <div class="wc-identity">
+      <div class="wc-eyebrow">🍚 Annaprasan Celebration</div>
+      <div class="wc-title">Yokshith</div>
+      <div class="wc-subtitle">A sweet milestone filled with blessings &amp; joy</div>
+    </div>
+    <div class="wc-date-badge">
+      <div class="wc-date-day">View</div>
+      <div class="wc-date-month">Event</div>
+      <div class="wc-date-year">Page</div>
+    </div>
+  </div>
+  <div class="wc-body">
+    <p class="wc-desc">Celebrate Yokshith's Annaprasan — a cherished first-feeding ceremony and a beautiful beginning to many joyful milestones ahead.</p>
+    <div class="wc-cta">Open Event <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M8 3l3.5 3.5L8 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>`;
+  grid.appendChild(ya);
+  setTimeout(()=>ya.classList.add('in'), 100 + FAMILY.length*140 + 160);
+
   /* Add member card */
   const add = document.createElement('div');
   add.className = 'add-card';
