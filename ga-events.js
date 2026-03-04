@@ -1,155 +1,183 @@
 /**
  * ga-events.js
- * Google Analytics event tracking for Chandu & Family celebration pages.
- * Include this AFTER the GA base tag on sindhu.html and yokshith.html.
- *
- * Tracked events:
- *  sindhu.html  → waiting_page_view, birthday_page_view, anniversary_page_view, memory_open, year_navigate
- *  yokshith.html→ waiting_page_view, birthday_page_view, memory_open, year_navigate, confetti_burst
+ * Global Google Analytics event tracking for all Family-Hub HTML pages.
  */
 
-(function() {
+(function () {
   'use strict';
 
-  /* ── Safely call gtag (no-op if GA hasn't loaded yet) ── */
-  function gtrack(eventName, params) {
-    if (typeof gtag === 'function') {
-      gtag('event', eventName, params || {});
+  var GA_ID = 'G-7X8J9M550J';
+  var PAGE = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+  var PAGE_KEY = PAGE.replace('.html', '') || 'index';
+
+  window.dataLayer = window.dataLayer || [];
+
+  function ensureGtag() {
+    if (typeof window.gtag !== 'function') {
+      window.gtag = function gtag() {
+        window.dataLayer.push(arguments);
+      };
+      window.gtag('js', new Date());
+      window.gtag('config', GA_ID);
     }
   }
 
-  /* ══════════════════════════════════════════
-     PATCH sindhu.html functions
-  ══════════════════════════════════════════ */
-  window.addEventListener('DOMContentLoaded', function() {
+  ensureGtag();
 
-    /* ── Detect which page we're on ── */
-    const isSindhu   = document.title.toLowerCase().includes('sindhu');
-    const isYokshith = document.title.toLowerCase().includes('yokshith');
+  function pushEvent(eventName, params) {
+    var payload = Object.assign({
+      page_name: PAGE,
+      page_key: PAGE_KEY,
+      event_timestamp: new Date().toISOString()
+    }, params || {});
 
-    /* ─────────────────────────────────────
-       SINDHU PAGE PATCHES
-    ───────────────────────────────────── */
-    if (isSindhu && typeof renderWaiting === 'function') {
+    window.dataLayer.push({
+      event: eventName,
+      event_params: payload
+    });
 
-      /* Patch renderWaiting */
-      const _origWaiting = window.renderWaiting;
-      window.renderWaiting = function() {
-        gtrack('waiting_page_view', { page: 'sindhu' });
-        return _origWaiting.apply(this, arguments);
-      };
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', eventName, payload);
+    }
+  }
 
-      /* Patch renderBirthday */
-      const _origBirthday = window.renderBirthday;
-      window.renderBirthday = function(year, fromWaiting) {
-        var BDAY_BIRTH_YEAR = 1994; // Sindhu
-        var age = year - BDAY_BIRTH_YEAR;
-        gtrack('birthday_page_view', {
-          person:       'Sindhu',
-          year:         year,
-          age:          age,
-          from_memory:  !!fromWaiting
+  // Capture every GA event called through gtag('event', ...)
+  if (!window.__gaEventsWrapped) {
+    var rawGtag = window.gtag;
+    window.gtag = function wrappedGtag() {
+      var args = Array.prototype.slice.call(arguments);
+      if (args[0] === 'event' && typeof args[1] === 'string') {
+        window.dataLayer.push({
+          event: 'captured_event',
+          captured_name: args[1],
+          captured_params: args[2] || {},
+          captured_page: PAGE,
+          captured_at: new Date().toISOString()
         });
-        return _origBirthday.apply(this, arguments);
-      };
+      }
+      return rawGtag.apply(this, args);
+    };
+    window.__gaEventsWrapped = true;
+  }
 
-      /* Patch renderAnniversary */
-      const _origAnniversary = window.renderAnniversary;
-      window.renderAnniversary = function(year, fromWaiting) {
-        var ANNIV_START = 2023;
-        var yearsMarried = year - ANNIV_START;
-        gtrack('anniversary_page_view', {
-          person:        'Sindhu',
-          year:          year,
-          years_married: yearsMarried,
-          from_memory:   !!fromWaiting
-        });
-        return _origAnniversary.apply(this, arguments);
-      };
+  window.trackFamilyHubEvent = pushEvent;
 
-      /* Patch openMemory */
-      const _origMemory = window.openMemory;
-      window.openMemory = function(type, year) {
-        gtrack('memory_open', {
-          page:        'sindhu',
-          memory_type: type,
-          memory_year: year
-        });
-        return _origMemory.apply(this, arguments);
-      };
+  document.addEventListener('DOMContentLoaded', function () {
+    pushEvent('page_ready', { title: document.title });
 
-      /* Track year navigation buttons via event delegation */
-      document.addEventListener('click', function(e) {
-        var btn = e.target.closest('.yn-btn');
-        if (!btn) return;
-        var txt = btn.textContent.trim();
-        gtrack('year_navigate', {
-          page:   'sindhu',
-          button: txt.substring(0, 40)
-        });
+    document.addEventListener('click', function (event) {
+      var el = event.target.closest('a,button,[onclick]');
+      if (!el) return;
+      var text = (el.textContent || '').trim().slice(0, 80);
+      pushEvent('ui_click', {
+        element_tag: el.tagName.toLowerCase(),
+        element_text: text,
+        element_id: el.id || '',
+        element_class: (el.className || '').toString().slice(0, 120)
       });
+      if (el.classList && el.classList.contains('yn-btn')) {
+        pushEvent('year_navigate', { button: text });
+      }
+    }, true);
+
+    document.addEventListener('submit', function (event) {
+      var form = event.target;
+      pushEvent('form_submit', {
+        form_id: form.id || '',
+        form_action: form.getAttribute('action') || ''
+      });
+    }, true);
+
+    // Existing page-specific hooks
+    var isSindhu = PAGE === 'sindhu.html';
+    var isYokshith = PAGE === 'yokshith.html';
+
+    if (isSindhu && typeof window.renderWaiting === 'function') {
+      var oldSindhuWaiting = window.renderWaiting;
+      window.renderWaiting = function () {
+        pushEvent('waiting_page_view', { person: 'Sindhu' });
+        return oldSindhuWaiting.apply(this, arguments);
+      };
+
+      if (typeof window.renderBirthday === 'function') {
+        var oldSindhuBirthday = window.renderBirthday;
+        window.renderBirthday = function (year, fromWaiting) {
+          pushEvent('birthday_page_view', {
+            person: 'Sindhu',
+            year: year,
+            from_memory: !!fromWaiting
+          });
+          return oldSindhuBirthday.apply(this, arguments);
+        };
+      }
+
+      if (typeof window.renderAnniversary === 'function') {
+        var oldSindhuAnniversary = window.renderAnniversary;
+        window.renderAnniversary = function (year, fromWaiting) {
+          pushEvent('anniversary_page_view', {
+            person: 'Sindhu',
+            year: year,
+            from_memory: !!fromWaiting
+          });
+          return oldSindhuAnniversary.apply(this, arguments);
+        };
+      }
+
+      if (typeof window.openMemory === 'function') {
+        var oldSindhuMemory = window.openMemory;
+        window.openMemory = function (type, year) {
+          pushEvent('memory_open', {
+            person: 'Sindhu',
+            memory_type: type,
+            memory_year: year
+          });
+          return oldSindhuMemory.apply(this, arguments);
+        };
+      }
     }
 
-    /* ─────────────────────────────────────
-       YOKSHITH PAGE PATCHES
-    ───────────────────────────────────── */
-    if (isYokshith && typeof renderWaiting === 'function') {
-
-      /* Patch renderWaiting */
-      const _origWaiting = window.renderWaiting;
-      window.renderWaiting = function() {
-        gtrack('waiting_page_view', { page: 'yokshith' });
-        return _origWaiting.apply(this, arguments);
+    if (isYokshith && typeof window.renderWaiting === 'function') {
+      var oldYokshithWaiting = window.renderWaiting;
+      window.renderWaiting = function () {
+        pushEvent('waiting_page_view', { person: 'Yokshith' });
+        return oldYokshithWaiting.apply(this, arguments);
       };
 
-      /* Patch renderBirthday */
-      const _origBirthday = window.renderBirthday;
-      window.renderBirthday = function(year, fromWaiting) {
-        var BIRTH_YEAR = 2025; // Yokshith
-        var age = year - BIRTH_YEAR;
-        gtrack('birthday_page_view', {
-          person:      'Yokshith',
-          year:        year,
-          age:         age,
-          from_memory: !!fromWaiting
-        });
-        return _origBirthday.apply(this, arguments);
-      };
+      if (typeof window.renderBirthday === 'function') {
+        var oldYokshithBirthday = window.renderBirthday;
+        window.renderBirthday = function (year, fromWaiting) {
+          pushEvent('birthday_page_view', {
+            person: 'Yokshith',
+            year: year,
+            from_memory: !!fromWaiting
+          });
+          return oldYokshithBirthday.apply(this, arguments);
+        };
+      }
 
-      /* Patch burst (confetti button) */
-      const _origBurst = window.burst;
-      window.burst = function(n) {
-        gtrack('confetti_burst', {
-          page:             'yokshith',
-          particles_count:  n || 140
-        });
-        return _origBurst.apply(this, arguments);
-      };
+      if (typeof window.burst === 'function') {
+        var oldBurst = window.burst;
+        window.burst = function (count) {
+          pushEvent('confetti_burst', { particles_count: count || 140 });
+          return oldBurst.apply(this, arguments);
+        };
+      }
 
-      /* Track year navigation */
-      document.addEventListener('click', function(e) {
-        var btn = e.target.closest('.yn-btn');
-        if (!btn) return;
-        var txt = btn.textContent.trim();
-        gtrack('year_navigate', {
-          page:   'yokshith',
-          button: txt.substring(0, 40)
-        });
-      });
-
-      /* Track memory card clicks */
-      document.addEventListener('click', function(e) {
-        var card = e.target.closest('.memory-card');
+      document.addEventListener('click', function (event) {
+        var card = event.target.closest('.memory-card');
         if (!card) return;
         var year = card.querySelector('.mc-year');
-        var lbl  = card.querySelector('.mc-lbl');
-        gtrack('memory_open', {
-          page:        'yokshith',
-          memory_year: year ? year.textContent : 'unknown',
-          memory_label: lbl ? lbl.textContent : ''
+        pushEvent('memory_open', {
+          person: 'Yokshith',
+          memory_year: year ? year.textContent.trim() : 'unknown'
         });
       });
     }
+  });
 
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') {
+      pushEvent('page_hidden');
+    }
   });
 })();
