@@ -9,52 +9,29 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Great+Vibes&family=Cinzel:wght@300;400;500&family=Lato:wght@200;300;400;500&display=swap" rel="stylesheet">
 
 <style>
-/* ═══════════════════════════════════════════════
-   CSS TOKENS  (overridden per year by JS)
-═══════════════════════════════════════════════ */
 :root {
-  --bg:         #FBF8F2;
-  --bg2:        #F5EFE4;
-  --bg3:        #EDE3D5;
-  --acc-pale:   #FAE8E8;
-  --acc-lt:     #E8A8B0;
-  --acc-mid:    #C07880;
-  --acc-dark:   #904050;
-  --gold:       #C09A52;
-  --gold-lt:    #D8BC82;
-  --gold-pale:  #F4E4C0;
-  --ink:        #2C1F18;
-  --ink-2:      #5A3E32;
-  --ink-3:      #9A7A6A;
-  --ink-4:      #C4A898;
-  --white:      #FFFFFF;
-  --card-bg:    rgba(255,255,255,0.85);
-  --ease:       cubic-bezier(.4,0,.2,1);
-  --spring:     cubic-bezier(.34,1.56,.64,1);
+  --bg:#FBF8F2;--bg2:#F5EFE4;--bg3:#EDE3D5;
+  --acc-pale:#FAE8E8;--acc-lt:#E8A8B0;--acc-mid:#C07880;--acc-dark:#904050;
+  --gold:#C09A52;--gold-lt:#D8BC82;--gold-pale:#F4E4C0;
+  --ink:#2C1F18;--ink-2:#5A3E32;--ink-3:#9A7A6A;--ink-4:#C4A898;
+  --white:#FFFFFF;--card-bg:rgba(255,255,255,0.85);
+  --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1);
 }
-
-/* ── RESET ── */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
 html{font-size:16px;scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
 body{font-family:'Lato',sans-serif;background:#FBF8F2;color:var(--ink);min-height:100vh;overflow-x:hidden;}
 a{color:inherit;text-decoration:none;}
 button{cursor:pointer;border:none;background:none;font:inherit;}
 
-/* ═══════════════════════════════════════════════
-   LOADER  — full immersive cover
-═══════════════════════════════════════════════ */
+/* ═══ LOADER ═══ */
 #loader{
   position:fixed;inset:0;z-index:9999;
-  /* Hard-coded — never flickers regardless of CSS variable state */
   background:#FBF8F2;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:0;
-  /* Smooth exit */
-  transition:opacity 1s cubic-bezier(.4,0,.2,1), visibility 1s cubic-bezier(.4,0,.2,1);
+  transition:opacity 1s cubic-bezier(.4,0,.2,1),visibility 1s cubic-bezier(.4,0,.2,1);
 }
 #loader.out{opacity:0;visibility:hidden;pointer-events:none;}
-
-/* Decorative corner lines on loader */
 #loader::before,#loader::after{
   content:'';position:absolute;
   width:clamp(80px,15vw,140px);height:clamp(80px,15vw,140px);
@@ -62,8 +39,6 @@ button{cursor:pointer;border:none;background:none;font:inherit;}
 }
 #loader::before{top:24px;left:24px;border-width:1px 0 0 1px;}
 #loader::after{bottom:24px;right:24px;border-width:0 1px 1px 0;}
-
-/* Inner corner (pseudo on a child) */
 .ld-corner-tr,.ld-corner-bl{
   position:absolute;
   width:clamp(80px,15vw,140px);height:clamp(80px,15vw,140px);
@@ -72,66 +47,104 @@ button{cursor:pointer;border:none;background:none;font:inherit;}
 .ld-corner-tr{top:24px;right:24px;border-width:1px 1px 0 0;}
 .ld-corner-bl{bottom:24px;left:24px;border-width:0 0 1px 1px;}
 
-/* Animated background petals inside loader */
-.ld-petal{
-  position:absolute;pointer-events:none;opacity:0;
-  animation:ldPetalDrift linear infinite;
+/* Scan-line overlay — cinematic CRT feel */
+#loader::before{top:24px;left:24px;border-width:1px 0 0 1px;}
+.ld-scan{
+  position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 3px,
+    rgba(192,120,128,.018) 3px,
+    rgba(192,120,128,.018) 4px
+  );
+  opacity:.6;
 }
+
+/* Floating petals inside loader */
+.ld-petal{position:absolute;pointer-events:none;opacity:0;animation:ldPetalDrift linear infinite;}
 @keyframes ldPetalDrift{
-  0%  {opacity:0;transform:translateY(-40px) rotate(0deg) translateX(0);}
-  8%  {opacity:.35;}
-  92% {opacity:.15;}
+  0%{opacity:0;transform:translateY(-40px) rotate(0deg) translateX(0);}
+  8%{opacity:.35;}92%{opacity:.15;}
   100%{opacity:0;transform:translateY(105vh) rotate(600deg) translateX(60px);}
 }
 
-/* Central logo mark */
+/* Central logo */
 .ld-logo-wrap{
-  margin-bottom:28px;position:relative;
+  margin-bottom:18px;position:relative;
   opacity:0;animation:ldRise 1s var(--spring) forwards .1s;
 }
 
-/* Outer rotating ring */
-.ld-ring-outer{
-  position:absolute;inset:-14px;border-radius:50%;
-  border:1px solid transparent;
-  border-top-color:rgba(192,154,82,.4);
-  border-right-color:rgba(192,154,82,.2);
-  animation:ldSpin 6s linear infinite;
+/* ═══ HEARTBEAT STRIP ═══ */
+.ld-heartbeat-wrap{
+  opacity:0;
+  animation:ldFade .6s ease forwards 2s;
+  margin-bottom:6px;
+  position:relative;
+  width:min(300px,80vw);
 }
-/* Inner counter ring */
-.ld-ring-inner{
-  position:absolute;inset:-7px;border-radius:50%;
-  border:1px dashed rgba(192,120,128,.25);
-  animation:ldSpin 9s linear infinite reverse;
-}
-@keyframes ldSpin{to{transform:rotate(360deg);}}
+.ld-hb-svg{display:block;overflow:visible;width:100%;height:auto;}
 
-/* SVG heart logo */
-.ld-heart-svg{display:block;filter:drop-shadow(0 4px 24px rgba(192,120,128,.22));}
+/* Main EKG line */
+.ld-hb-path{
+  stroke-dasharray:460;
+  stroke-dashoffset:460;
+  animation:ldHbDraw 3.6s cubic-bezier(.42,0,.38,1) infinite 2.1s;
+}
+/* Second echo path (faint, slightly delayed) */
+.ld-hb-echo{
+  stroke-dasharray:460;
+  stroke-dashoffset:460;
+  animation:ldHbDraw 3.6s cubic-bezier(.42,0,.38,1) infinite 2.35s;
+  opacity:.28;
+}
+
+@keyframes ldHbDraw{
+  0%   {stroke-dashoffset:460;opacity:0;}
+  3%   {opacity:1;}
+  44%  {stroke-dashoffset:0;opacity:1;}
+  62%  {stroke-dashoffset:0;opacity:.75;}
+  74%  {opacity:0;}
+  75%  {stroke-dashoffset:460;}
+  100% {stroke-dashoffset:460;opacity:0;}
+}
+
+/* Heart pulses exactly when the QRS spike sweeps through (~30% of draw = 0.45s) */
+.ld-heart-svg{
+  display:block;
+  filter:drop-shadow(0 4px 24px rgba(192,120,128,.22));
+  animation:ldHeartPulse 3.6s ease-in-out infinite 2.1s;
+  transform-origin:center;
+}
+@keyframes ldHeartPulse{
+  0%,10%  {transform:scale(1);}
+  15%     {transform:scale(1.14);filter:drop-shadow(0 6px 28px rgba(192,120,128,.5));}
+  20%     {transform:scale(0.96);}
+  25%     {transform:scale(1.07);}
+  31%     {transform:scale(1);filter:drop-shadow(0 4px 24px rgba(192,120,128,.22));}
+  100%    {transform:scale(1);}
+}
+
+/* Glow dot travels along path */
+.ld-hb-dot{
+  r:4;
+  animation:ldHbDotFade 3.6s ease-in-out infinite 2.1s;
+}
+@keyframes ldHbDotFade{
+  0%,2%{opacity:0;}  5%{opacity:1;}
+  42%{opacity:1;}    50%{opacity:0;}
+  100%{opacity:0;}
+}
+
+/* ──── rest of loader unchanged ──── */
 .ld-heart-draw{
   stroke-dasharray:160;stroke-dashoffset:160;
   animation:ldDraw 1.8s cubic-bezier(.4,0,.2,1) forwards .4s;
 }
-.ld-heart-fill{
-  opacity:0;animation:ldFillHeart 1s ease forwards 1.6s;
-}
+.ld-heart-fill{opacity:0;animation:ldFillHeart 1s ease forwards 1.6s;}
 @keyframes ldDraw{to{stroke-dashoffset:0;}}
 @keyframes ldFillHeart{from{opacity:0;}to{opacity:1;}}
 
-/* Orbiting dot */
-.ld-orbit{
-  position:absolute;inset:-20px;
-  animation:ldSpin 3s linear infinite;
-}
-.ld-orbit-dot{
-  position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:5px;height:5px;border-radius:50%;
-  background:var(--gold,#C09A52);
-  opacity:0;animation:ldFade .3s ease forwards 1.8s;
-  box-shadow:0 0 6px rgba(192,154,82,.5);
-}
-
-/* Name text */
 .ld-name{
   font-family:'Great Vibes',cursive;
   font-size:clamp(2.8rem,8vw,4.2rem);
@@ -145,397 +158,183 @@ button{cursor:pointer;border:none;background:none;font:inherit;}
   font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
   font-size:clamp(.85rem,2.5vw,1.05rem);
   color:#9A7A6A;letter-spacing:.08em;
-  margin-bottom:36px;
+  margin-bottom:30px;
   opacity:0;animation:ldFade .7s ease forwards 1.2s;
 }
-
-/* Progress track */
-.ld-progress-wrap{
-  width:min(220px,55vw);
-  opacity:0;animation:ldFade .5s ease forwards 1.3s;
-  margin-bottom:14px;
-}
-.ld-progress-track{
-  width:100%;height:1px;
-  background:rgba(192,120,128,.15);
-  border-radius:2px;overflow:hidden;position:relative;
-}
+.ld-progress-wrap{width:min(220px,55vw);opacity:0;animation:ldFade .5s ease forwards 1.3s;margin-bottom:14px;}
+.ld-progress-track{width:100%;height:1px;background:rgba(192,120,128,.15);border-radius:2px;overflow:hidden;position:relative;}
 .ld-progress-fill{
   height:100%;width:0;border-radius:2px;
   background:linear-gradient(90deg,#C07880,#C09A52,#C07880);
   background-size:200% 100%;
-  animation:ldFillBar 1.6s cubic-bezier(.4,0,.2,1) forwards 1.4s,
-            ldShimmer 2s linear infinite 1.4s;
+  animation:ldFillBar 1.6s cubic-bezier(.4,0,.2,1) forwards 1.4s,ldShimmer 2s linear infinite 1.4s;
 }
 @keyframes ldFillBar{from{width:0;}to{width:100%;}}
 @keyframes ldShimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
-
-/* Caption dots */
 .ld-caption{
-  font-family:'Cinzel',serif;font-size:.55rem;font-weight:300;
-  letter-spacing:.55em;text-transform:uppercase;
-  color:rgba(154,122,106,.6);
-  display:flex;align-items:center;gap:8px;
+  font-family:'Cinzel',serif;font-size:.55rem;font-weight:300;letter-spacing:.55em;text-transform:uppercase;
+  color:rgba(154,122,106,.6);display:flex;align-items:center;gap:8px;
   opacity:0;animation:ldFade .5s ease forwards 1.5s;
 }
-.ld-caption-dot{
-  width:3px;height:3px;border-radius:50%;
-  background:rgba(192,120,128,.4);
-  animation:ldDotPulse 1.4s ease-in-out infinite alternate;
-}
+.ld-caption-dot{width:3px;height:3px;border-radius:50%;background:rgba(192,120,128,.4);animation:ldDotPulse 1.4s ease-in-out infinite alternate;}
 .ld-caption-dot:nth-child(2){animation-delay:.2s;}
 .ld-caption-dot:nth-child(4){animation-delay:.4s;}
 @keyframes ldDotPulse{from{opacity:.2;transform:scale(.7);}to{opacity:1;transform:scale(1.3);}}
-
-/* Rising animation */
 @keyframes ldRise{from{opacity:0;transform:translateY(18px) scale(.95);}to{opacity:1;transform:none;}}
-/* ldUp = alias for hero section inline animations */
 @keyframes ldUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
 @keyframes ldFade{from{opacity:0;}to{opacity:1;}}
 
-/* ═══════════════════════════════════════════════
-   FIXED LAYERS — start invisible, fade in after loader exits
-═══════════════════════════════════════════════ */
-.bg-base{
-  position:fixed;inset:0;z-index:0;
-  transition:background 1.2s var(--ease), opacity .6s ease;
-  opacity:0;
-}
+/* ═══ FIXED LAYERS ═══ */
+.bg-base{position:fixed;inset:0;z-index:0;transition:background 1.2s var(--ease),opacity .6s ease;opacity:0;}
 .bg-base.in{opacity:1;}
-
-.bg-noise{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  opacity:0;transition:opacity .8s ease;
-}
+.bg-noise{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity .8s ease;}
 .bg-noise.in{opacity:.022;}
 .bg-noise-svg{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:180px 180px;}
-
 #fx-canvas{position:fixed;inset:0;z-index:1;pointer-events:none;}
 #petal-layer{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
 #shape-layer{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;}
 
-/* ═══════════════════════════════════════════════
-   APP — hidden until loader exits
-═══════════════════════════════════════════════ */
-#app{
-  position:relative;z-index:10;
-  opacity:0;transition:opacity .7s ease;
-}
+/* ═══ APP ═══ */
+#app{position:relative;z-index:10;opacity:0;transition:opacity .7s ease;}
 #app.in{opacity:1;}
-
 .page-enter{animation:pageIn .9s var(--ease) forwards;}
 @keyframes pageIn{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
 
-/* ═══════════════════════════════════════════════
-   TYPOGRAPHY HELPERS
-═══════════════════════════════════════════════ */
+/* ═══ TYPOGRAPHY ═══ */
 .font-display{font-family:'Playfair Display',serif;}
 .font-romantic{font-family:'Cormorant Garamond',serif;}
 .font-script{font-family:'Great Vibes',cursive;}
 .font-formal{font-family:'Cinzel',serif;}
 
-/* ═══════════════════════════════════════════════
-   SHARED SECTION COMPONENTS
-═══════════════════════════════════════════════ */
-.section-ornament{
-  display:flex;align-items:center;gap:16px;margin-bottom:clamp(36px,5vw,56px);
-}
+/* ═══ SHARED SECTION COMPONENTS ═══ */
+.section-ornament{display:flex;align-items:center;gap:16px;margin-bottom:clamp(36px,5vw,56px);}
 .so-line{flex:1;height:1px;}
 .so-line-l{background:linear-gradient(to right,transparent,var(--acc-lt));opacity:.6;}
 .so-line-r{background:linear-gradient(to left,transparent,var(--acc-lt));opacity:.6;}
-.so-text{
-  font-family:'Cinzel',serif;font-size:.58rem;font-weight:400;letter-spacing:.55em;text-transform:uppercase;
-  color:var(--acc-mid);white-space:nowrap;
-  padding:5px 14px;border:1px solid var(--acc-pale);border-radius:50px;
-  background:rgba(255,255,255,.6);
-}
+.so-text{font-family:'Cinzel',serif;font-size:.58rem;font-weight:400;letter-spacing:.55em;text-transform:uppercase;color:var(--acc-mid);white-space:nowrap;padding:5px 14px;border:1px solid var(--acc-pale);border-radius:50px;background:rgba(255,255,255,.6);}
 .so-diamond{width:8px;height:8px;border:1.5px solid var(--gold);transform:rotate(45deg);flex-shrink:0;}
-
-/* Big script number / title */
-.event-title{
-  font-family:'Great Vibes',cursive;
-  font-size:clamp(3.5rem,13vw,9rem);
-  line-height:1;
-  color:var(--acc-mid);
-  filter:drop-shadow(0 2px 24px rgba(192,120,128,.2));
-  text-align:center;display:block;
-}
-.event-subtitle{
-  font-family:'Playfair Display',serif;font-weight:700;font-style:italic;
-  font-size:clamp(1.6rem,5vw,3.2rem);
-  color:var(--ink);text-align:center;
-  letter-spacing:-.01em;line-height:1.15;
-}
-
-/* Poem block */
-.poem-block{
-  max-width:520px;margin:0 auto;
-  text-align:center;padding:clamp(24px,4vw,40px);
-  background:var(--acc-pale);border-radius:20px;
-  border-left:3px solid var(--acc-lt);
-  position:relative;overflow:hidden;
-}
-.poem-block::before{
-  content:'"';font-family:'Playfair Display',serif;font-size:8rem;
-  color:var(--acc-lt);opacity:.3;
-  position:absolute;top:-20px;left:10px;line-height:1;pointer-events:none;
-}
-.poem-line{
-  font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;
-  font-size:clamp(1rem,3vw,1.2rem);color:var(--ink-2);
-  line-height:2;display:block;
-}
-
-/* Message card */
-.message-card{
-  max-width:680px;margin:0 auto;
-  background:var(--white);border-radius:24px;
-  box-shadow:0 8px 40px rgba(44,31,24,.08);
-  padding:clamp(28px,5vw,52px);
-  position:relative;overflow:hidden;
-  border-top:3px solid var(--acc-mid);
-}
-.message-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:120px;
-  background:linear-gradient(180deg,var(--acc-pale),transparent);
-  pointer-events:none;
-}
-.message-para{
-  font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;
-  font-size:clamp(1.05rem,2.8vw,1.28rem);color:var(--ink-2);
-  line-height:2;margin-bottom:20px;position:relative;
-}
+.event-title{font-family:'Great Vibes',cursive;font-size:clamp(3.5rem,13vw,9rem);line-height:1;color:var(--acc-mid);filter:drop-shadow(0 2px 24px rgba(192,120,128,.2));text-align:center;display:block;}
+.event-subtitle{font-family:'Playfair Display',serif;font-weight:700;font-style:italic;font-size:clamp(1.6rem,5vw,3.2rem);color:var(--ink);text-align:center;letter-spacing:-.01em;line-height:1.15;}
+.poem-block{max-width:520px;margin:0 auto;text-align:center;padding:clamp(24px,4vw,40px);background:var(--acc-pale);border-radius:20px;border-left:3px solid var(--acc-lt);position:relative;overflow:hidden;}
+.poem-block::before{content:'"';font-family:'Playfair Display',serif;font-size:8rem;color:var(--acc-lt);opacity:.3;position:absolute;top:-20px;left:10px;line-height:1;pointer-events:none;}
+.poem-line{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(1rem,3vw,1.2rem);color:var(--ink-2);line-height:2;display:block;}
+.message-card{max-width:680px;margin:0 auto;background:var(--white);border-radius:24px;box-shadow:0 8px 40px rgba(44,31,24,.08);padding:clamp(28px,5vw,52px);position:relative;overflow:hidden;border-top:3px solid var(--acc-mid);}
+.message-card::before{content:'';position:absolute;top:0;left:0;right:0;height:120px;background:linear-gradient(180deg,var(--acc-pale),transparent);pointer-events:none;}
+.message-para{font-family:'Cormorant Garamond',serif;font-weight:300;font-style:italic;font-size:clamp(1.05rem,2.8vw,1.28rem);color:var(--ink-2);line-height:2;margin-bottom:20px;position:relative;}
 .message-para:last-child{margin-bottom:0;}
 .message-para em{font-style:normal;color:var(--acc-dark);font-weight:500;}
 .message-para strong{font-style:normal;color:var(--gold);font-weight:600;}
-
-/* Wishes grid */
-.wishes-grid{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));
-  gap:16px;max-width:680px;margin:0 auto;
-}
-.wish-card{
-  background:var(--white);border-radius:18px;padding:22px 18px;
-  border:1px solid var(--acc-pale);text-align:center;
-  box-shadow:0 3px 16px rgba(44,31,24,.06);
-  transition:transform .4s var(--spring),box-shadow .4s;
-}
+.wishes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr));gap:16px;max-width:680px;margin:0 auto;}
+.wish-card{background:var(--white);border-radius:18px;padding:22px 18px;border:1px solid var(--acc-pale);text-align:center;box-shadow:0 3px 16px rgba(44,31,24,.06);transition:transform .4s var(--spring),box-shadow .4s;}
 .wish-card:hover{transform:translateY(-5px);box-shadow:0 10px 30px rgba(44,31,24,.1);}
 .wc-icon{font-size:1.8rem;display:block;margin-bottom:10px;}
 .wc-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--acc-dark);margin-bottom:6px;}
 .wc-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;font-weight:300;color:var(--ink-3);line-height:1.7;}
-
-/* Milestone banner */
-.milestone-banner{
-  max-width:680px;margin:0 auto;padding:22px 28px;
-  background:linear-gradient(135deg,var(--acc-pale),var(--gold-pale));
-  border-radius:16px;
-  border:1px solid var(--acc-lt);
-  display:flex;gap:18px;align-items:flex-start;
-}
+.milestone-banner{max-width:680px;margin:0 auto;padding:22px 28px;background:linear-gradient(135deg,var(--acc-pale),var(--gold-pale));border-radius:16px;border:1px solid var(--acc-lt);display:flex;gap:18px;align-items:flex-start;}
 .mb-icon{font-size:2.2rem;flex-shrink:0;margin-top:2px;}
 .mb-label{font-family:'Cinzel',serif;font-size:.58rem;font-weight:400;letter-spacing:.4em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:5px;}
 .mb-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--ink);margin-bottom:5px;}
 .mb-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:.95rem;color:var(--ink-3);line-height:1.8;}
-
-/* Countdown row */
-.cd-row{
-  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;
-  gap:clamp(8px,2vw,20px);
-  padding:18px 20px;background:var(--white);border-radius:16px;
-  box-shadow:0 3px 16px rgba(44,31,24,.07);
-  max-width:400px;margin:0 auto;
-}
+.cd-row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:clamp(8px,2vw,20px);padding:18px 20px;background:var(--white);border-radius:16px;box-shadow:0 3px 16px rgba(44,31,24,.07);max-width:400px;margin:0 auto;}
 .cd-unit{text-align:center;min-width:48px;}
-.cd-num{
-  font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4vw,2.4rem);font-weight:700;
-  color:var(--acc-mid);line-height:1;display:block;
-}
+.cd-num{font-family:'Playfair Display',serif;font-size:clamp(1.5rem,4vw,2.4rem);font-weight:700;color:var(--acc-mid);line-height:1;display:block;}
 .cd-lbl{font-family:'Cinzel',serif;font-size:.44rem;font-weight:300;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-4);margin-top:3px;}
 .cd-sep{font-size:1.4rem;color:var(--acc-pale);font-weight:300;margin-bottom:10px;line-height:1;}
-
-/* Waiting page countdown — inline within card */
-.wec-countdown{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:6px;margin-top:8px;
-}
+.wec-countdown{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px;}
 .wcc-unit{text-align:center;background:var(--acc-pale);border-radius:8px;padding:8px 4px;}
-.wcc-num{
-  font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.5vw,1.6rem);font-weight:700;
-  color:var(--acc-mid);line-height:1;display:block;
-}
+.wcc-num{font-family:'Playfair Display',serif;font-size:clamp(1.2rem,3.5vw,1.6rem);font-weight:700;color:var(--acc-mid);line-height:1;display:block;}
 .wcc-lbl{font-size:.42rem;font-weight:400;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-4);margin-top:2px;}
-
-/* Back nav pill */
-.year-nav{
-  display:flex;align-items:center;justify-content:center;gap:12px;
-  flex-wrap:wrap;margin-top:16px;
-}
-.yn-btn{
-  font-family:'Cinzel',serif;font-size:.65rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;
-  color:var(--acc-mid);padding:10px 22px;border-radius:50px;
-  border:1px solid var(--acc-lt);background:rgba(255,255,255,.7);
-  transition:all .35s var(--ease);display:flex;align-items:center;gap:8px;
-}
+.year-nav{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:16px;}
+.yn-btn{font-family:'Cinzel',serif;font-size:.65rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:var(--acc-mid);padding:10px 22px;border-radius:50px;border:1px solid var(--acc-lt);background:rgba(255,255,255,.7);transition:all .35s var(--ease);display:flex;align-items:center;gap:8px;}
 .yn-btn:hover{background:var(--acc-mid);color:white;border-color:var(--acc-mid);transform:translateY(-2px);}
 .yn-btn svg{flex-shrink:0;transition:transform .3s;}
 .yn-btn:hover svg{transform:translateX(-3px);}
 .yn-btn.fwd:hover svg{transform:translateX(3px);}
-.viewing-past-banner{
-  background:var(--acc-pale);border:1px solid var(--acc-lt);border-radius:12px;
-  padding:10px 22px;text-align:center;margin-bottom:20px;
-  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--ink-3);
-}
-.locked-msg{
-  display:flex;flex-direction:column;align-items:center;gap:12px;
-  padding:28px;border:2px dashed var(--acc-pale);border-radius:20px;
-  text-align:center;margin:20px auto;max-width:400px;
-}
+.viewing-past-banner{background:var(--acc-pale);border:1px solid var(--acc-lt);border-radius:12px;padding:10px 22px;text-align:center;margin-bottom:20px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--ink-3);}
+.locked-msg{display:flex;flex-direction:column;align-items:center;gap:12px;padding:28px;border:2px dashed var(--acc-pale);border-radius:20px;text-align:center;margin:20px auto;max-width:400px;}
 .locked-icon{font-size:2.5rem;}
 .locked-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--ink-2);}
 .locked-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink-3);}
-
-/* Signature */
-.signature-section{
-  text-align:center;padding:clamp(30px,5vw,50px) 20px clamp(20px,3vw,30px);
-}
+.signature-section{text-align:center;padding:clamp(30px,5vw,50px) 20px clamp(20px,3vw,30px);}
 .sig-from{font-family:'Cinzel',serif;font-size:.6rem;font-weight:300;letter-spacing:.45em;text-transform:uppercase;color:var(--ink-4);margin-bottom:10px;}
-.sig-name{
-  font-family:'Great Vibes',cursive;font-size:clamp(2.5rem,8vw,4rem);
-  color:var(--gold);filter:drop-shadow(0 2px 12px rgba(192,154,82,.25));
-}
+.sig-name{font-family:'Great Vibes',cursive;font-size:clamp(2.5rem,8vw,4rem);color:var(--gold);filter:drop-shadow(0 2px 12px rgba(192,154,82,.25));}
 .sig-heart{font-size:1.3rem;animation:heartPulse 2.2s ease-in-out infinite;display:inline-block;}
 @keyframes heartPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.18);}}
-
-/* Scroll reveal */
 .sr{opacity:0;transform:translateY(24px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
 .sr.in{opacity:1;transform:none;}
 .sr-l{opacity:0;transform:translateX(-24px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
 .sr-l.in{opacity:1;transform:none;}
 .sr-r{opacity:0;transform:translateX(24px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
 .sr-r.in{opacity:1;transform:none;}
-
-/* Page section spacing */
 .psec{padding:clamp(50px,7vw,90px) clamp(18px,5vw,60px);}
 .psec-inner{max-width:760px;margin:0 auto;}
 .psec-wide{max-width:1000px;margin:0 auto;}
-
-/* Anniversary timeline */
 .timeline{max-width:620px;margin:0 auto;position:relative;padding-left:36px;}
 .timeline::before{content:'';position:absolute;left:8px;top:8px;bottom:8px;width:1px;background:linear-gradient(to bottom,var(--acc-lt),var(--gold-lt),transparent);}
 .tl-item{position:relative;margin-bottom:28px;}
-.tl-dot{
-  position:absolute;left:-32px;top:4px;
-  width:16px;height:16px;border-radius:50%;
-  border:2px solid var(--acc-lt);background:var(--white);
-  display:flex;align-items:center;justify-content:center;
-  font-size:.5rem;
-}
+.tl-dot{position:absolute;left:-32px;top:4px;width:16px;height:16px;border-radius:50%;border:2px solid var(--acc-lt);background:var(--white);display:flex;align-items:center;justify-content:center;font-size:.5rem;}
 .tl-dot.current{background:var(--acc-mid);border-color:var(--acc-mid);}
 .tl-dot.current::after{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--acc-lt);animation:dotPulse 2s ease-in-out infinite;}
 @keyframes dotPulse{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:0;transform:scale(1.5);}}
 .tl-year{font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.3em;color:var(--ink-4);margin-bottom:3px;}
 .tl-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:3px;}
 .tl-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;font-weight:300;color:var(--ink-3);}
-
-/* Waiting page specific */
 .wait-event-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:20px;max-width:660px;margin:0 auto;}
-.wait-ev-card{
-  background:var(--white);border-radius:20px;padding:28px 24px;
-  box-shadow:0 6px 28px rgba(44,31,24,.08);
-  position:relative;overflow:hidden;
-}
+.wait-ev-card{background:var(--white);border-radius:20px;padding:28px 24px;box-shadow:0 6px 28px rgba(44,31,24,.08);position:relative;overflow:hidden;}
 .wait-ev-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--ev-stripe);}
 .wec-icon{font-size:2.2rem;margin-bottom:14px;display:block;}
 .wec-label{font-family:'Cinzel',serif;font-size:.58rem;font-weight:400;letter-spacing:.4em;text-transform:uppercase;color:var(--ink-4);margin-bottom:4px;}
 .wec-name{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;color:var(--ink);margin-bottom:4px;}
 .wec-date{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;color:var(--ink-3);margin-bottom:18px;}
-
-/* Memory grid on waiting page */
 .memory-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:14px;max-width:780px;margin:0 auto;}
-.memory-card{
-  background:var(--white);border-radius:14px;padding:18px 16px;
-  box-shadow:0 2px 12px rgba(44,31,24,.06);
-  text-align:center;cursor:pointer;
-  transition:transform .35s var(--spring),box-shadow .35s;
-  border-bottom:2px solid var(--acc-pale);
-}
+.memory-card{background:var(--white);border-radius:14px;padding:18px 16px;box-shadow:0 2px 12px rgba(44,31,24,.06);text-align:center;cursor:pointer;transition:transform .35s var(--spring),box-shadow .35s;border-bottom:2px solid var(--acc-pale);}
 .memory-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(44,31,24,.1);}
 .mc-emoji{font-size:1.5rem;display:block;margin-bottom:8px;}
 .mc-year{font-family:'Cinzel',serif;font-size:.7rem;font-weight:500;letter-spacing:.25em;color:var(--acc-mid);}
 .mc-label{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--ink-3);margin-top:2px;}
-
-/* ── FOOTER ── */
-.footer{
-  position:relative;z-index:10;background:var(--ink);
-  padding:clamp(36px,5vw,56px) clamp(18px,5vw,60px);text-align:center;
-}
+.footer{position:relative;z-index:10;background:var(--ink);padding:clamp(36px,5vw,56px) clamp(18px,5vw,60px);text-align:center;}
 .footer::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 100%,rgba(192,120,128,.1) 0%,transparent 60%);}
 .ft-inner{position:relative;max-width:600px;margin:0 auto;}
 .ft-brand{font-family:'Great Vibes',cursive;font-size:clamp(1.8rem,5vw,2.6rem);color:var(--acc-lt);margin-bottom:4px;filter:drop-shadow(0 2px 10px rgba(192,120,128,.3));}
 .ft-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(.88rem,2.5vw,1.05rem);color:rgba(255,255,255,.3);margin-bottom:22px;}
 .ft-copy{font-size:.62rem;font-weight:300;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.18);line-height:2;}
 .ft-copy strong{color:rgba(192,154,82,.5);font-weight:400;}
-
-/* Responsive */
-@media(max-width:580px){
-  .wishes-grid{grid-template-columns:1fr 1fr;}
-  .milestone-banner{flex-direction:column;}
-  .timeline{padding-left:28px;}
-}
-@media(max-width:360px){
-  .wishes-grid{grid-template-columns:1fr;}
-}
+@media(max-width:580px){.wishes-grid{grid-template-columns:1fr 1fr;}.milestone-banner{flex-direction:column;}.timeline{padding-left:28px;}}
+@media(max-width:360px){.wishes-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
 
-<!-- ════════ LOADER ════════ -->
+<!-- ════ LOADER ════ -->
 <div id="loader">
-
-  <!-- Decorative corners (CSS pseudo handles top-left & bottom-right) -->
   <div class="ld-corner-tr" aria-hidden="true"></div>
   <div class="ld-corner-bl" aria-hidden="true"></div>
-
-  <!-- Floating petals inside the loader -->
+  <!-- Cinematic scan-line overlay -->
+  <div class="ld-scan" aria-hidden="true"></div>
+  <!-- Petals -->
   <div id="ld-petals" aria-hidden="true"></div>
 
-  <!-- Central logo -->
+  <!-- Heart logo (no rings — heartbeat replaces them) -->
   <div class="ld-logo-wrap" role="img" aria-label="Sindhu — heart logo">
-    <!-- Orbiting rings -->
-    <div class="ld-ring-outer"></div>
-    <div class="ld-ring-inner"></div>
-    <!-- Orbiting gold dot -->
-    <div class="ld-orbit"><div class="ld-orbit-dot"></div></div>
-
-    <!-- Heart SVG -->
     <svg class="ld-heart-svg" width="92" height="92" viewBox="0 0 92 92" fill="none">
-      <!-- Decorative dashed outer circle -->
-      <circle cx="46" cy="46" r="43" stroke="#F0D0D4" stroke-width=".8"
-        stroke-dasharray="3 8" opacity=".5"/>
-      <!-- Filled heart (fades in after draw) -->
+      <circle cx="46" cy="46" r="43" stroke="#F0D0D4" stroke-width=".8" stroke-dasharray="3 8" opacity=".5"/>
       <path class="ld-heart-fill"
         d="M46 70 C46 70 20 54 20 34 C20 25 26.5 18 35 18 C40 18 44 21 46 25 C48 21 52 18 57 18 C65.5 18 72 25 72 34 C72 54 46 70 46 70Z"
         fill="url(#ldGrad)"/>
-      <!-- Stroke draw animation -->
       <path class="ld-heart-draw"
         d="M46 70 C46 70 20 54 20 34 C20 25 26.5 18 35 18 C40 18 44 21 46 25 C48 21 52 18 57 18 C65.5 18 72 25 72 34 C72 54 46 70 46 70Z"
         fill="none" stroke="url(#ldStroke)" stroke-width="1.5"
         stroke-linecap="round" stroke-linejoin="round"/>
-      <!-- Inner highlight arch -->
       <path d="M35 30 Q46 23 57 30"
         fill="none" stroke="rgba(255,255,255,.45)" stroke-width="1"
         stroke-linecap="round"
         stroke-dasharray="30" stroke-dashoffset="30"
         style="animation:ldDraw 1s ease forwards 1.8s"/>
-      <!-- Accent dots at cardinal points -->
       <circle cx="46" cy="6"  r="2.5" fill="#C09A52" opacity="0" style="animation:ldFade .4s ease forwards 1.9s"/>
       <circle cx="46" cy="86" r="2.5" fill="#C09A52" opacity="0" style="animation:ldFade .4s ease forwards 2s"/>
       <circle cx="6"  cy="46" r="2"   fill="#C07880" opacity="0" style="animation:ldFade .4s ease forwards 2s"/>
       <circle cx="86" cy="46" r="2"   fill="#C07880" opacity="0" style="animation:ldFade .4s ease forwards 2s"/>
-      <!-- Diamond top -->
-      <path d="M46 2 L48.5 6 L46 10 L43.5 6Z"
-        fill="#C09A52" opacity="0" style="animation:ldFade .4s ease forwards 1.9s"/>
+      <path d="M46 2 L48.5 6 L46 10 L43.5 6Z" fill="#C09A52" opacity="0" style="animation:ldFade .4s ease forwards 1.9s"/>
       <defs>
         <linearGradient id="ldGrad" x1="20" y1="18" x2="72" y2="70" gradientUnits="userSpaceOnUse">
           <stop offset="0%"   stop-color="#DDB870"/>
@@ -551,18 +350,67 @@ button{cursor:pointer;border:none;background:none;font:inherit;}
     </svg>
   </div>
 
-  <!-- Name -->
+  <!-- ══ CINEMATIC HEARTBEAT STRIP ══ -->
+  <div class="ld-heartbeat-wrap" aria-hidden="true">
+    <svg class="ld-hb-svg" viewBox="0 0 300 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Main line gradient: fades at both ends, glows in centre -->
+        <linearGradient id="hbGrad" x1="0" y1="0" x2="300" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="#C09A52" stop-opacity="0"/>
+          <stop offset="18%"  stop-color="#C07880" stop-opacity="0.9"/>
+          <stop offset="50%"  stop-color="#D4A860"/>
+          <stop offset="82%"  stop-color="#C07880" stop-opacity="0.9"/>
+          <stop offset="100%" stop-color="#C09A52" stop-opacity="0"/>
+        </linearGradient>
+        <!-- Echo / glow blur -->
+        <filter id="hbGlowFilter" x="-10%" y="-80%" width="120%" height="260%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="2.2" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <!-- Soft glow on dot -->
+        <filter id="dotGlow" x="-200%" y="-200%" width="500%" height="500%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Faint static baseline — always visible once loader shows -->
+      <line x1="0" y1="34" x2="300" y2="34"
+        stroke="#E8A8B0" stroke-width="0.4" opacity="0"
+        style="animation:ldFade .4s ease forwards 2s"/>
+
+      <!-- Echo path (blurred, slightly ahead) -->
+      <path class="ld-hb-echo"
+        d="M-15,34 L58,34 L62,31 L66,34 L74,34 L77,40 L80,6 L84,46 L89,34 Q97,26 104,34 L315,34"
+        stroke="#C07880" stroke-width="2.8" stroke-linecap="round"
+        filter="url(#hbGlowFilter)" opacity="0"/>
+
+      <!-- Main EKG path -->
+      <path class="ld-hb-path"
+        d="M-15,34 L58,34 L62,31 L66,34 L74,34 L77,40 L80,6 L84,46 L89,34 Q97,26 104,34 L315,34"
+        stroke="url(#hbGrad)" stroke-width="1.6" stroke-linecap="round"
+        filter="url(#hbGlowFilter)"/>
+
+      <!-- Traveling dot with glow — follows leading edge of path -->
+      <circle class="ld-hb-dot" r="3.8" fill="#D4A860" filter="url(#dotGlow)">
+        <animateMotion
+          dur="1.512s"
+          begin="2.1s"
+          repeatCount="indefinite"
+          calcMode="linear"
+          path="M-15,34 L58,34 L62,31 L66,34 L74,34 L77,40 L80,6 L84,46 L89,34 Q97,26 104,34 L315,34"
+        />
+      </circle>
+
+    </svg>
+  </div>
+  <!-- ══ END HEARTBEAT ══ -->
+
   <div class="ld-name">Sindhu</div>
   <div class="ld-tagline">My Love · My Life · My Home</div>
-
-  <!-- Progress bar -->
   <div class="ld-progress-wrap">
-    <div class="ld-progress-track">
-      <div class="ld-progress-fill"></div>
-    </div>
+    <div class="ld-progress-track"><div class="ld-progress-fill"></div></div>
   </div>
-
-  <!-- Animated caption -->
   <div class="ld-caption">
     <div class="ld-caption-dot"></div>
     <span>Opening with love</span>
@@ -570,20 +418,19 @@ button{cursor:pointer;border:none;background:none;font:inherit;}
     <span>for you</span>
     <div class="ld-caption-dot"></div>
   </div>
-
 </div>
 
-<!-- ════════ FIXED LAYERS ════════ -->
+<!-- ════ FIXED LAYERS ════ -->
 <div class="bg-base" id="bg-base"></div>
 <div class="bg-noise bg-noise-svg"></div>
 <canvas id="fx-canvas"></canvas>
 <div id="petal-layer"></div>
 <div id="shape-layer"></div>
 
-<!-- ════════ APP ════════ -->
+<!-- ════ APP ════ -->
 <div id="app"></div>
 
-<!-- ════════ FOOTER ════════ -->
+<!-- ════ FOOTER ════ -->
 <footer class="footer">
   <div class="ft-inner">
     <div class="ft-brand">Sindhu</div>
@@ -596,27 +443,18 @@ button{cursor:pointer;border:none;background:none;font:inherit;}
   </div>
 </footer>
 
-<!-- ════════════════════════════════════════════════════════
-     J A V A S C R I P T
-════════════════════════════════════════════════════════ -->
 <script>
 'use strict';
 
-/* ══════════════════════════════════════════════════════
-   CONSTANTS
-══════════════════════════════════════════════════════ */
 const BDAY  = { month:9,  day:25, birthYear:1994 };
 const ANNIV = { month:11, day:19, startYear:2023 };
-
 const NOW   = new Date();
 const TODAY = new Date(NOW.getFullYear(), NOW.getMonth(), NOW.getDate());
 const CY    = NOW.getFullYear();
 const CM    = NOW.getMonth() + 1;
 const CD    = NOW.getDate();
-
 const MN  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const MNS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
 function isToday(m,d){ return CM===m && CD===d; }
 function nextOcc(m,d){ let dt=new Date(CY,m-1,d); if(dt<=TODAY) dt=new Date(CY+1,m-1,d); return dt; }
 function daysTo(m,d){ return Math.ceil((nextOcc(m,d)-TODAY)/86400000); }
@@ -626,1314 +464,103 @@ function cdTo(m,d){
 }
 function pad(n){return String(n).padStart(2,'0');}
 function ordinal(n){const s=['th','st','nd','rd'];const v=n%100;return n+(s[(v-20)%10]||s[v]||s[0]);}
-
-// Last reachable birthday year (don't show future years as a surprise)
 const lastBdayYear  = (new Date(CY,BDAY.month-1,BDAY.day)  <=TODAY) ? CY : CY-1;
 const lastAnnivYear = (new Date(CY,ANNIV.month-1,ANNIV.day)<=TODAY) ? CY : CY-1;
-
 document.getElementById('ft-yr').textContent = CY;
 
-/* ══════════════════════════════════════════════════════
-   BIRTHDAY THEMES  (age → theme)
-══════════════════════════════════════════════════════ */
 const BDAY_THEMES = {
-
-  30: {
-    name:"Thirty, Radiant & Timeless",
-    tagline:"The decade of gold begins, and it starts with you.",
-    bg:`radial-gradient(ellipse 80% 60% at 0% 0%,#FAE8E8 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 100% 0%,#F4E4C0 0%,transparent 50%),#FBF8F2`,
-    accPale:"#FAE8E8", accLt:"#E8A8B0", accMid:"#C07880", accDark:"#904050",
-    cardBg:"#FEF4F5",
-    animType:"petals",
-    animColors:["#F0C8CC","#DDB890","#F8D8DC","#E8C8A0"],
-    poem:["Thirty years of grace in motion,","of laughing loud and loving deep,","you've stepped into a golden decade","of radiance yours to always keep."],
-    msgA:`Thirty. The number sounds like music — like the opening notes of a symphony that has only just found its full voice. Sindhu, <em>you are that symphony</em>. Every year that has led to this one has been a movement, a passage, building toward the breathtaking fullness of who you are today. I look at you and see decades of quiet strength, of beauty earned, of a woman who has grown into herself like a rose that refuses to rush.`,
-    msgB:`There is a particular kind of brilliance that belongs only to a woman in her thirties — she has loved enough to know what love truly means, hurt enough to understand real kindness, and lived enough to carry wisdom in her laughter. You have all of this, Sindhu. <strong>You are the rarest kind of woman: one who becomes more extraordinary with every single year.</strong>`,
-    msgC:`On your thirtieth birthday, I want you to know that marrying you was not luck — it was destiny completing itself. Every path in my life existed only to lead me to you. Here's to thirty more, and thirty after that. Here's to all the years that get to belong to us.`,
-    milestone:"🌹 Welcome to Thirty",
-    mileTitle:"The Rose Gold Decade",
-    mileText:"Thirty is not an arrival, it is an ascent. You step into it with a grace that most people spend a lifetime searching for.",
-    wishes:[
-      {icon:"💎",title:"Radiant Joy",text:"May every morning greet you with a happiness so complete it spills over into everything you touch."},
-      {icon:"🌹",title:"Endless Love",text:"May our love deepen with every year, becoming richer and more beautiful than the year before."},
-      {icon:"✨",title:"Your Dreams",text:"May this decade bring every dream you have dared to hold close finally, gloriously true."},
-      {icon:"🥂",title:"Celebration",text:"May you always find reasons — big and small — to celebrate yourself exactly as you are."},
-    ]
-  },
-
-  31: {
-    name:"Thirty-One in Full Bloom",
-    tagline:"You bloom more beautifully with every passing season.",
-    bg:`radial-gradient(ellipse 75% 55% at 5% 5%,#E8F4EA 0%,transparent 50%),radial-gradient(ellipse 55% 60% at 95% 10%,#F4E4C0 0%,transparent 50%),#F8FAF6`,
-    accPale:"#E8F4EA", accLt:"#94C89A", accMid:"#5A9460", accDark:"#3A6840",
-    cardBg:"#F0FAF2",
-    animType:"botanical",
-    animColors:["#94C89A","#B8D8A0","#D4E8C8","#E8F4EA","#C8D4A0"],
-    poem:["Thirty-one — and the garden of you","blooms richer than it did before,","every petal a year well-tended,","every blossom worth adoring more."],
-    msgA:`Thirty-one is the year of full bloom. Not the eager opening of youth, nor the quiet wisdom of middle years — but the extraordinary moment when a flower has completely, perfectly opened. <em>That is what you are, Sindhu.</em> Fully yourself. Fully present. Fully magnificent. I have watched you grow and shed and grow again, and every iteration of you is more beautiful than the last.`,
-    msgB:`This year I want you to know that the things you sometimes doubt about yourself — your choices, your softness, your quiet way of loving — <strong>are precisely the things that make you irreplaceable</strong>. The world is gentler for having you in it. Our home is warmer. My life is fuller. Yokshith's laughter is louder. All because of you.`,
-    msgC:`Thirty-one is yours, completely. Wear it like the garden you have always tended so carefully — with patience, with color, with a beauty that makes people stop and stare and feel glad the world has flowers in it at all.`,
-    milestone:"🌿 Year of Botanical Beauty",
-    mileTitle:"Blooming Into Brilliance",
-    mileText:"In your thirty-first year you show us that growth is never finished — it is always and forever becoming something lovelier.",
-    wishes:[
-      {icon:"🌸",title:"New Blooms",text:"May this year open doors you haven't yet imagined and fill them with flowers you've never seen."},
-      {icon:"🌿",title:"Deep Roots",text:"May our family's roots grow deeper and our branches stretch wider with every passing year."},
-      {icon:"🦋",title:"Transformation",text:"May every change this year brings you carry you into a version of yourself you fall in love with."},
-      {icon:"🍃",title:"Gentle Peace",text:"May you always find the quiet, green spaces inside yourself where everything feels calm and right."},
-    ]
-  },
-
-  32: {
-    name:"Starlit at Thirty-Two",
-    tagline:"You were always written in the stars, my love.",
-    bg:`radial-gradient(ellipse 70% 50% at 10% 0%,#EEF0FA 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 90% 20%,#F4E8D8 0%,transparent 50%),#F8F8FC`,
-    accPale:"#EEF0FA", accLt:"#9098D8", accMid:"#5058B0", accDark:"#303880",
-    cardBg:"#F4F5FD",
-    animType:"starfall",
-    animColors:["#B0B8F0","#D0B890","#C8C0F0","#F0E0C8","#A0A8E8"],
-    poem:["Thirty-two stars I count on the clearest nights,","each one a year you've lit the dark,","and if the sky had words, Sindhu,","it would speak them all inside your heart."],
-    msgA:`There is something celestial about you — has always been. The way you move through a room, the way you hold a moment between your hands and make it feel important, the way you love without reservation or fear. <em>You are starlight made into a person.</em> At thirty-two, you shine with the particular brightness of someone who knows exactly who they are and has decided to be nothing less.`,
-    msgB:`Astronomers say that the light of a star takes thousands of years to reach our eyes — that what we see is ancient, faithful, and everlasting. <strong>That is how I think of your love.</strong> It was there before I knew what to call it, and it will outlast every name we give it. You are the constant in my universe, Sindhu. The north star by which I navigate every single day.`,
-    msgC:`On this birthday, I want you to tilt your head back and look at the sky and know — without any doubt at all — that you belong among those lights. You always have. You always will. Happy thirty-second, my brightest star.`,
-    milestone:"⭐ Celestial Year",
-    mileTitle:"Written in the Stars",
-    mileText:"At thirty-two the universe pauses to acknowledge what those of us who love you have always known — you are extraordinary.",
-    wishes:[
-      {icon:"🌙",title:"Moonlit Nights",text:"May your evenings always end in beauty, in stillness, in the kind of peace only a clear night can bring."},
-      {icon:"⭐",title:"Your Light",text:"May you never dim yourself for any room — you were made to illuminate, not to minimize."},
-      {icon:"🔭",title:"New Horizons",text:"May this year stretch your vision toward possibilities that once seemed impossibly far away."},
-      {icon:"💫",title:"Shooting Stars",text:"May every wish you send into the sky come hurtling back to you, fulfilled and glorious."},
-    ]
-  },
-
-  33: {
-    name:"The Warmth of Thirty-Three",
-    tagline:"You are the warmest thing I have ever known.",
-    bg:`radial-gradient(ellipse 75% 55% at 5% 0%,#FAF0E4 0%,transparent 55%),radial-gradient(ellipse 55% 50% at 95% 20%,#F8E4DC 0%,transparent 50%),#FAF8F2`,
-    accPale:"#FAF0E4", accLt:"#D89858", accMid:"#B07830", accDark:"#784820",
-    cardBg:"#FEF8F2",
-    animType:"aurora",
-    animColors:["#E8B870","#E09870","#F0C890","#E4A860"],
-    poem:["Thirty-three — the number warm as amber,","as summer light through afternoon trees,","you are the fireplace in winter,","the ease that puts the world at ease."],
-    msgA:`There is a particular warmth that surrounds you, Sindhu — a quality that makes every room feel more alive, every dinner table more full, every ordinary Tuesday feel like a small celebration. At thirty-three, that warmth has deepened into something I can only describe as <em>home</em>. You are home to me. Not a place — a feeling. The specific, irreplaceable feeling of being exactly where I'm supposed to be.`,
-    msgB:`This year I think of all the fires you have kept burning: the warmth in our family, the light in Yokshith's eyes, the ember of something steady and bright between us that years only seem to feed rather than diminish. <strong>You are a woman who brings warmth without burning.</strong> Who gives light without asking for anything in return. It is one of the most beautiful things I have ever witnessed.`,
-    msgC:`Thirty-three is the age of amber — of something golden and ancient and luminous. I cannot wait to watch this year glow. I cannot wait to watch you glow in it. My love is always yours. Every flicker of it.`,
-    milestone:"🍂 Golden Year",
-    mileTitle:"Amber & Firelight",
-    mileText:"In your thirty-third year you radiate the kind of warmth that makes everyone lucky enough to know you feel seen and held.",
-    wishes:[
-      {icon:"🕯️",title:"Inner Light",text:"May your inner fire never waver — it is the most beautiful thing about you, and the world needs it."},
-      {icon:"🍊",title:"Warmth & Comfort",text:"May this year bring you the kind of comfort that comes from being surrounded by people who truly see you."},
-      {icon:"☀️",title:"Golden Days",text:"May your days be long and golden and filled with the unhurried sweetness that life at its best can give."},
-      {icon:"🌻",title:"Joy in Bloom",text:"May happiness find you the way sunflowers find the sun — turning naturally, inevitably, joyfully toward it."},
-    ]
-  },
-
-  34: {
-    name:"Ocean Deep at Thirty-Four",
-    tagline:"Like the sea, you are constant, powerful, and breathtaking.",
-    bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#E4F4F8 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 100% 10%,#EEF8F4 0%,transparent 50%),#F4FAFC`,
-    accPale:"#E4F4F8", accLt:"#68B8C8", accMid:"#3888A0", accDark:"#1A5870",
-    cardBg:"#EEF8FC",
-    animType:"bubbles",
-    animColors:["#88CCD8","#A8D8E8","#C8ECF0","#68B8C8","#B0E0E8"],
-    poem:["Thirty-four — the depth of clear water,","the tide that knows exactly when to come,","you are the ocean that keeps calling,","the current I will always be swept from."],
-    msgA:`I think of the ocean when I think of you — not the surface shimmer (though that too, always that too) but the extraordinary depth beneath. The parts of you that most people never see: the reserves of patience you carry, the quiet way you absorb what would break others, <em>the strength that lives so deep in you it doesn't even need to announce itself</em>. I have been swimming in you for years and I have not yet found the bottom.`,
-    msgB:`At thirty-four you possess something rare — a certainty of self that doesn't come from never being afraid, but from moving forward <strong>despite</strong> the fear. You have crossed depths that would have capsized others. You have navigated tides that swept others off their feet. And you are still here, steady, beautiful, and completely, magnificently <strong>you</strong>.`,
-    msgC:`May this year be an ocean year — wide and deep and full of surprising treasures. May it carry you gently to shores you have always wanted to reach. And may I always be there on the beach, watching you return, breathless with how extraordinary you are.`,
-    milestone:"🌊 Year of Depth",
-    mileTitle:"Deep and Magnificent",
-    mileText:"Thirty-four is the year you show the world what true depth of character, love, and spirit looks like in a single, radiant person.",
-    wishes:[
-      {icon:"🐚",title:"Hidden Treasures",text:"May this year reveal gifts in yourself you hadn't yet discovered, wonders you haven't yet met."},
-      {icon:"🌊",title:"Flowing Strength",text:"May you move through every challenge with the graceful, unstoppable power of the ocean you embody."},
-      {icon:"🪸",title:"Rich Life",text:"May your life grow more colorful and rich, like a reef where every corner holds something new to love."},
-      {icon:"☀️",title:"Surface Light",text:"May the sun always find you and set you sparkling — because you deserve every beautiful reflection."},
-    ]
-  },
-
-  35: {
-    name:"Magnificently Thirty-Five",
-    tagline:"Thirty-five is not a milestone. You are the milestone.",
-    bg:`radial-gradient(ellipse 70% 50% at 0% 0%,#F4EAF8 0%,transparent 50%),radial-gradient(ellipse 55% 55% at 100% 10%,#F4E0D8 0%,transparent 50%),#FAF8FC`,
-    accPale:"#F4EAF8", accLt:"#C098D8", accMid:"#8850A8", accDark:"#603080",
-    cardBg:"#F8F2FD",
-    animType:"sparkles",
-    animColors:["#C898D8","#D0A8E8","#D4B890","#E8C8F4","#B880C8"],
-    poem:["Thirty-five — and you have never been more yourself,","more luminous, more unapologetically alive,","the universe knows it, the stars confirm it:","there is no one quite like you who will ever arrive."],
-    msgA:`Let me tell you what I see at thirty-five: a woman who has arrived. Not arrived as in finished — arrived as in <em>fully inhabiting herself</em>. The soft edges, the sharp wit, the limitless capacity for love and occasional eye-roll, the way you carry tenderness and steel in equal measure. At thirty-five, Sindhu, you have become what I always knew you would: someone who takes the breath away simply by existing.`,
-    msgB:`Half a decade in your thirties and what a half it has been. Motherhood, marriage, love in all its complicated and stunning forms — you have walked through each door with a grace that I have catalogued carefully, because I want to remember every version of you that has ever existed. <strong>Every version has been magnificent.</strong> This one most of all.`,
-    msgC:`Thirty-five belongs to you. Not as a number, not as a milestone — but as a year that will carry your fingerprints on every day of it. I am honoured to watch every single one. Happy birthday, my magnificent Sindhu. You deserve every superlative in every language.`,
-    milestone:"💜 Mid-Decade Crown",
-    mileTitle:"Halfway Through Your Thirties",
-    mileText:"Thirty-five is the crown jewel of a decade that belongs entirely to you. Wear it with the confidence it was always meant for.",
-    wishes:[
-      {icon:"👑",title:"Crown Your Worth",text:"May you always know, in the core of yourself, that you are worth every good thing that comes to you."},
-      {icon:"🔮",title:"Clear Vision",text:"May you see yourself as clearly and as kindly as those who love you have always seen you."},
-      {icon:"🪄",title:"Your Magic",text:"May this year be full of moments where life feels unmistakably, wondrously magical — because of you."},
-      {icon:"💎",title:"Priceless",text:"May you always remember you cannot be replaced, cannot be replicated, and cannot be anything but extraordinary."},
-    ]
-  },
-
-  36: {
-    name:"Thirty-Six in Pure Grace",
-    tagline:"Grace is not given. You grew it, year by patient year.",
-    bg:`radial-gradient(ellipse 70% 55% at 5% 5%,#EAFAF4 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 95% 15%,#F4F8EA 0%,transparent 50%),#F4FAF8`,
-    accPale:"#EAFAF4", accLt:"#78C8A8", accMid:"#388870", accDark:"#1A5848",
-    cardBg:"#F0FDF8",
-    animType:"geometric",
-    animColors:["#88D8B8","#A8E8C8","#C8F0E0","#68C8A0"],
-    poem:["Thirty-six — and in your step there is a quiet,","a sureness that you carry without sound,","grace is the word for what you are becoming,","and it looks exactly like you've always looked."],
-    msgA:`There is a particular kind of grace that you carry at thirty-six — not the performed grace of someone trying to seem elegant, but the deep, bone-level grace of someone who has simply become good. Good at being present. Good at loving. Good at choosing, again and again, what matters most. <em>That is a profound thing to witness.</em> And I have had a front-row seat for years.`,
-    msgB:`I watch you with Yokshith and I see it most clearly — this incredible capacity to give endlessly, joyfully, without accounting. The way you give time as if it is the most natural gift, attention as if it is the cheapest currency, love as if it can never run out. <strong>You make us all better</strong>, Sindhu. Every day. Without trying. Effortlessly and absolutely.`,
-    msgC:`Thirty-six is the year of sage and serenity. Of knowing what you know and resting in it. I love this version of you with my whole heart — and I cannot wait to love the next one too. Always yours.`,
-    milestone:"🌿 Year of Serene Grace",
-    mileTitle:"Grace in Every Motion",
-    mileText:"In your thirty-sixth year you demonstrate, without a word, that grace is something you grow — patient year by careful year.",
-    wishes:[
-      {icon:"🌿",title:"Quiet Strength",text:"May this year give you long, undisturbed stretches of peace in which to simply be yourself."},
-      {icon:"🍃",title:"Steady Ground",text:"May you always find solid ground beneath your feet, and may it always feel exactly like home."},
-      {icon:"🌱",title:"New Growth",text:"May something new and beautiful take root in your life this year — something worth tending for decades."},
-      {icon:"🧘",title:"Inner Calm",text:"May the stillness inside you deepen, holding you gently through whatever the year decides to bring."},
-    ]
-  },
-
-  37: {
-    name:"Golden at Thirty-Seven",
-    tagline:"You have always been gold. Now the world is catching up.",
-    bg:`radial-gradient(ellipse 75% 55% at 0% 0%,#FAF4E0 0%,transparent 55%),radial-gradient(ellipse 55% 50% at 95% 15%,#FAE8DC 0%,transparent 50%),#FAF8F0`,
-    accPale:"#FAF4E0", accLt:"#D8B050", accMid:"#B08820", accDark:"#785808",
-    cardBg:"#FFFCF0",
-    animType:"petals",
-    animColors:["#E8C870","#D8B050","#F0D890","#E0C060","#F4E8B0"],
-    poem:["Thirty-seven — and you are burnished gold,","warmer now than you have ever been,","time only deepens what was always precious,","in the quiet space between."],
-    msgA:`Gold. That is the word that rises to me at thirty-seven — not the garish gold of display, but the deep, warm, burnished gold of something truly precious. Something that has been tested and held and proven and polished by the simple act of living fully. <em>You are that kind of gold, Sindhu.</em> The kind that gets warmer with every year, richer with every season, more unmistakably itself the longer it exists.`,
-    msgB:`I think of every ordinary moment this year has held and I am staggered by how many of them were beautiful: the mornings, the meals, the fights we moved through and the laughter we fell into. All of it gilded by your presence. <strong>You make ordinary things luminous simply by being near them.</strong> That is not a small thing. That is possibly the largest thing I know.`,
-    msgC:`Thirty-seven looks like you: warm and honest and worth more than it knows. May this year be every shade of golden, every note of warm light, every version of beautiful that you so completely deserve.`,
-    milestone:"✨ The Golden Year",
-    mileTitle:"Burnished and Beautiful",
-    mileText:"At thirty-seven you embody what true gold is — not flashy, not loud, but deep and warm and worth every year it took to become this.",
-    wishes:[
-      {icon:"🌟",title:"Gold Standard",text:"May you always set the standard — for love, for grace, for the generous way of being in the world."},
-      {icon:"🍯",title:"Sweet Days",text:"May this year be rich and slow and sweet — the kind of year you remember as one of the best."},
-      {icon:"🌾",title:"Harvest Time",text:"May you reap everything you have sown with such care and consistency and love for so many years."},
-      {icon:"🔑",title:"New Doors",text:"May golden doors open this year that lead to rooms you will love filling with your particular light."},
-    ]
-  },
-
-  38: {
-    name:"The Art of Thirty-Eight",
-    tagline:"You are a living, breathing work of art.",
-    bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#FAE8E0 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 100% 10%,#E0F0F8 0%,transparent 50%),#FAF8F6`,
-    accPale:"#FAE8E0", accLt:"#E89878", accMid:"#C06840", accDark:"#904028",
-    cardBg:"#FEF4F0",
-    animType:"aurora",
-    animColors:["#E89878","#D8B880","#90C8D8","#E8A888"],
-    poem:["Thirty-eight — and you are the watercolor,","the brushstroke no one else could place,","you are the painting that keeps changing,","the masterpiece that time won't erase."],
-    msgA:`You are a work of art, Sindhu — and I mean that in the truest, least clichéd way I know how. Art is not perfection. Art is the <em>specific, unrepeatable arrangement of beauty and flaw and feeling</em> that makes something irreplaceable. You are irreplaceable. I have looked at you for years and still find new angles, new colors, new things to love that I somehow missed before. That is what great art does. That is what you do.`,
-    msgB:`Thirty-eight is the year of the artist fully trusting the work. Not second-guessing every stroke, not hiding the canvas out of fear. <strong>Showing it. Owning it. Knowing it is something worth seeing.</strong> I hope this year you let yourself be seen exactly as you are — magnificent, layered, entirely original, and more beautiful for every mark that life has left on you.`,
-    msgC:`You are the most beautiful work of art I have ever had the privilege of studying close, and I have not finished looking. Happy birthday, my masterpiece. May thirty-eight be the most vibrant year on your canvas yet.`,
-    milestone:"🎨 The Artistic Year",
-    mileTitle:"Masterpiece in Progress",
-    mileText:"At thirty-eight you are the artist and the art — living proof that the most beautiful creations are those shaped by love and time.",
-    wishes:[
-      {icon:"🎨",title:"Creative Joy",text:"May this year unleash something creative in you that has been quietly waiting for its moment to bloom."},
-      {icon:"🖼️",title:"Your Story",text:"May you see the story of your life as the extraordinary, beautiful narrative it has always been."},
-      {icon:"🌈",title:"Vibrant Days",text:"May every day carry a color you've never seen before — vivid, unexpected, and entirely yours."},
-      {icon:"🖌️",title:"New Chapters",text:"May you write the next chapter of your life with confidence, with color, and with complete artistic freedom."},
-    ]
-  },
-
-  39: {
-    name:"Thirty-Nine & Luminous",
-    tagline:"The light in you only grows stronger with every year.",
-    bg:`radial-gradient(ellipse 70% 55% at 5% 0%,#FAF0F8 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 95% 15%,#F4EAF8 0%,transparent 50%),#FBF8FC`,
-    accPale:"#FAF0F8", accLt:"#D898C8", accMid:"#A05898", accDark:"#703070",
-    cardBg:"#FEF4FC",
-    animType:"sparkles",
-    animColors:["#D898C8","#E8B8D8","#C880B8","#F0C8E8","#D0A0C0"],
-    poem:["Thirty-nine — and you are luminous,","a lantern in the dark of every year,","the eve of something large and golden,","the light that makes the whole sky clear."],
-    msgA:`Thirty-nine — the year before the decade — and you stand in it as though it was made precisely for you. There is a luminosity to you now, Sindhu, that I notice in photographs, in the middle of dinners, in the quiet way you exist on an ordinary Saturday morning. <em>You are lit from within.</em> I don't know another way to say it. You are simply, unmistakably glowing.`,
-    msgB:`I have watched you become this woman over years and the watching has been one of the great privileges of my life. <strong>Thirty-nine is not an ending — it is the most beautiful possible prelude.</strong> The last note of a movement so gorgeous that the next one can only be more spectacular. You are standing on the threshold of the decade that will be the defining one of your extraordinary life. And you are ready.`,
-    msgC:`On the eve of forty, I want to tell you this: you are the most luminous human being I have ever known. And whatever comes next — whatever candles we add to whatever cakes — I will always be the luckiest person in the room. Happy thirty-ninth, my light.`,
-    milestone:"🌟 Pre-Decade Glow",
-    mileTitle:"Standing on the Threshold",
-    mileText:"At thirty-nine you are the glowing finale of a decade that has shaped you into someone remarkable and completely ready for what comes next.",
-    wishes:[
-      {icon:"🌙",title:"Soft Nights",text:"May this year give you nights of genuine rest, deep comfort, and the peace of a life well and truly loved."},
-      {icon:"💐",title:"Flowers of Joy",text:"May unexpected joy arrive like flowers at the door — unannounced, fragrant, and entirely welcome."},
-      {icon:"🦢",title:"Your Elegance",text:"May you carry yourself with the grace and elegance that has always been yours but that you rarely let yourself claim."},
-      {icon:"🌟",title:"Bright Horizon",text:"May the year ahead glimmer with possibility and open into something even more luminous than today."},
-    ]
-  },
-
-  40: {
-    name:"Forty & Absolutely Fabulous",
-    tagline:"Forty is not a number. It is a declaration.",
-    bg:`radial-gradient(ellipse 60% 50% at 5% 5%,#F8F0D8 0%,transparent 50%),radial-gradient(ellipse 55% 50% at 95% 10%,#1A1208 0%,transparent 70%),#F8F4EC`,
-    accPale:"#F8F0D8", accLt:"#D4A840", accMid:"#A07820", accDark:"#704800",
-    cardBg:"#FFFCF0",
-    animType:"confetti",
-    animColors:["#D4A840","#C07880","#68C8A0","#9088D0","#E87050","#D4A840"],
-    poem:["Forty — and the word sounds like a fanfare,","like trumpets waking up the sleeping sky,","every year before was preparation,","and forty is the reason why."],
-    msgA:`FORTY. The word deserves to be written in capital letters, in gold ink, on the most beautiful paper I can find — because it belongs to the most spectacular woman I know. Sindhu, <em>forty looks like you</em>: confident, radiant, deeply joyful, and completely, utterly unbothered by anything that doesn't deserve your energy. You have never been more fully yourself, and yourself has never been more magnificent.`,
-    msgB:`Four decades of this woman. Four decades of that laugh, that strength, that infuriating and wonderful way you have of always being right about the things that matter most. <strong>I have loved you across years and they have only added dimensions.</strong> More colors to your portrait. More depth to the love I have for you. More evidence that whatever force brought you into this world knew exactly what it was doing.`,
-    msgC:`Happy fortieth birthday, Sindhu. The confetti is in the air, the music is turned up, and everything is celebrating you — as it should be, as it always should have been, as it will be for every year that follows this one. You are forty. You are absolutely fabulous. And you are entirely, completely mine.`,
-    milestone:"🥂 The Grand Forty",
-    mileTitle:"Four Decades of Magnificent",
-    mileText:"Forty is the declaration of a woman who has loved, lost, grown, and arrived — fully herself, fully brilliant, fully ready for everything next.",
-    wishes:[
-      {icon:"🎊",title:"Grand Celebration",text:"May today be the biggest, loudest, most beautiful celebration you have ever been surrounded by."},
-      {icon:"👑",title:"You Are the Crown",text:"May you wear forty like the crown it is — with pride, with joy, and with unshakeable confidence."},
-      {icon:"🥂",title:"Toast to You",text:"Every glass raised today is raised to the woman who makes everything around her better simply by being in it."},
-      {icon:"🚀",title:"Next Chapter",text:"May the next decade be the most extraordinary yet — because you have never needed a running start."},
-    ]
-  },
-
-  41: {
-    name:"The Beauty of Forty-One",
-    tagline:"Forty-one is what brilliance looks like after the fanfare settles.",
-    bg:`radial-gradient(ellipse 70% 55% at 5% 5%,#FDE8F0 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 95% 10%,#F8F4E4 0%,transparent 50%),#FAF8F4`,
-    accPale:"#FDE8F0", accLt:"#E090B0", accMid:"#B05880", accDark:"#804060",
-    cardBg:"#FDF4F8",
-    animType:"petals",
-    animColors:["#E8A0C0","#DDB890","#F0C8D8","#E8D0B0"],
-    poem:["Forty-one — and quieter now,","with the kind of beauty only depth can hold,","you carry decades in your laughter,","and grace in every story told."],
-    msgA:`After forty's grand arrival, forty-one is the year that belongs to you alone — quieter, deeper, and far more beautiful for it. This is the year you exist beyond the fanfare, beyond the milestone, in the pure and private pleasure of <em>simply being the person you have worked so hard to become</em>. And she is extraordinary, Sindhu. Every understated, brilliant inch of her.`,
-    msgB:`I think this year you will surprise yourself. Not with grand gestures or sweeping changes, but with the small daily evidence of how much you have grown — <strong>how sure-footed you have become, how naturally generous, how capable of joy even in the smallest moments</strong>. That is the deeper beauty of forty-one. The one that doesn't require a party.`,
-    msgC:`The world is a better, more beautiful place because you are forty-one years old in it. That is simply true. And I am the luckiest person in it because you are mine. Happy birthday, my love.`,
-    milestone:"🌷 Year of Quiet Radiance",
-    mileTitle:"Beyond the Milestone",
-    mileText:"Forty-one is where true beauty lives — past the performance, in the quiet, in the deep and daily joy of being entirely yourself.",
-    wishes:[
-      {icon:"🌷",title:"Quiet Joy",text:"May this year hold stretches of peace so complete they restore every part of you that ever felt worn."},
-      {icon:"🫖",title:"Gentle Moments",text:"May you find beauty in every ordinary moment — the tea, the morning, the laughter at nothing."},
-      {icon:"📖",title:"Your Story",text:"May you read the story of your life this year and find it more beautiful and braver than you remembered."},
-      {icon:"🕊️",title:"Sweet Freedom",text:"May this year set free something in you that has been waiting a long time for permission to fly."},
-    ]
-  },
-
-  42: {
-    name:"Forty-Two, Fearless & Fine",
-    tagline:"You have always been fearless. Now you know it too.",
-    bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#E4F8EC 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 100% 15%,#F4F8E4 0%,transparent 50%),#F4FAF6`,
-    accPale:"#E4F8EC", accLt:"#68B888", accMid:"#308858", accDark:"#186038",
-    cardBg:"#F0FDF4",
-    animType:"botanical",
-    animColors:["#88C8A0","#A8D8B8","#C8ECE0","#78B898","#B0D8C0"],
-    poem:["Forty-two — and the forest of you,","deep and dark and full of life,","you have walked through every season,","and emerged like morning through the night."],
-    msgA:`At forty-two you are fearless — not reckless, not unafraid, but deeply and quietly <em>undefeated</em>. Every year has brought its share of things that could have diminished you, and every year you have emerged not just intact but somehow more. More generous, more steady, more rooted in what matters. That is the particular beauty of forty-two: the knowledge, worn into your bones, that you can handle whatever comes.`,
-    msgB:`I watch you parent Yokshith with this fearlessness and it moves me every time. <strong>You are teaching him what it looks like to be brave — not by never being afraid, but by being afraid and choosing love anyway.</strong> That is the greatest gift any parent can give, and you give it every single day. You are remarkable. I don't say it enough. You are remarkable.`,
-    msgC:`Forty-two — green and growing and entirely unfinished and completely magnificent. This forest called Sindhu has room for so many more years of extraordinary life. I am grateful to walk through it beside you every day. Happy birthday, my fearless love.`,
-    milestone:"🌲 Year of the Deep Forest",
-    mileTitle:"Rooted and Fearless",
-    mileText:"At forty-two you are the forest — patient and deep and full of life, and absolutely, beautifully unafraid of growing.",
-    wishes:[
-      {icon:"🌲",title:"Deep Roots",text:"May everything good in your life deepen and strengthen this year — love, health, joy, and purpose."},
-      {icon:"🦁",title:"Your Courage",text:"May you feel the full force of your own courage this year — you have more of it than you know."},
-      {icon:"🌿",title:"Fresh Growth",text:"May new and wonderful things take root in your life, nurtured by all the rich experience you carry."},
-      {icon:"🌤️",title:"Clear Skies",text:"May this year hold more clear skies than clouds, and when the clouds come, may they pass quickly and gently."},
-    ]
-  }
+  30:{name:"Thirty, Radiant & Timeless",tagline:"The decade of gold begins, and it starts with you.",bg:`radial-gradient(ellipse 80% 60% at 0% 0%,#FAE8E8 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 100% 0%,#F4E4C0 0%,transparent 50%),#FBF8F2`,accPale:"#FAE8E8",accLt:"#E8A8B0",accMid:"#C07880",accDark:"#904050",cardBg:"#FEF4F5",animType:"petals",animColors:["#F0C8CC","#DDB890","#F8D8DC","#E8C8A0"],poem:["Thirty years of grace in motion,","of laughing loud and loving deep,","you've stepped into a golden decade","of radiance yours to always keep."],msgA:`Thirty. The number sounds like music — like the opening notes of a symphony that has only just found its full voice. Sindhu, <em>you are that symphony</em>. Every year that has led to this one has been a movement, a passage, building toward the breathtaking fullness of who you are today. I look at you and see decades of quiet strength, of beauty earned, of a woman who has grown into herself like a rose that refuses to rush.`,msgB:`There is a particular kind of brilliance that belongs only to a woman in her thirties — she has loved enough to know what love truly means, hurt enough to understand real kindness, and lived enough to carry wisdom in her laughter. You have all of this, Sindhu. <strong>You are the rarest kind of woman: one who becomes more extraordinary with every single year.</strong>`,msgC:`On your thirtieth birthday, I want you to know that marrying you was not luck — it was destiny completing itself. Every path in my life existed only to lead me to you. Here's to thirty more, and thirty after that. Here's to all the years that get to belong to us.`,milestone:"🌹 Welcome to Thirty",mileTitle:"The Rose Gold Decade",mileText:"Thirty is not an arrival, it is an ascent. You step into it with a grace that most people spend a lifetime searching for.",wishes:[{icon:"💎",title:"Radiant Joy",text:"May every morning greet you with a happiness so complete it spills over into everything you touch."},{icon:"🌹",title:"Endless Love",text:"May our love deepen with every year, becoming richer and more beautiful than the year before."},{icon:"✨",title:"Your Dreams",text:"May this decade bring every dream you have dared to hold close finally, gloriously true."},{icon:"🥂",title:"Celebration",text:"May you always find reasons — big and small — to celebrate yourself exactly as you are."}]},
+  31:{name:"Thirty-One in Full Bloom",tagline:"You bloom more beautifully with every passing season.",bg:`radial-gradient(ellipse 75% 55% at 5% 5%,#E8F4EA 0%,transparent 50%),radial-gradient(ellipse 55% 60% at 95% 10%,#F4E4C0 0%,transparent 50%),#F8FAF6`,accPale:"#E8F4EA",accLt:"#94C89A",accMid:"#5A9460",accDark:"#3A6840",cardBg:"#F0FAF2",animType:"botanical",animColors:["#94C89A","#B8D8A0","#D4E8C8","#E8F4EA","#C8D4A0"],poem:["Thirty-one — and the garden of you","blooms richer than it did before,","every petal a year well-tended,","every blossom worth adoring more."],msgA:`Thirty-one is the year of full bloom. Not the eager opening of youth, nor the quiet wisdom of middle years — but the extraordinary moment when a flower has completely, perfectly opened. <em>That is what you are, Sindhu.</em> Fully yourself. Fully present. Fully magnificent. I have watched you grow and shed and grow again, and every iteration of you is more beautiful than the last.`,msgB:`This year I want you to know that the things you sometimes doubt about yourself — your choices, your softness, your quiet way of loving — <strong>are precisely the things that make you irreplaceable</strong>. The world is gentler for having you in it. Our home is warmer. My life is fuller. Yokshith's laughter is louder. All because of you.`,msgC:`Thirty-one is yours, completely. Wear it like the garden you have always tended so carefully — with patience, with color, with a beauty that makes people stop and stare and feel glad the world has flowers in it at all.`,milestone:"🌿 Year of Botanical Beauty",mileTitle:"Blooming Into Brilliance",mileText:"In your thirty-first year you show us that growth is never finished — it is always and forever becoming something lovelier.",wishes:[{icon:"🌸",title:"New Blooms",text:"May this year open doors you haven't yet imagined and fill them with flowers you've never seen."},{icon:"🌿",title:"Deep Roots",text:"May our family's roots grow deeper and our branches stretch wider with every passing year."},{icon:"🦋",title:"Transformation",text:"May every change this year brings you carry you into a version of yourself you fall in love with."},{icon:"🍃",title:"Gentle Peace",text:"May you always find the quiet, green spaces inside yourself where everything feels calm and right."}]},
+  32:{name:"Starlit at Thirty-Two",tagline:"You were always written in the stars, my love.",bg:`radial-gradient(ellipse 70% 50% at 10% 0%,#EEF0FA 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 90% 20%,#F4E8D8 0%,transparent 50%),#F8F8FC`,accPale:"#EEF0FA",accLt:"#9098D8",accMid:"#5058B0",accDark:"#303880",cardBg:"#F4F5FD",animType:"starfall",animColors:["#B0B8F0","#D0B890","#C8C0F0","#F0E0C8","#A0A8E8"],poem:["Thirty-two stars I count on the clearest nights,","each one a year you've lit the dark,","and if the sky had words, Sindhu,","it would speak them all inside your heart."],msgA:`There is something celestial about you — has always been. The way you move through a room, the way you hold a moment between your hands and make it feel important, the way you love without reservation or fear. <em>You are starlight made into a person.</em> At thirty-two, you shine with the particular brightness of someone who knows exactly who they are and has decided to be nothing less.`,msgB:`Astronomers say that the light of a star takes thousands of years to reach our eyes — that what we see is ancient, faithful, and everlasting. <strong>That is how I think of your love.</strong> It was there before I knew what to call it, and it will outlast every name we give it. You are the constant in my universe, Sindhu. The north star by which I navigate every single day.`,msgC:`On this birthday, I want you to tilt your head back and look at the sky and know — without any doubt at all — that you belong among those lights. You always have. You always will. Happy thirty-second, my brightest star.`,milestone:"⭐ Celestial Year",mileTitle:"Written in the Stars",mileText:"At thirty-two the universe pauses to acknowledge what those of us who love you have always known — you are extraordinary.",wishes:[{icon:"🌙",title:"Moonlit Nights",text:"May your evenings always end in beauty, in stillness, in the kind of peace only a clear night can bring."},{icon:"⭐",title:"Your Light",text:"May you never dim yourself for any room — you were made to illuminate, not to minimize."},{icon:"🔭",title:"New Horizons",text:"May this year stretch your vision toward possibilities that once seemed impossibly far away."},{icon:"💫",title:"Shooting Stars",text:"May every wish you send into the sky come hurtling back to you, fulfilled and glorious."}]},
+  33:{name:"The Warmth of Thirty-Three",tagline:"You are the warmest thing I have ever known.",bg:`radial-gradient(ellipse 75% 55% at 5% 0%,#FAF0E4 0%,transparent 55%),radial-gradient(ellipse 55% 50% at 95% 20%,#F8E4DC 0%,transparent 50%),#FAF8F2`,accPale:"#FAF0E4",accLt:"#D89858",accMid:"#B07830",accDark:"#784820",cardBg:"#FEF8F2",animType:"aurora",animColors:["#E8B870","#E09870","#F0C890","#E4A860"],poem:["Thirty-three — the number warm as amber,","as summer light through afternoon trees,","you are the fireplace in winter,","the ease that puts the world at ease."],msgA:`There is a particular warmth that surrounds you, Sindhu — a quality that makes every room feel more alive, every dinner table more full, every ordinary Tuesday feel like a small celebration. At thirty-three, that warmth has deepened into something I can only describe as <em>home</em>. You are home to me. Not a place — a feeling. The specific, irreplaceable feeling of being exactly where I'm supposed to be.`,msgB:`This year I think of all the fires you have kept burning: the warmth in our family, the light in Yokshith's eyes, the ember of something steady and bright between us that years only seem to feed rather than diminish. <strong>You are a woman who brings warmth without burning.</strong> Who gives light without asking for anything in return. It is one of the most beautiful things I have ever witnessed.`,msgC:`Thirty-three is the age of amber — of something golden and ancient and luminous. I cannot wait to watch this year glow. I cannot wait to watch you glow in it. My love is always yours. Every flicker of it.`,milestone:"🍂 Golden Year",mileTitle:"Amber & Firelight",mileText:"In your thirty-third year you radiate the kind of warmth that makes everyone lucky enough to know you feel seen and held.",wishes:[{icon:"🕯️",title:"Inner Light",text:"May your inner fire never waver — it is the most beautiful thing about you, and the world needs it."},{icon:"🍊",title:"Warmth & Comfort",text:"May this year bring you the kind of comfort that comes from being surrounded by people who truly see you."},{icon:"☀️",title:"Golden Days",text:"May your days be long and golden and filled with the unhurried sweetness that life at its best can give."},{icon:"🌻",title:"Joy in Bloom",text:"May happiness find you the way sunflowers find the sun — turning naturally, inevitably, joyfully toward it."}]},
+  34:{name:"Ocean Deep at Thirty-Four",tagline:"Like the sea, you are constant, powerful, and breathtaking.",bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#E4F4F8 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 100% 10%,#EEF8F4 0%,transparent 50%),#F4FAFC`,accPale:"#E4F4F8",accLt:"#68B8C8",accMid:"#3888A0",accDark:"#1A5870",cardBg:"#EEF8FC",animType:"bubbles",animColors:["#88CCD8","#A8D8E8","#C8ECF0","#68B8C8","#B0E0E8"],poem:["Thirty-four — the depth of clear water,","the tide that knows exactly when to come,","you are the ocean that keeps calling,","the current I will always be swept from."],msgA:`I think of the ocean when I think of you — not the surface shimmer (though that too, always that too) but the extraordinary depth beneath. The parts of you that most people never see: the reserves of patience you carry, the quiet way you absorb what would break others, <em>the strength that lives so deep in you it doesn't even need to announce itself</em>. I have been swimming in you for years and I have not yet found the bottom.`,msgB:`At thirty-four you possess something rare — a certainty of self that doesn't come from never being afraid, but from moving forward <strong>despite</strong> the fear. You have crossed depths that would have capsized others. You have navigated tides that swept others off their feet. And you are still here, steady, beautiful, and completely, magnificently <strong>you</strong>.`,msgC:`May this year be an ocean year — wide and deep and full of surprising treasures. May it carry you gently to shores you have always wanted to reach. And may I always be there on the beach, watching you return, breathless with how extraordinary you are.`,milestone:"🌊 Year of Depth",mileTitle:"Deep and Magnificent",mileText:"Thirty-four is the year you show the world what true depth of character, love, and spirit looks like in a single, radiant person.",wishes:[{icon:"🐚",title:"Hidden Treasures",text:"May this year reveal gifts in yourself you hadn't yet discovered, wonders you haven't yet met."},{icon:"🌊",title:"Flowing Strength",text:"May you move through every challenge with the graceful, unstoppable power of the ocean you embody."},{icon:"🪸",title:"Rich Life",text:"May your life grow more colorful and rich, like a reef where every corner holds something new to love."},{icon:"☀️",title:"Surface Light",text:"May the sun always find you and set you sparkling — because you deserve every beautiful reflection."}]},
+  35:{name:"Magnificently Thirty-Five",tagline:"Thirty-five is not a milestone. You are the milestone.",bg:`radial-gradient(ellipse 70% 50% at 0% 0%,#F4EAF8 0%,transparent 50%),radial-gradient(ellipse 55% 55% at 100% 10%,#F4E0D8 0%,transparent 50%),#FAF8FC`,accPale:"#F4EAF8",accLt:"#C098D8",accMid:"#8850A8",accDark:"#603080",cardBg:"#F8F2FD",animType:"sparkles",animColors:["#C898D8","#D0A8E8","#D4B890","#E8C8F4","#B880C8"],poem:["Thirty-five — and you have never been more yourself,","more luminous, more unapologetically alive,","the universe knows it, the stars confirm it:","there is no one quite like you who will ever arrive."],msgA:`Let me tell you what I see at thirty-five: a woman who has arrived. Not arrived as in finished — arrived as in <em>fully inhabiting herself</em>. The soft edges, the sharp wit, the limitless capacity for love and occasional eye-roll, the way you carry tenderness and steel in equal measure. At thirty-five, Sindhu, you have become what I always knew you would: someone who takes the breath away simply by existing.`,msgB:`Half a decade in your thirties and what a half it has been. Motherhood, marriage, love in all its complicated and stunning forms — you have walked through each door with a grace that I have catalogued carefully, because I want to remember every version of you that has ever existed. <strong>Every version has been magnificent.</strong> This one most of all.`,msgC:`Thirty-five belongs to you. Not as a number, not as a milestone — but as a year that will carry your fingerprints on every day of it. I am honoured to watch every single one. Happy birthday, my magnificent Sindhu. You deserve every superlative in every language.`,milestone:"💜 Mid-Decade Crown",mileTitle:"Halfway Through Your Thirties",mileText:"Thirty-five is the crown jewel of a decade that belongs entirely to you. Wear it with the confidence it was always meant for.",wishes:[{icon:"👑",title:"Crown Your Worth",text:"May you always know, in the core of yourself, that you are worth every good thing that comes to you."},{icon:"🔮",title:"Clear Vision",text:"May you see yourself as clearly and as kindly as those who love you have always seen you."},{icon:"🪄",title:"Your Magic",text:"May this year be full of moments where life feels unmistakably, wondrously magical — because of you."},{icon:"💎",title:"Priceless",text:"May you always remember you cannot be replaced, cannot be replicated, and cannot be anything but extraordinary."}]}
 };
 
-/* generator for ages outside defined range */
-function genBdayTheme(age) {
-  const palettes = [
-    {bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#FAE8E8,transparent 50%),#FBF8F2`,accPale:'#FAE8E8',accLt:'#E8A8B0',accMid:'#C07880',accDark:'#904050',cardBg:'#FEF4F5',anim:'petals',colors:['#F0C8CC','#DDB890','#F8D8DC']},
-    {bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#E8F4EA,transparent 50%),#F8FAF6`,accPale:'#E8F4EA',accLt:'#94C89A',accMid:'#5A9460',accDark:'#3A6840',cardBg:'#F0FAF2',anim:'botanical',colors:['#94C89A','#B8D8A0','#D4E8C8']},
-    {bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#EEF0FA,transparent 50%),#F8F8FC`,accPale:'#EEF0FA',accLt:'#9098D8',accMid:'#5058B0',accDark:'#303880',cardBg:'#F4F5FD',anim:'starfall',colors:['#B0B8F0','#D0B890','#C8C0F0']},
-    {bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#FAF0E4,transparent 50%),#FAF8F2`,accPale:'#FAF0E4',accLt:'#D89858',accMid:'#B07830',accDark:'#784820',cardBg:'#FEF8F2',anim:'aurora',colors:['#E8B870','#E09870','#F0C890']},
-    {bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#E4F4F8,transparent 50%),#F4FAFC`,accPale:'#E4F4F8',accLt:'#68B8C8',accMid:'#3888A0',accDark:'#1A5870',cardBg:'#EEF8FC',anim:'bubbles',colors:['#88CCD8','#A8D8E8','#C8ECF0']},
-  ];
-  const p = palettes[age % palettes.length];
-  return {
-    name:`${age} — Another Beautiful Year`,
-    tagline:`${age} years of the most extraordinary woman I know.`,
-    bg:p.bg, accPale:p.accPale, accLt:p.accLt, accMid:p.accMid, accDark:p.accDark,
-    cardBg:p.cardBg, animType:p.anim, animColors:p.colors,
-    poem:[`${age} candles, each one a year of light,`,`a testament to who you've grown to be,`,`more beautiful, more whole, more radiant,`,`more wonderful than words can ever say from me.`],
-    msgA:`${age} years of you — and still, still, every year finds me more amazed than the last. There is something about the way you exist in the world that refuses to become ordinary, no matter how many years pass. <em>You are stubbornly, gloriously extraordinary.</em>`,
-    msgB:`I have catalogued every version of you that has existed across the years: the nervous ones, the triumphant ones, the quiet Tuesday ones that I love most of all. <strong>Every single version has been my favourite.</strong> This one included. Especially this one.`,
-    msgC:`Happy ${ordinal(age)} birthday, Sindhu. The years are counting, but what they're counting is beauty — and that particular number only grows.`,
-    milestone:`🎂 Year ${age} Celebration`,
-    mileTitle:`${age} Magnificent Years`,
-    mileText:`Another year of you, which means another year of the world being richer, warmer, and infinitely more beautiful for your presence in it.`,
-    wishes:[
-      {icon:'🌟',title:'Joy Always',text:'May this year overflow with the joy you so freely give to everyone around you.'},
-      {icon:'🌹',title:'Deep Love',text:'May our love continue to deepen and surprise us both with its beauty.'},
-      {icon:'✨',title:'Your Light',text:'May you never forget how brightly you shine, even on the days when you cannot feel it.'},
-      {icon:'💛',title:'All My Love',text:'Every wish I have is wrapped up in one: may you be happy, deeply and completely happy.'},
-    ]
-  };
-}
+function genBdayTheme(age){const palettes=[{bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#FAE8E8,transparent 50%),#FBF8F2`,accPale:'#FAE8E8',accLt:'#E8A8B0',accMid:'#C07880',accDark:'#904050',cardBg:'#FEF4F5',anim:'petals',colors:['#F0C8CC','#DDB890','#F8D8DC']},{bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#E8F4EA,transparent 50%),#F8FAF6`,accPale:'#E8F4EA',accLt:'#94C89A',accMid:'#5A9460',accDark:'#3A6840',cardBg:'#F0FAF2',anim:'botanical',colors:['#94C89A','#B8D8A0','#D4E8C8']},{bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#EEF0FA,transparent 50%),#F8F8FC`,accPale:'#EEF0FA',accLt:'#9098D8',accMid:'#5058B0',accDark:'#303880',cardBg:'#F4F5FD',anim:'starfall',colors:['#B0B8F0','#D0B890','#C8C0F0']},{bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#FAF0E4,transparent 50%),#FAF8F2`,accPale:'#FAF0E4',accLt:'#D89858',accMid:'#B07830',accDark:'#784820',cardBg:'#FEF8F2',anim:'aurora',colors:['#E8B870','#E09870','#F0C890']},{bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#E4F4F8,transparent 50%),#F4FAFC`,accPale:'#E4F4F8',accLt:'#68B8C8',accMid:'#3888A0',accDark:'#1A5870',cardBg:'#EEF8FC',anim:'bubbles',colors:['#88CCD8','#A8D8E8','#C8ECF0']}];const p=palettes[age%palettes.length];return{name:`${age} — Another Beautiful Year`,tagline:`${age} years of the most extraordinary woman I know.`,bg:p.bg,accPale:p.accPale,accLt:p.accLt,accMid:p.accMid,accDark:p.accDark,cardBg:p.cardBg,animType:p.anim,animColors:p.colors,poem:[`${age} candles, each one a year of light,`,`a testament to who you've grown to be,`,`more beautiful, more whole, more radiant,`,`more wonderful than words can ever say from me.`],msgA:`${age} years of you — and still, still, every year finds me more amazed than the last. There is something about the way you exist in the world that refuses to become ordinary, no matter how many years pass. <em>You are stubbornly, gloriously extraordinary.</em>`,msgB:`I have catalogued every version of you that has existed across the years: the nervous ones, the triumphant ones, the quiet Tuesday ones that I love most of all. <strong>Every single version has been my favourite.</strong> This one included. Especially this one.`,msgC:`Happy ${ordinal(age)} birthday, Sindhu. The years are counting, but what they're counting is beauty — and that particular number only grows.`,milestone:`🎂 Year ${age} Celebration`,mileTitle:`${age} Magnificent Years`,mileText:`Another year of you, which means another year of the world being richer, warmer, and infinitely more beautiful for your presence in it.`,wishes:[{icon:'🌟',title:'Joy Always',text:'May this year overflow with the joy you so freely give to everyone around you.'},{icon:'🌹',title:'Deep Love',text:'May our love continue to deepen and surprise us both with its beauty.'},{icon:'✨',title:'Your Light',text:'May you never forget how brightly you shine, even on the days when you cannot feel it.'},{icon:'💛',title:'All My Love',text:'Every wish I have is wrapped up in one: may you be happy, deeply and completely happy.'}]};}
+function getBdayTheme(age){return BDAY_THEMES[age]||genBdayTheme(age);}
 
-function getBdayTheme(age){ return BDAY_THEMES[age] || genBdayTheme(age); }
-
-/* ══════════════════════════════════════════════════════
-   ANNIVERSARY THEMES  (years since 2023)
-══════════════════════════════════════════════════════ */
-const ANNIV_THEMES = {
-
-  1: {
-    name:"Paper — Our First Chapter",
-    tagline:"The most important story ever written begins with you.",
-    traditional:"Paper Anniversary",
-    traditionalNote:"Like paper, our story is a blank canvas filled with the words only we could write.",
-    bg:`radial-gradient(ellipse 75% 55% at 0% 0%,#FAF4EC 0%,transparent 55%),radial-gradient(ellipse 55% 50% at 100% 10%,#FDE8E4 0%,transparent 50%),#FBF8F2`,
-    accPale:"#FAF4EC", accLt:"#D8B888", accMid:"#A88858", accDark:"#785838",
-    cardBg:"#FFFCF5",
-    animType:"petals",
-    animColors:["#E8D0A8","#F0C8BC","#F4E4C8","#E8C8A0"],
-    poem:["One year — and already the world feels different,","the ordinary air has changed its temperature and tone,","you stepped into my life and rearranged it,","and now I cannot picture it alone."],
-    msgA:`One year of marriage, and I find myself unable to add it up — because every day has felt so full that a year seems simultaneously like a lifetime and a single exhaled breath. <em>Being married to you, Sindhu, is the greatest privilege of my life.</em> Not because it is always easy or always perfect, but because it is always — always — worth everything.`,
-    msgB:`In our first year I have learned the weight of the word 'home' in a way I never understood before you. Home is the specific sound of your voice in the morning. It is the way you arrange things, the way you laugh at things, the way you love our son with an entirety that leaves me in complete awe. <strong>You have made a home out of every room we have occupied together.</strong>`,
-    msgC:`One year of choosing you. One year of you choosing me. There is no luckier man alive. Here is to every year that follows, each one a new page in the most beautiful book I could ever hope to be part of.`,
-    milestone:"📜 The Paper Anniversary",
-    mileTitle:"Our First Chapter",
-    mileText:"Paper: blank and full of possibility, the first page of a story that will take a lifetime to tell — and will be worth every word.",
-    journeyNote:"The beginning of everything. The year of firsts: first home, first fights, first deep laugh, first evidence that you were the right choice, completely.",
-    wishes:[
-      {icon:"📖",title:"Our Story",text:"May every chapter that follows this one be more beautiful, more rich, and more love-filled than the last."},
-      {icon:"✍️",title:"New Words",text:"May we keep finding new words for what we are to each other — words that surprise us with their truth."},
-      {icon:"📝",title:"Promises Kept",text:"May we keep every promise quietly, faithfully, and without fanfare — because that is what real love looks like."},
-      {icon:"🕊️",title:"Peace & Joy",text:"May our first year be a foundation so solid that everything built on it stands for a hundred more."},
-    ]
-  },
-
-  2: {
-    name:"Cotton — Softly Woven Together",
-    tagline:"Two years of being woven into the same beautiful cloth.",
-    traditional:"Cotton Anniversary",
-    traditionalNote:"Like cotton: strong, soft, and more comfortable with every year that passes.",
-    bg:`radial-gradient(ellipse 70% 55% at 5% 0%,#FAF4EC 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 95% 15%,#F4ECE4 0%,transparent 50%),#F8F4EC`,
-    accPale:"#F8F0E4", accLt:"#C4A878", accMid:"#9C7848", accDark:"#6C5030",
-    cardBg:"#FFFCF4",
-    animType:"aurora",
-    animColors:["#D8B888","#C8A878","#E0C8A0","#D0B890"],
-    poem:["Two years — and the weave of us is tighter,","every thread a choice to stay and stay,","cotton-soft and linen-strong between us,","the fabric of a love that's here to stay."],
-    msgA:`Two years of marriage — and what I notice most is how comfortable love has become. Not comfortable in a settled or complacent way, but comfortable the way a favorite garment becomes comfortable: <em>softer with every wear, more shaped to you, more exactly right with every passing day</em>. Our second year has been the year of real knowing — of learning the full shape of each other's habits and edges and finding them, somehow, even more loveable.`,
-    msgB:`I think about the things we have built in two years: a home with actual warmth in it, a family with actual roots, a language between us that no one else speaks. <strong>That private language of glances and shorthand and the specific way you say my name when you're both exasperated and fond at once — I treasure it more than I can say.</strong>`,
-    msgC:`Two years, Sindhu. Two years of the best decision I ever made. Cotton is the traditional gift: soft and strong and grown from the earth. There is nothing I want to give you more than the same — softness and strength, year after year, as long as I am here.`,
-    milestone:"🧵 The Cotton Anniversary",
-    mileTitle:"Soft & Strong Together",
-    mileText:"Cotton: broken in and beautiful, more comfortable with every year, woven from something ordinary into something that holds everything together.",
-    journeyNote:"The year of deepening. Of learning the rhythms of each other, finding the grooves where we fit, and marveling at the fact that we keep choosing this.",
-    wishes:[
-      {icon:"🫶",title:"Soft Love",text:"May our love always hold both: the softness that makes it a comfort and the strength that makes it a foundation."},
-      {icon:"🧶",title:"Woven Together",text:"May every thread of our life become more beautifully interwoven with every year that passes."},
-      {icon:"🌾",title:"Natural Growth",text:"May what we are to each other keep growing as naturally and richly as the earth grows what is precious."},
-      {icon:"💛",title:"Comfort & Joy",text:"May our home always be the safest, warmest, most comfortable place either of us has ever known."},
-    ]
-  },
-
-  3: {
-    name:"Leather — Timeless & True",
-    tagline:"Three years, and what we have is more durable than anything.",
-    traditional:"Leather Anniversary",
-    traditionalNote:"Like leather: refined by time, stronger for being tested, more beautiful for every year of wear.",
-    bg:`radial-gradient(ellipse 70% 55% at 5% 0%,#F8F0E8 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 95% 15%,#F0E4D8 0%,transparent 50%),#F8F0E8`,
-    accPale:"#F8F0E8", accLt:"#C09060", accMid:"#906038", accDark:"#603818",
-    cardBg:"#FEF8F2",
-    animType:"geometric",
-    animColors:["#C09060","#D0A878","#E0C0A0","#B08050"],
-    poem:["Three years — and we are leather now,","worn in and shaped to each other's contour,","what time has done is deepen, not diminish,","what love has made is stronger than before."],
-    msgA:`Three years. The leather anniversary — and I cannot think of a more perfect symbol. Because what we have built in three years is exactly that: something durable and beautiful and marked beautifully by the life we have lived inside it. <em>Every year leaves its mark. Every year makes it better.</em> Not despite the wear, but because of it.`,
-    msgB:`I think about who we were on November 19, 2023 and who we are today, and the distance between those two versions of us is not a loss — it is a deepening. We have grown into each other the way good leather shapes itself: <strong>not compromising, but finding the exact form that fits the life it was made for</strong>. That form is us. It is right. It is beautiful.`,
-    msgC:`Three years of this extraordinary, complicated, joyful, sometimes exhausting, always worthwhile love. Three years of you. I would choose it again without hesitation. I choose it again, right now, in the writing of this sentence. Happy third anniversary, my timeless love.`,
-    milestone:"🏺 The Leather Anniversary",
-    mileTitle:"Refined by Time",
-    mileText:"Leather: time-tested and more beautiful for it, shaped by every year of use into something that fits perfectly and lasts forever.",
-    journeyNote:"The year of real life. Of navigating together what cannot be navigated alone, and discovering that together is always, always better.",
-    wishes:[
-      {icon:"🤎",title:"Timeless Love",text:"May what we have only grow more durable and beautiful with every year that puts pressure on it."},
-      {icon:"🌰",title:"Rich & Deep",text:"May our love continue deepening — richer, darker, more layered with every passing season."},
-      {icon:"🪵",title:"Built to Last",text:"May we keep building something together that neither of us could have built alone, and both of us treasure."},
-      {icon:"🔥",title:"Warmth Always",text:"May the warmth between us never cool — may it be the constant in every year of our changing life."},
-    ]
-  },
-
-  4: {
-    name:"Fruit & Flowers — In Full Bloom",
-    tagline:"Four years of our garden growing more beautiful together.",
-    traditional:"Fruit & Flowers Anniversary",
-    traditionalNote:"Like fruit and flowers: at the height of bloom, fragrant and full of sweetness.",
-    bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#F0F8EC 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 100% 10%,#FAF0E8 0%,transparent 50%),#F4FAF0`,
-    accPale:"#F0F8EC", accLt:"#88B860", accMid:"#587838", accDark:"#385020",
-    cardBg:"#F4FDF0",
-    animType:"botanical",
-    animColors:["#A8D080","#B8D898","#D0EAC0","#94C870","#C8E8A8"],
-    poem:["Four years — and the garden between us,","blooms richer than it ever did before,","every season brings a new abundance,","every year a reason to adore."],
-    msgA:`Four years of marriage — and what I see when I look at us is a garden in full bloom. <em>Not the tender new growth of year one, not the careful tending of year two</em> — but the full, fragrant abundance of something that has rooted deeply and now blooms without self-consciousness, without reservation, in every color it was always meant to be.`,
-    msgB:`You are in full bloom, Sindhu. In our marriage, in our family, in yourself. I see it every day: the confidence with which you love, the ease with which you give, the way you have grown into your life here as though it were always exactly the right soil for you. <strong>It is. You are. Everything about this is in its most beautiful season.</strong>`,
-    msgC:`Four years of our garden. Four springs of choosing to tend it together, to water it even in the dry weeks, to trust that it would bloom again. It always does. It always will. Happy fourth anniversary, my flower.`,
-    milestone:"🌺 The Fruit & Flowers Anniversary",
-    mileTitle:"A Garden in Full Bloom",
-    mileText:"Fruit and flowers: the season of abundance, of color and sweetness, of a love that has rooted and is now blooming fully and without reservation.",
-    journeyNote:"The year of abundance. Of looking at what we have built and feeling — for the first time — that it is not only enough but extraordinary.",
-    wishes:[
-      {icon:"🌸",title:"Fragrant Days",text:"May our life together be always fragrant with the sweetness of love freely given and joyfully received."},
-      {icon:"🍋",title:"Sweet & Tart",text:"May we always have both the sweetness and the necessary sharpness that keeps everything interesting."},
-      {icon:"🌻",title:"Turning Together",text:"May we always turn toward each other, the way sunflowers turn toward light, naturally and inevitably."},
-      {icon:"🌱",title:"More to Come",text:"May what is already blooming between us continue to grow and open into colors we haven't yet imagined."},
-    ]
-  },
-
-  5: {
-    name:"Wood — Rooted Forever",
-    tagline:"Five years deep, our roots reach further than we know.",
-    traditional:"Wood Anniversary",
-    traditionalNote:"Like wood: deeply rooted, built to weather every storm, more beautiful with every ring of growth.",
-    bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#EAF8EC 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 100% 10%,#F0F8EC 0%,transparent 50%),#F0F8F4`,
-    accPale:"#EAF8EC", accLt:"#5A9860", accMid:"#306838", accDark:"#1A4820",
-    cardBg:"#F0FDF4",
-    animType:"botanical",
-    animColors:["#78B880","#98C890","#B8D8A8","#5A9060","#A8C898"],
-    poem:["Five years — and we are deep-rooted now,","the kind of roots that storms run from in fear,","five rings of growth inside the trunk of us,","and not a single one I wish weren't here."],
-    msgA:`Five years. The wood anniversary — and how right that feels. Because what we have is exactly that now: deeply rooted, structurally sound, capable of holding weight that neither of us could carry alone. <em>We are a tree that has survived five full cycles of every season.</em> And with every year, the roots have gone deeper, the branches have stretched wider, and the shade we offer each other and our son has grown more complete.`,
-    msgB:`I think about the rings inside a tree — each one a year of sun and rain and growth and stillness. Each one a record. <strong>Our five rings hold everything we are: the laughter, the arguments, the healing, the joy that keeps arriving unexpectedly and making everything brighter.</strong> I would not change a single ring. I would not unbend a single storm that grew us.`,
-    msgC:`Five years, Sindhu. Half a decade of the most important decision of my life proving itself the right one, over and over and over again. Here's to the next five, and the five after that, and all the rings we haven't grown yet. I love you rootedly, completely, and without reservation.`,
-    milestone:"🌳 The Wood Anniversary",
-    mileTitle:"Half a Decade Together",
-    mileText:"Wood: five rings of growth, rooted in trust and love, proof that what is built carefully and watered faithfully will stand against anything.",
-    journeyNote:"Five years — the year you know, with complete certainty, that what you have built is real. Not luck. Not wishful thinking. Real, and rooted, and yours.",
-    wishes:[
-      {icon:"🌳",title:"Lasting Roots",text:"May what we have built together be as strong and enduring as the oldest, deepest-rooted tree."},
-      {icon:"🪵",title:"Built Together",text:"May we keep building — adding rings, growing branches, offering more shade to the people we love."},
-      {icon:"🍃",title:"New Leaves",text:"May every new year bring fresh growth and new beauty to what is already deeply, wonderfully here."},
-      {icon:"🌿",title:"Growing Together",text:"May we always grow in the same direction — toward light, toward joy, toward each other."},
-    ]
-  }
+const ANNIV_THEMES={
+  1:{name:"Paper — Our First Chapter",tagline:"The most important story ever written begins with you.",traditional:"Paper Anniversary",traditionalNote:"Like paper, our story is a blank canvas filled with the words only we could write.",bg:`radial-gradient(ellipse 75% 55% at 0% 0%,#FAF4EC 0%,transparent 55%),radial-gradient(ellipse 55% 50% at 100% 10%,#FDE8E4 0%,transparent 50%),#FBF8F2`,accPale:"#FAF4EC",accLt:"#D8B888",accMid:"#A88858",accDark:"#785838",cardBg:"#FFFCF5",animType:"petals",animColors:["#E8D0A8","#F0C8BC","#F4E4C8","#E8C8A0"],poem:["One year — and already the world feels different,","the ordinary air has changed its temperature and tone,","you stepped into my life and rearranged it,","and now I cannot picture it alone."],msgA:`One year of marriage, and I find myself unable to add it up — because every day has felt so full that a year seems simultaneously like a lifetime and a single exhaled breath. <em>Being married to you, Sindhu, is the greatest privilege of my life.</em> Not because it is always easy or always perfect, but because it is always — always — worth everything.`,msgB:`In our first year I have learned the weight of the word 'home' in a way I never understood before you. Home is the specific sound of your voice in the morning. It is the way you arrange things, the way you laugh at things, the way you love our son with an entirety that leaves me in complete awe. <strong>You have made a home out of every room we have occupied together.</strong>`,msgC:`One year of choosing you. One year of you choosing me. There is no luckier man alive. Here is to every year that follows, each one a new page in the most beautiful book I could ever hope to be part of.`,milestone:"📜 The Paper Anniversary",mileTitle:"Our First Chapter",mileText:"Paper: blank and full of possibility, the first page of a story that will take a lifetime to tell — and will be worth every word.",journeyNote:"The beginning of everything. The year of firsts: first home, first fights, first deep laugh, first evidence that you were the right choice, completely.",wishes:[{icon:"📖",title:"Our Story",text:"May every chapter that follows this one be more beautiful, more rich, and more love-filled than the last."},{icon:"✍️",title:"New Words",text:"May we keep finding new words for what we are to each other — words that surprise us with their truth."},{icon:"📝",title:"Promises Kept",text:"May we keep every promise quietly, faithfully, and without fanfare — because that is what real love looks like."},{icon:"🕊️",title:"Peace & Joy",text:"May our first year be a foundation so solid that everything built on it stands for a hundred more."}]},
+  2:{name:"Cotton — Softly Woven Together",tagline:"Two years of being woven into the same beautiful cloth.",traditional:"Cotton Anniversary",traditionalNote:"Like cotton: strong, soft, and more comfortable with every year that passes.",bg:`radial-gradient(ellipse 70% 55% at 5% 0%,#FAF4EC 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 95% 15%,#F4ECE4 0%,transparent 50%),#F8F4EC`,accPale:"#F8F0E4",accLt:"#C4A878",accMid:"#9C7848",accDark:"#6C5030",cardBg:"#FFFCF4",animType:"aurora",animColors:["#D8B888","#C8A878","#E0C8A0","#D0B890"],poem:["Two years — and the weave of us is tighter,","every thread a choice to stay and stay,","cotton-soft and linen-strong between us,","the fabric of a love that's here to stay."],msgA:`Two years of marriage — and what I notice most is how comfortable love has become. Not comfortable in a settled or complacent way, but comfortable the way a favorite garment becomes comfortable: <em>softer with every wear, more shaped to you, more exactly right with every passing day</em>. Our second year has been the year of real knowing — of learning the full shape of each other's habits and edges and finding them, somehow, even more loveable.`,msgB:`I think about the things we have built in two years: a home with actual warmth in it, a family with actual roots, a language between us that no one else speaks. <strong>That private language of glances and shorthand and the specific way you say my name when you're both exasperated and fond at once — I treasure it more than I can say.</strong>`,msgC:`Two years, Sindhu. Two years of the best decision I ever made. Cotton is the traditional gift: soft and strong and grown from the earth. There is nothing I want to give you more than the same — softness and strength, year after year, as long as I am here.`,milestone:"🧵 The Cotton Anniversary",mileTitle:"Soft & Strong Together",mileText:"Cotton: broken in and beautiful, more comfortable with every year, woven from something ordinary into something that holds everything together.",journeyNote:"The year of deepening. Of learning the rhythms of each other, finding the grooves where we fit, and marveling at the fact that we keep choosing this.",wishes:[{icon:"🫶",title:"Soft Love",text:"May our love always hold both: the softness that makes it a comfort and the strength that makes it a foundation."},{icon:"🧶",title:"Woven Together",text:"May every thread of our life become more beautifully interwoven with every year that passes."},{icon:"🌾",title:"Natural Growth",text:"May what we are to each other keep growing as naturally and richly as the earth grows what is precious."},{icon:"💛",title:"Comfort & Joy",text:"May our home always be the safest, warmest, most comfortable place either of us has ever known."}]},
+  3:{name:"Leather — Timeless & True",tagline:"Three years, and what we have is more durable than anything.",traditional:"Leather Anniversary",traditionalNote:"Like leather: refined by time, stronger for being tested, more beautiful for every year of wear.",bg:`radial-gradient(ellipse 70% 55% at 5% 0%,#F8F0E8 0%,transparent 50%),radial-gradient(ellipse 60% 50% at 95% 15%,#F0E4D8 0%,transparent 50%),#F8F0E8`,accPale:"#F8F0E8",accLt:"#C09060",accMid:"#906038",accDark:"#603818",cardBg:"#FEF8F2",animType:"geometric",animColors:["#C09060","#D0A878","#E0C0A0","#B08050"],poem:["Three years — and we are leather now,","worn in and shaped to each other's contour,","what time has done is deepen, not diminish,","what love has made is stronger than before."],msgA:`Three years. The leather anniversary — and I cannot think of a more perfect symbol. Because what we have built in three years is exactly that: something durable and beautiful and marked beautifully by the life we have lived inside it. <em>Every year leaves its mark. Every year makes it better.</em> Not despite the wear, but because of it.`,msgB:`I think about who we were on November 19, 2023 and who we are today, and the distance between those two versions of us is not a loss — it is a deepening. We have grown into each other the way good leather shapes itself: <strong>not compromising, but finding the exact form that fits the life it was made for</strong>. That form is us. It is right. It is beautiful.`,msgC:`Three years of this extraordinary, complicated, joyful, sometimes exhausting, always worthwhile love. Three years of you. I would choose it again without hesitation. I choose it again, right now, in the writing of this sentence. Happy third anniversary, my timeless love.`,milestone:"🏺 The Leather Anniversary",mileTitle:"Refined by Time",mileText:"Leather: time-tested and more beautiful for it, shaped by every year of use into something that fits perfectly and lasts forever.",journeyNote:"The year of real life. Of navigating together what cannot be navigated alone, and discovering that together is always, always better.",wishes:[{icon:"🤎",title:"Timeless Love",text:"May what we have only grow more durable and beautiful with every year that puts pressure on it."},{icon:"🌰",title:"Rich & Deep",text:"May our love continue deepening — richer, darker, more layered with every passing season."},{icon:"🪵",title:"Built to Last",text:"May we keep building something together that neither of us could have built alone, and both of us treasure."},{icon:"🔥",title:"Warmth Always",text:"May the warmth between us never cool — may it be the constant in every year of our changing life."}]}
 };
 
-/* generate for years beyond defined */
-function genAnnivTheme(years) {
-  const milestones = {
-    6:"Candy/Iron",7:"Wool/Copper",8:"Bronze/Pottery",9:"Pottery",10:"Tin/Aluminum",
-    11:"Steel",12:"Silk/Linen",13:"Lace",14:"Ivory/Opal",15:"Crystal",20:"China",
-    25:"Silver",30:"Pearl",35:"Coral",40:"Ruby",45:"Sapphire",50:"Gold",
-    55:"Emerald",60:"Diamond",65:"Blue Sapphire",70:"Platinum"
-  };
-  const nearest = Object.keys(milestones).map(Number).reduce((a,b)=>Math.abs(b-years)<Math.abs(a-years)?b:a);
-  const ms = milestones[nearest] || `${years}-Year`;
-  const palettes=[
-    {bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#FAE8E8,transparent 50%),#FBF8F2`,p:'#FAE8E8',l:'#E8A8B0',m:'#C07880',d:'#904050',cb:'#FEF4F5',a:'petals',c:['#F0C8CC','#DDB890']},
-    {bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#F4E0C8,transparent 50%),#FAF4EC`,p:'#F4E0C8',l:'#C09060',m:'#906038',d:'#603818',cb:'#FEF8F0',a:'aurora',c:['#D0A870','#E0C098']},
-    {bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#E4F0F8,transparent 50%),#F4F8FC`,p:'#E4F0F8',l:'#68A8C8',m:'#387898',d:'#1A4870',cb:'#EEF8FC',a:'sparkles',c:['#88C0D8','#A8D0E8']},
-  ];
-  const p = palettes[years%palettes.length];
-  return {
-    name:`${years} Years of Extraordinary Love`,
-    tagline:`${years} years — and every single one has been the best year of my life.`,
-    traditional:`${ms} Anniversary`,
-    traditionalNote:`Like ${ms.toLowerCase()}: a symbol of what we have built — enduring, precious, and more valuable with every year.`,
-    bg:p.bg, accPale:p.p, accLt:p.l, accMid:p.m, accDark:p.d, cardBg:p.cb,
-    animType:p.a, animColors:p.c,
-    poem:[`${years} years — and I would write it in gold,`,`on every surface I could find,`,`that choosing you was the best decision,`,`that loving you is peace of mind.`],
-    msgA:`${years} years of marriage to the most extraordinary person I have ever known. <em>Every year has added something to us that we couldn't have had without the years before it.</em> We are richer for every season we have shared.`,
-    msgB:`I look at what we have built — our family, our home, the private world that only we two fully understand — and I am moved by how much of it is beautiful, and how much of its beauty came from choosing to keep going on the days when going was hard. <strong>That is what real love looks like. We have it.</strong>`,
-    msgC:`${years} years, Sindhu. And I choose you still, every morning, in every version of this life. Happy anniversary, my love. The very best is still ahead of us.`,
-    milestone:`🥂 ${years}-Year Anniversary`,
-    mileTitle:`${ordinal(years)} Anniversary — ${ms}`,
-    mileText:`${ms}: a symbol of ${years} extraordinary years of love, growth, and the daily miracle of two people choosing each other completely.`,
-    journeyNote:`${years} years: proof that what two people build together, with intention and love and the willingness to keep going, is the most beautiful thing in the world.`,
-    wishes:[
-      {icon:'🌹',title:'Enduring Love',text:'May what we have only deepen and grow more beautiful with every year we add to it.'},
-      {icon:'✨',title:'Our Light',text:'May we always be each other\'s light — in the bright times and especially in the dark ones.'},
-      {icon:'🥂',title:'Celebration',text:'May we always find reasons to celebrate — each other, our family, this extraordinary life.'},
-      {icon:'💛',title:'Always',text:'Always and forever, in every year that comes — this love is yours and this love is ours.'},
-    ]
-  };
+function genAnnivTheme(years){const milestones={6:"Candy/Iron",7:"Wool/Copper",8:"Bronze/Pottery",9:"Pottery",10:"Tin/Aluminum",11:"Steel",12:"Silk/Linen",13:"Lace",14:"Ivory/Opal",15:"Crystal",20:"China",25:"Silver",30:"Pearl",35:"Coral",40:"Ruby",45:"Sapphire",50:"Gold",55:"Emerald",60:"Diamond",65:"Blue Sapphire",70:"Platinum"};const nearest=Object.keys(milestones).map(Number).reduce((a,b)=>Math.abs(b-years)<Math.abs(a-years)?b:a);const ms=milestones[nearest]||`${years}-Year`;const palettes=[{bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#FAE8E8,transparent 50%),#FBF8F2`,p:'#FAE8E8',l:'#E8A8B0',m:'#C07880',d:'#904050',cb:'#FEF4F5',a:'petals',c:['#F0C8CC','#DDB890']},{bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#F4E0C8,transparent 50%),#FAF4EC`,p:'#F4E0C8',l:'#C09060',m:'#906038',d:'#603818',cb:'#FEF8F0',a:'aurora',c:['#D0A870','#E0C098']},{bg:`radial-gradient(ellipse 70% 55% at 0% 0%,#E4F0F8,transparent 50%),#F4F8FC`,p:'#E4F0F8',l:'#68A8C8',m:'#387898',d:'#1A4870',cb:'#EEF8FC',a:'sparkles',c:['#88C0D8','#A8D0E8']}];const p=palettes[years%palettes.length];return{name:`${years} Years of Extraordinary Love`,tagline:`${years} years — and every single one has been the best year of my life.`,traditional:`${ms} Anniversary`,traditionalNote:`Like ${ms.toLowerCase()}: a symbol of what we have built — enduring, precious, and more valuable with every year.`,bg:p.bg,accPale:p.p,accLt:p.l,accMid:p.m,accDark:p.d,cardBg:p.cb,animType:p.a,animColors:p.c,poem:[`${years} years — and I would write it in gold,`,`on every surface I could find,`,`that choosing you was the best decision,`,`that loving you is peace of mind.`],msgA:`${years} years of marriage to the most extraordinary person I have ever known. <em>Every year has added something to us that we couldn't have had without the years before it.</em> We are richer for every season we have shared.`,msgB:`I look at what we have built — our family, our home, the private world that only we two fully understand — and I am moved by how much of it is beautiful, and how much of its beauty came from choosing to keep going on the days when going was hard. <strong>That is what real love looks like. We have it.</strong>`,msgC:`${years} years, Sindhu. And I choose you still, every morning, in every version of this life. Happy anniversary, my love. The very best is still ahead of us.`,milestone:`🥂 ${years}-Year Anniversary`,mileTitle:`${ordinal(years)} Anniversary — ${ms}`,mileText:`${ms}: a symbol of ${years} extraordinary years of love, growth, and the daily miracle of two people choosing each other completely.`,journeyNote:`${years} years: proof that what two people build together, with intention and love and the willingness to keep going, is the most beautiful thing in the world.`,wishes:[{icon:'🌹',title:'Enduring Love',text:'May what we have only deepen and grow more beautiful with every year we add to it.'},{icon:'✨',title:'Our Light',text:'May we always be each other\'s light — in the bright times and especially in the dark ones.'},{icon:'🥂',title:'Celebration',text:'May we always find reasons to celebrate — each other, our family, this extraordinary life.'},{icon:'💛',title:'Always',text:'Always and forever, in every year that comes — this love is yours and this love is ours.'}]};}
+function getAnnivTheme(years){return ANNIV_THEMES[years]||genAnnivTheme(years);}
+
+function applyTheme(t){const r=document.documentElement;r.style.setProperty('--bg','transparent');r.style.setProperty('--acc-pale',t.accPale);r.style.setProperty('--acc-lt',t.accLt);r.style.setProperty('--acc-mid',t.accMid);r.style.setProperty('--acc-dark',t.accDark);r.style.setProperty('--card-bg',t.cardBg);r.style.setProperty('--gold','#C09A52');r.style.setProperty('--gold-lt','#D8BC82');document.getElementById('bg-base').style.background=t.bg;}
+
+const state={page:null,bdayViewYear:lastBdayYear,annivViewYear:lastAnnivYear};
+const BDAY_MIN_YEAR=BDAY.birthYear+30;
+const ANNIV_MIN_YEAR=ANNIV.startYear+1;
+
+function detectPage(){
+  if(isToday(BDAY.month,BDAY.day)){state.page='birthday';state.bdayViewYear=CY;renderBirthday(CY);}
+  else if(isToday(ANNIV.month,ANNIV.day)){state.page='anniversary';state.annivViewYear=CY;renderAnniversary(CY);}
+  else{state.page='waiting';renderWaiting();}
 }
 
-function getAnnivTheme(years){ return ANNIV_THEMES[years] || genAnnivTheme(years); }
-
-/* ══════════════════════════════════════════════════════
-   THEME APPLICATION — applies CSS vars for the year
-══════════════════════════════════════════════════════ */
-function applyTheme(t) {
-  const r = document.documentElement;
-  r.style.setProperty('--bg',        'transparent');
-  r.style.setProperty('--acc-pale',  t.accPale);
-  r.style.setProperty('--acc-lt',    t.accLt);
-  r.style.setProperty('--acc-mid',   t.accMid);
-  r.style.setProperty('--acc-dark',  t.accDark);
-  r.style.setProperty('--card-bg',   t.cardBg);
-  r.style.setProperty('--gold',      '#C09A52');
-  r.style.setProperty('--gold-lt',   '#D8BC82');
-  // bg-base gradient
-  document.getElementById('bg-base').style.background = t.bg;
+function renderWaiting(){
+  applyTheme({accPale:'#FAE8E8',accLt:'#E8A8B0',accMid:'#C07880',accDark:'#904050',cardBg:'#FEF4F5',bg:`radial-gradient(ellipse 75% 55% at 0% 0%,rgba(240,200,200,.4) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 100% 0%,rgba(242,220,180,.3) 0%,transparent 50%),#FBF8F2`});
+  startAnim('petals',['#F0C8CC','#DDB890','#F8D8DC','#E8C8A0']);
+  const memoryItems=[];
+  for(let yr=BDAY_MIN_YEAR;yr<=lastBdayYear;yr++){const age=yr-BDAY.birthYear;const t=getBdayTheme(age);memoryItems.push(`<div class="memory-card" onclick="openMemory('birthday',${yr})"><span class="mc-emoji">🎂</span><div class="mc-year">${yr}</div><div class="mc-label">${t.name.split('—')[0].trim()||('Age '+age)}</div></div>`);}
+  for(let yr=ANNIV_MIN_YEAR;yr<=lastAnnivYear;yr++){const yrs=yr-ANNIV.startYear;const t=getAnnivTheme(yrs);memoryItems.push(`<div class="memory-card" onclick="openMemory('anniversary',${yr})"><span class="mc-emoji">💍</span><div class="mc-year">${yr}</div><div class="mc-label">${t.name.split('—')[0].trim()||(yrs+' Year')}</div></div>`);}
+  const html=`<div class="page-enter"><div class="psec" style="text-align:center;padding-bottom:0;"><div class="psec-inner"><div style="margin-bottom:24px;"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" style="margin:0 auto;"><circle cx="32" cy="32" r="30" stroke="#E8A8B0" stroke-width="1" stroke-dasharray="4 6" opacity=".6"/><path d="M32 48C32 48 14 37 14 25C14 18.5 19 14 25 14C28.5 14 31 16 32 19C33 16 35.5 14 39 14C45 14 50 18.5 50 25C50 37 32 48 32 48Z" fill="url(#wlg)" opacity=".8"/><defs><linearGradient id="wlg" x1="14" y1="14" x2="50" y2="48"><stop stop-color="#D4A85C"/><stop offset="1" stop-color="#C07880"/></linearGradient></defs></svg></div><div style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.55em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:16px;">A Special Day Awaits</div><h1 style="font-family:'Great Vibes',cursive;font-size:clamp(3rem,11vw,6rem);color:var(--acc-mid);line-height:1;filter:drop-shadow(0 2px 16px rgba(192,120,128,.2));">Sindhu</h1><p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(1rem,3vw,1.35rem);color:var(--ink-3);margin:14px 0 36px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.9;">Some of the most beautiful things in life are worth waiting for.<br>Your special day is coming — and when it arrives, this space will be<br>filled with something made entirely, lovingly, for <em>you</em>.</p></div></div><div class="psec" style="padding-top:30px;"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Your Next Celebrations</span><div class="so-line so-line-r"></div></div><div class="wait-event-cards sr"><div class="wait-ev-card" style="--ev-stripe:linear-gradient(90deg,#C07880,#D4A85C)"><span class="wec-icon">🌹</span><div class="wec-label">Birthday</div><div class="wec-name">Sindhu's Birthday</div><div class="wec-date">September 25th</div><div class="wec-countdown"><div class="wcc-unit"><span class="wcc-num" id="bd-d">--</span><div class="wcc-lbl">Days</div></div><div class="wcc-unit"><span class="wcc-num" id="bd-h">--</span><div class="wcc-lbl">Hrs</div></div><div class="wcc-unit"><span class="wcc-num" id="bd-m">--</span><div class="wcc-lbl">Min</div></div><div class="wcc-unit"><span class="wcc-num" id="bd-s">--</span><div class="wcc-lbl">Sec</div></div></div></div><div class="wait-ev-card" style="--ev-stripe:linear-gradient(90deg,#C09A52,#C07880)"><span class="wec-icon">💍</span><div class="wec-label">Anniversary</div><div class="wec-name">Wedding Anniversary</div><div class="wec-date">November 19th</div><div class="wec-countdown"><div class="wcc-unit"><span class="wcc-num" id="an-d">--</span><div class="wcc-lbl">Days</div></div><div class="wcc-unit"><span class="wcc-num" id="an-h">--</span><div class="wcc-lbl">Hrs</div></div><div class="wcc-unit"><span class="wcc-num" id="an-m">--</span><div class="wcc-lbl">Min</div></div><div class="wcc-unit"><span class="wcc-num" id="an-s">--</span><div class="wcc-lbl">Sec</div></div></div></div></div></div></div><div class="psec" style="background:linear-gradient(135deg,rgba(248,234,234,.5),rgba(252,244,232,.5));"><div class="psec-inner" style="text-align:center;"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">While You Wait</span><div class="so-line so-line-r"></div></div><div class="message-card sr" style="text-align:left;"><p class="message-para">There is a particular kind of love that doesn't require a special day to be felt — and that is the love that fills this space every moment you are not here. <em>This page exists for you, Sindhu</em>. For the days when the calendar aligns and the words finally have a stage. But know that on all the days in between, the love behind these words is just as present.</p><p class="message-para">On your birthday, this page will open into something made for exactly how old you are in exactly that year — because you deserve celebrations that know you, specifically, not celebrations that could belong to anyone. And on our anniversary, it will hold something that knows what our particular love has grown into that particular year.</p><p class="message-para">Until then — come back when the day arrives. <strong>It will be worth the wait. You always are.</strong></p></div></div></div>${memoryItems.length>0?`<div class="psec"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Relive the Memories</span><div class="so-line so-line-r"></div></div><p style="text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink-3);margin-bottom:28px;" class="sr">Every year held something beautiful. Browse the ones that already belong to us.</p><div class="memory-grid sr">${memoryItems.join('')}</div></div></div>`:''}<div class="signature-section sr"><div class="sig-from">— waiting for your special day — with all my love —</div><div class="sig-name">Your Chandu <span class="sig-heart">🌹</span></div></div></div>`;
+  document.getElementById('app').innerHTML=html;
+  initReveal();tickWaiting();setInterval(tickWaiting,1000);
 }
 
-/* ══════════════════════════════════════════════════════
-   STATE
-══════════════════════════════════════════════════════ */
-const state = {
-  page: null,       // 'waiting' | 'birthday' | 'anniversary'
-  bdayViewYear:  lastBdayYear,
-  annivViewYear: lastAnnivYear,
-};
+function tickWaiting(){const bd=cdTo(BDAY.month,BDAY.day);const an=cdTo(ANNIV.month,ANNIV.day);const elems={'bd-d':bd.d,'bd-h':bd.h,'bd-m':bd.m,'bd-s':bd.s,'an-d':an.d,'an-h':an.h,'an-m':an.m,'an-s':an.s};Object.entries(elems).forEach(([id,val])=>{const el=document.getElementById(id);if(el&&el.textContent!==pad(val)){el.style.opacity='.3';el.style.transform='translateY(-4px)';setTimeout(()=>{el.textContent=pad(val);el.style.opacity='';el.style.transform='';},150);}});}
+function openMemory(type,year){if(type==='birthday')renderBirthday(year,true);else renderAnniversary(year,true);}
 
-/* ══════════════════════════════════════════════════════
-   DETERMINE WHICH PAGE TO SHOW
-══════════════════════════════════════════════════════ */
-
-// Minimum year a user can navigate back to (age 30 = year 2024, first year with custom content)
-const BDAY_MIN_YEAR  = BDAY.birthYear + 30;  // 2024
-const ANNIV_MIN_YEAR = ANNIV.startYear + 1;  // 2024
-function detectPage() {
-  if (isToday(BDAY.month, BDAY.day)) {
-    state.page = 'birthday';
-    state.bdayViewYear = CY;
-    renderBirthday(CY);
-  } else if (isToday(ANNIV.month, ANNIV.day)) {
-    state.page = 'anniversary';
-    state.annivViewYear = CY;
-    renderAnniversary(CY);
-  } else {
-    state.page = 'waiting';
-    renderWaiting();
-  }
+function renderBirthday(year,fromWaiting=false){
+  const age=year-BDAY.birthYear;const t=getBdayTheme(age);applyTheme(t);startAnim(t.animType,t.animColors);
+  const isCurrentYear=(year===lastBdayYear);const canGoBack=(year-1)>=(BDAY.birthYear+1);const canGoForward=!isCurrentYear&&(year+1)<=lastBdayYear;
+  const timelineItems=[];
+  for(let y=Math.max(BDAY.birthYear+1,year-4);y<=Math.min(year,lastBdayYear);y++){const a=y-BDAY.birthYear;const th=getBdayTheme(a);timelineItems.push(`<div class="tl-item"><div class="tl-dot ${y===year?'current':''}"></div><div class="tl-year">${y} · Age ${a}</div><div class="tl-title">${th.name}</div><div class="tl-text">${th.tagline}</div></div>`);}
+  const html=`<div class="page-enter">${!isCurrentYear?`<div style="padding:14px 20px 0;max-width:760px;margin:0 auto;"><div class="viewing-past-banner">You are viewing <strong>${year}</strong> — Sindhu's ${ordinal(age)} Birthday · <button onclick="renderBirthday(${lastBdayYear})" style="background:var(--acc-mid);color:white;border:none;cursor:pointer;padding:3px 12px;border-radius:20px;font-size:.75rem;margin-left:6px;">Return to ${lastBdayYear} →</button></div></div>`:''}<div class="psec" style="text-align:center;padding-bottom:20px;"><div class="psec-inner"><div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.55em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:20px;opacity:0;animation:ldUp .8s ease forwards .1s;">${MN[BDAY.month-1]} ${BDAY.day}, ${year} &nbsp;·&nbsp; ${ordinal(age)} Birthday</div><span class="event-title" style="opacity:0;animation:ldUp 1s ease forwards .25s;">Happy Birthday</span><h2 class="event-subtitle" style="opacity:0;animation:ldUp .9s ease forwards .45s;margin-top:8px;">${t.name}</h2><p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(.95rem,2.8vw,1.2rem);color:var(--ink-3);margin:14px auto 28px;max-width:500px;line-height:1.9;opacity:0;animation:ldUp .9s ease forwards .6s;">${t.tagline}</p><div style="display:inline-flex;align-items:center;gap:14px;padding:12px 28px;border-radius:50px;background:var(--acc-pale);border:1px solid var(--acc-lt);margin-bottom:40px;opacity:0;animation:ldUp .8s ease forwards .75s;"><div style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,6vw,2.8rem);font-weight:900;color:var(--acc-mid);line-height:1;">${age}</div><div style="text-align:left;"><div style="font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-4);">Years of</div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink-2);">Being Extraordinary</div></div></div></div></div><div class="psec" style="padding-top:0;"><div class="psec-inner sr"><div class="poem-block">${t.poem.map(l=>`<span class="poem-line">${l}</span>`).join('')}</div></div></div><div class="psec" style="background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(255,255,255,.3));"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">A Letter to You</span><div class="so-line so-line-r"></div></div><div class="message-card sr"><p class="message-para">${t.msgA}</p><p class="message-para">${t.msgB}</p><p class="message-para">${t.msgC}</p></div></div></div><div class="psec"><div class="psec-inner sr"><div class="milestone-banner"><div class="mb-icon">${t.milestone.split(' ')[0]}</div><div><div class="mb-label">This Year's Milestone</div><div class="mb-title">${t.mileTitle}</div><div class="mb-text">${t.mileText}</div></div></div></div></div><div class="psec" style="background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.2));"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Birthday Wishes</span><div class="so-line so-line-r"></div></div><div class="wishes-grid sr">${t.wishes.map(w=>`<div class="wish-card"><span class="wc-icon">${w.icon}</span><div class="wc-title">${w.title}</div><div class="wc-text">${w.text}</div></div>`).join('')}</div></div></div>${timelineItems.length>1?`<div class="psec"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">The Years So Far</span><div class="so-line so-line-r"></div></div><div class="timeline sr">${timelineItems.join('')}</div></div></div>`:''}<div class="psec" style="padding-top:20px;padding-bottom:30px;"><div class="psec-inner" style="text-align:center;">${canGoBack||canGoForward?`<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--ink-4);margin-bottom:16px;">Browse other celebrations</div><div class="year-nav">${canGoBack?`<button class="yn-btn" onclick="renderBirthday(${year-1})"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H4M6 4l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> ${year-1} · Age ${age-1}</button>`:''}${canGoForward?`<button class="yn-btn fwd" onclick="renderBirthday(${year+1})">${year+1} · Age ${age+1} <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 7h6M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`:''}${(year+1)>lastBdayYear?`<div class="locked-msg" style="margin-top:10px;"><div class="locked-icon">🔮</div><div class="locked-title">A Future Surprise</div><div class="locked-text">Come back on September 25th, ${year+1} to discover what ${year+1} holds for you.</div></div>`:''}</div>`:''} ${fromWaiting?`<div style="margin-top:20px;"><button class="yn-btn" onclick="renderWaiting()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H4M6 4l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Back to Home</button></div>`:''}</div></div><div class="signature-section sr"><div class="sig-from">— with every piece of my heart, always —</div><div class="sig-name">Your Chandu <span class="sig-heart">🌹</span></div></div></div>`;
+  document.getElementById('app').innerHTML=html;window.scrollTo({top:0,behavior:'smooth'});initReveal();
 }
 
-/* ══════════════════════════════════════════════════════
-   RENDER: WAITING PAGE
-══════════════════════════════════════════════════════ */
-function renderWaiting() {
-  applyTheme({
-    accPale:'#FAE8E8',accLt:'#E8A8B0',accMid:'#C07880',accDark:'#904050',
-    cardBg:'#FEF4F5',
-    bg:`radial-gradient(ellipse 75% 55% at 0% 0%,rgba(240,200,200,.4) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 100% 0%,rgba(242,220,180,.3) 0%,transparent 50%),#FBF8F2`
-  });
-  startAnim('petals', ['#F0C8CC','#DDB890','#F8D8DC','#E8C8A0']);
-
-  // Build past events list — birthday from age 30 (2024) onward; anniversary from year 1
-  const memoryItems = [];
-  for(let yr=BDAY_MIN_YEAR; yr<=lastBdayYear; yr++){
-    const age = yr-BDAY.birthYear;
-    const t = getBdayTheme(age);
-    memoryItems.push(`<div class="memory-card" onclick="openMemory('birthday',${yr})">
-      <span class="mc-emoji">🎂</span>
-      <div class="mc-year">${yr}</div>
-      <div class="mc-label">${t.name.split('—')[0].trim() || ('Age '+age)}</div>
-    </div>`);
-  }
-  for(let yr=ANNIV_MIN_YEAR; yr<=lastAnnivYear; yr++){
-    const yrs=yr-ANNIV.startYear;
-    const t=getAnnivTheme(yrs);
-    memoryItems.push(`<div class="memory-card" onclick="openMemory('anniversary',${yr})">
-      <span class="mc-emoji">💍</span>
-      <div class="mc-year">${yr}</div>
-      <div class="mc-label">${t.name.split('—')[0].trim() || (yrs+' Year')}</div>
-    </div>`);
-  }
-
-  const html = `
-  <div class="page-enter">
-
-    <!-- Hero -->
-    <div class="psec" style="text-align:center;padding-bottom:0;">
-      <div class="psec-inner">
-        <!-- SVG ornament -->
-        <div style="margin-bottom:24px;">
-          <svg width="64" height="64" viewBox="0 0 64 64" fill="none" style="margin:0 auto;">
-            <circle cx="32" cy="32" r="30" stroke="#E8A8B0" stroke-width="1" stroke-dasharray="4 6" opacity=".6"/>
-            <path d="M32 48C32 48 14 37 14 25C14 18.5 19 14 25 14C28.5 14 31 16 32 19C33 16 35.5 14 39 14C45 14 50 18.5 50 25C50 37 32 48 32 48Z" fill="url(#wlg)" opacity=".8"/>
-            <defs><linearGradient id="wlg" x1="14" y1="14" x2="50" y2="48"><stop stop-color="#D4A85C"/><stop offset="1" stop-color="#C07880"/></linearGradient></defs>
-          </svg>
-        </div>
-        <div style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.55em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:16px;">A Special Day Awaits</div>
-        <h1 style="font-family:'Great Vibes',cursive;font-size:clamp(3rem,11vw,6rem);color:var(--acc-mid);line-height:1;filter:drop-shadow(0 2px 16px rgba(192,120,128,.2));">Sindhu</h1>
-        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(1rem,3vw,1.35rem);color:var(--ink-3);margin:14px 0 36px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.9;">
-          Some of the most beautiful things in life are worth waiting for.<br>
-          Your special day is coming — and when it arrives, this space will be<br>
-          filled with something made entirely, lovingly, for <em>you</em>.
-        </p>
-      </div>
-    </div>
-
-    <!-- Countdowns -->
-    <div class="psec" style="padding-top:30px;">
-      <div class="psec-inner">
-        <div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Your Next Celebrations</span><div class="so-line so-line-r"></div></div>
-        <div class="wait-event-cards sr">
-          <div class="wait-ev-card" style="--ev-stripe:linear-gradient(90deg,#C07880,#D4A85C)">
-            <span class="wec-icon">🌹</span>
-            <div class="wec-label">Birthday</div>
-            <div class="wec-name">Sindhu's Birthday</div>
-            <div class="wec-date">September 25th</div>
-            <div class="wec-countdown">
-              <div class="wcc-unit"><span class="wcc-num" id="bd-d">--</span><div class="wcc-lbl">Days</div></div>
-              <div class="wcc-unit"><span class="wcc-num" id="bd-h">--</span><div class="wcc-lbl">Hrs</div></div>
-              <div class="wcc-unit"><span class="wcc-num" id="bd-m">--</span><div class="wcc-lbl">Min</div></div>
-              <div class="wcc-unit"><span class="wcc-num" id="bd-s">--</span><div class="wcc-lbl">Sec</div></div>
-            </div>
-          </div>
-          <div class="wait-ev-card" style="--ev-stripe:linear-gradient(90deg,#C09A52,#C07880)">
-            <span class="wec-icon">💍</span>
-            <div class="wec-label">Anniversary</div>
-            <div class="wec-name">Wedding Anniversary</div>
-            <div class="wec-date">November 19th</div>
-            <div class="wec-countdown">
-              <div class="wcc-unit"><span class="wcc-num" id="an-d">--</span><div class="wcc-lbl">Days</div></div>
-              <div class="wcc-unit"><span class="wcc-num" id="an-h">--</span><div class="wcc-lbl">Hrs</div></div>
-              <div class="wcc-unit"><span class="wcc-num" id="an-m">--</span><div class="wcc-lbl">Min</div></div>
-              <div class="wcc-unit"><span class="wcc-num" id="an-s">--</span><div class="wcc-lbl">Sec</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Love note while waiting -->
-    <div class="psec" style="background:linear-gradient(135deg,rgba(248,234,234,.5),rgba(252,244,232,.5));">
-      <div class="psec-inner" style="text-align:center;">
-        <div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">While You Wait</span><div class="so-line so-line-r"></div></div>
-        <div class="message-card sr" style="text-align:left;">
-          <p class="message-para">There is a particular kind of love that doesn't require a special day to be felt — and that is the love that fills this space every moment you are not here. <em>This page exists for you, Sindhu</em>. For the days when the calendar aligns and the words finally have a stage. But know that on all the days in between, the love behind these words is just as present.</p>
-          <p class="message-para">On your birthday, this page will open into something made for exactly how old you are in exactly that year — because you deserve celebrations that know you, specifically, not celebrations that could belong to anyone. And on our anniversary, it will hold something that knows what our particular love has grown into that particular year.</p>
-          <p class="message-para">Until then — come back when the day arrives. <strong>It will be worth the wait. You always are.</strong></p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Memory Lane -->
-    ${memoryItems.length > 0 ? `
-    <div class="psec">
-      <div class="psec-inner">
-        <div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Relive the Memories</span><div class="so-line so-line-r"></div></div>
-        <p style="text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink-3);margin-bottom:28px;" class="sr">Every year held something beautiful. Browse the ones that already belong to us.</p>
-        <div class="memory-grid sr">${memoryItems.join('')}</div>
-      </div>
-    </div>` : ''}
-
-    <!-- Signature -->
-    <div class="signature-section sr">
-      <div class="sig-from">— waiting for your special day — with all my love —</div>
-      <div class="sig-name">Your Chandu <span class="sig-heart">🌹</span></div>
-    </div>
-
-  </div>`;
-
-  document.getElementById('app').innerHTML = html;
-  initReveal();
-  tickWaiting();
-  setInterval(tickWaiting, 1000);
+function renderAnniversary(year,fromWaiting=false){
+  const years=year-ANNIV.startYear;const t=getAnnivTheme(years);applyTheme(t);startAnim(t.animType,t.animColors);
+  const isCurrentYear=(year===lastAnnivYear);const canGoBack=(year-1)>ANNIV.startYear;const canGoForward=!isCurrentYear&&(year+1)<=lastAnnivYear;
+  const tlItems=[];
+  for(let y=ANNIV.startYear+1;y<=Math.min(year,lastAnnivYear);y++){const yrs=y-ANNIV.startYear;const th=getAnnivTheme(yrs);tlItems.push(`<div class="tl-item"><div class="tl-dot ${y===year?'current':''}"></div><div class="tl-year">${y} · Year ${yrs}</div><div class="tl-title">${th.name}</div><div class="tl-text">${th.journeyNote||th.tagline}</div></div>`);}
+  const html=`<div class="page-enter">${!isCurrentYear?`<div style="padding:14px 20px 0;max-width:760px;margin:0 auto;"><div class="viewing-past-banner">Viewing <strong>${year}</strong> — Our ${ordinal(years)} Anniversary · <button onclick="renderAnniversary(${lastAnnivYear})" style="background:var(--acc-mid);color:white;border:none;cursor:pointer;padding:3px 12px;border-radius:20px;font-size:.75rem;margin-left:6px;">Return to ${lastAnnivYear} →</button></div></div>`:''}<div class="psec" style="text-align:center;padding-bottom:20px;"><div class="psec-inner"><div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.55em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:16px;opacity:0;animation:ldUp .8s ease forwards .1s;">${MN[ANNIV.month-1]} ${ANNIV.day}, ${year} &nbsp;·&nbsp; ${ordinal(years)} Anniversary</div><span class="event-title" style="opacity:0;animation:ldUp 1s ease forwards .25s;">Happy Anniversary</span><h2 class="event-subtitle" style="opacity:0;animation:ldUp .9s ease forwards .45s;margin-top:8px;">${t.name}</h2><p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.95rem,2.8vw,1.2rem);color:var(--ink-3);margin:14px auto 28px;max-width:500px;line-height:1.9;opacity:0;animation:ldUp .9s ease forwards .6s;">${t.tagline}</p><div style="display:inline-flex;align-items:center;gap:16px;padding:14px 32px;border-radius:50px;background:var(--acc-pale);border:1px solid var(--acc-lt);margin-bottom:40px;opacity:0;animation:ldUp .8s ease forwards .75s;"><div style="font-family:'Playfair Display',serif;font-size:clamp(2rem,7vw,3.2rem);font-weight:900;color:var(--acc-mid);line-height:1;">${years}</div><div style="text-align:left;"><div style="font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-4);">Years of</div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink-2);">Extraordinary Love</div></div></div><div style="max-width:420px;margin:0 auto;padding:14px 20px;background:var(--acc-pale);border-radius:14px;border:1px solid var(--acc-lt);opacity:0;animation:ldUp .8s ease forwards .9s;"><div style="font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.4em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:5px;">Traditional Gift</div><div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:var(--ink);margin-bottom:4px;">${t.traditional}</div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--ink-3);">${t.traditionalNote}</div></div></div></div><div class="psec" style="padding-top:0;"><div class="psec-inner sr"><div class="poem-block">${t.poem.map(l=>`<span class="poem-line">${l}</span>`).join('')}</div></div></div><div class="psec" style="background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(255,255,255,.3));"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">To My Wife</span><div class="so-line so-line-r"></div></div><div class="message-card sr"><p class="message-para">${t.msgA}</p><p class="message-para">${t.msgB}</p><p class="message-para">${t.msgC}</p></div></div></div><div class="psec"><div class="psec-inner sr"><div class="milestone-banner"><div class="mb-icon">💍</div><div><div class="mb-label">Anniversary Milestone</div><div class="mb-title">${t.mileTitle}</div><div class="mb-text">${t.mileText}</div></div></div></div></div><div class="psec" style="background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.2));"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Anniversary Wishes</span><div class="so-line so-line-r"></div></div><div class="wishes-grid sr">${t.wishes.map(w=>`<div class="wish-card"><span class="wc-icon">${w.icon}</span><div class="wc-title">${w.title}</div><div class="wc-text">${w.text}</div></div>`).join('')}</div></div></div>${tlItems.length>1?`<div class="psec"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Our Journey</span><div class="so-line so-line-r"></div></div><div class="timeline sr">${tlItems.join('')}</div></div></div>`:''}<div class="psec" style="padding-top:20px;padding-bottom:30px;"><div class="psec-inner" style="text-align:center;">${canGoBack||canGoForward?`<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--ink-4);margin-bottom:16px;">Browse our anniversaries</div><div class="year-nav">${canGoBack?`<button class="yn-btn" onclick="renderAnniversary(${year-1})"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H4M6 4l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> ${year-1} · Year ${years-1}</button>`:''}${canGoForward?`<button class="yn-btn fwd" onclick="renderAnniversary(${year+1})">${year+1} · Year ${years+1} <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 7h6M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`:''}${(year+1)>lastAnnivYear?`<div class="locked-msg" style="margin-top:10px;"><div class="locked-icon">🔮</div><div class="locked-title">A Future Surprise</div><div class="locked-text">Return on November 19th, ${year+1} to discover what Year ${years+1} brings for us.</div></div>`:''}</div>`:''} ${fromWaiting?`<div style="margin-top:20px;"><button class="yn-btn" onclick="renderWaiting()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H4M6 4l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Back to Home</button></div>`:''}</div></div><div class="signature-section sr"><div class="sig-from">— yours, completely, in every year of this beautiful life —</div><div class="sig-name">Your Chandu <span class="sig-heart">💍</span></div></div></div>`;
+  document.getElementById('app').innerHTML=html;window.scrollTo({top:0,behavior:'smooth'});initReveal();
 }
 
-function tickWaiting() {
-  const bd = cdTo(BDAY.month,  BDAY.day);
-  const an = cdTo(ANNIV.month, ANNIV.day);
-  const elems = {
-    'bd-d':bd.d,'bd-h':bd.h,'bd-m':bd.m,'bd-s':bd.s,
-    'an-d':an.d,'an-h':an.h,'an-m':an.m,'an-s':an.s,
-  };
-  Object.entries(elems).forEach(([id,val])=>{
-    const el=document.getElementById(id);
-    if(el && el.textContent !== pad(val)){
-      el.style.opacity='.3'; el.style.transform='translateY(-4px)';
-      setTimeout(()=>{ el.textContent=pad(val); el.style.opacity=''; el.style.transform=''; },150);
-    }
-  });
-}
+function initReveal(){const io=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.1});document.querySelectorAll('.sr,.sr-l,.sr-r').forEach(el=>io.observe(el));}
 
-function openMemory(type, year) {
-  if(type==='birthday') renderBirthday(year, true);
-  else renderAnniversary(year, true);
-}
+let animLoop=null;let petalTimer=null;
+function clearAnim(){if(animLoop){cancelAnimationFrame(animLoop);animLoop=null;}if(petalTimer){clearInterval(petalTimer);petalTimer=null;}document.getElementById('petal-layer').innerHTML='';document.getElementById('shape-layer').innerHTML='';const cv=document.getElementById('fx-canvas');const ctx=cv.getContext('2d');ctx.clearRect(0,0,cv.width,cv.height);}
+function startAnim(type,colors){clearAnim();const cv=document.getElementById('fx-canvas');function resize(){cv.width=innerWidth;cv.height=innerHeight;}resize();window.addEventListener('resize',resize);if(type==='petals')animPetals(colors);else if(type==='sparkles')animSparkles(cv,colors);else if(type==='starfall')animStarfall(cv,colors);else if(type==='bubbles')animBubbles(cv,colors);else if(type==='geometric')animGeometric(colors);else if(type==='botanical')animBotanical(colors);else if(type==='aurora')animAurora(cv,colors);else if(type==='confetti')animConfetti(cv,colors);else animSparkles(cv,colors);}
 
-/* ══════════════════════════════════════════════════════
-   RENDER: BIRTHDAY PAGE
-══════════════════════════════════════════════════════ */
-function renderBirthday(year, fromWaiting=false) {
-  const age = year - BDAY.birthYear;
-  const t   = getBdayTheme(age);
-  applyTheme(t);
-  startAnim(t.animType, t.animColors);
+function animPetals(colors){function mkPetal(){const layer=document.getElementById('petal-layer');const el=document.createElement('div');const sz=7+Math.random()*15;const c=colors[Math.floor(Math.random()*colors.length)];const dur=12+Math.random()*10;el.style.cssText=`position:absolute;left:${Math.random()*100}%;top:-60px;pointer-events:none;opacity:0;animation:petal${Math.floor(Math.random()*3)+1} ${dur}s ${Math.random()*3}s linear forwards;`;el.innerHTML=`<svg width="${sz}" height="${sz*1.4}" viewBox="0 0 20 28"><ellipse cx="10" cy="14" rx="6" ry="13" fill="${c}" opacity=".75" transform="rotate(${Math.random()*25-12.5},10,14)"/></svg>`;layer.appendChild(el);setTimeout(()=>el.remove(),(dur+4)*1000);}if(!document.getElementById('petalKF')){const s=document.createElement('style');s.id='petalKF';s.textContent=`@keyframes petal1{0%{opacity:0;transform:translateY(0) rotate(0)}5%{opacity:.55}95%{opacity:.2}100%{opacity:0;transform:translateY(115vh) rotate(720deg) translateX(80px)}}@keyframes petal2{0%{opacity:0;transform:translateY(0) rotate(0)}5%{opacity:.45}95%{opacity:.15}100%{opacity:0;transform:translateY(115vh) rotate(-540deg) translateX(-60px)}}@keyframes petal3{0%{opacity:0;transform:translateY(0) rotate(0)}5%{opacity:.5}95%{opacity:.18}100%{opacity:0;transform:translateY(115vh) rotate(900deg) translateX(50px)}}`;document.head.appendChild(s);}for(let i=0;i<10;i++)setTimeout(mkPetal,i*600);petalTimer=setInterval(mkPetal,1600);}
+function animSparkles(cv,colors){const ctx=cv.getContext('2d');const pts=Array.from({length:60},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:0.6+Math.random()*2,vx:(Math.random()-.5)*.2,vy:-(0.1+Math.random()*.3),a:Math.random(),va:0.005+Math.random()*.012,c:colors[Math.floor(Math.random()*colors.length)]}));function frame(){ctx.clearRect(0,0,cv.width,cv.height);pts.forEach((p)=>{p.x+=p.vx;p.y+=p.vy;p.a+=p.va;if(p.y<-10||p.a>1.05){p.x=Math.random()*cv.width;p.y=cv.height+10;p.a=0;}const alpha=.55*Math.sin(Math.PI*p.a);ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.c+(Math.round(alpha*255).toString(16).padStart(2,'0'));ctx.fill();});animLoop=requestAnimationFrame(frame);}frame();}
+function animStarfall(cv,colors){const ctx=cv.getContext('2d');const stars=Array.from({length:55},()=>({x:Math.random()*cv.width,y:Math.random()*cv.height,r:0.5+Math.random()*1.8,vy:0.3+Math.random()*.8,a:Math.random(),c:colors[Math.floor(Math.random()*colors.length)]}));function frame(){ctx.clearRect(0,0,cv.width,cv.height);stars.forEach(s=>{s.y+=s.vy;s.a+=0.008;if(s.y>cv.height+10){s.y=-10;s.x=Math.random()*cv.width;}const alpha=.5*Math.abs(Math.sin(s.a));ctx.save();ctx.translate(s.x,s.y);ctx.fillStyle=s.c+(Math.round(alpha*255).toString(16).padStart(2,'0'));ctx.beginPath();const r=s.r*1.8,ri=s.r*.4;for(let i=0;i<8;i++){const angle=i*Math.PI/4;const rad=i%2===0?r:ri;i===0?ctx.moveTo(Math.cos(angle)*rad,Math.sin(angle)*rad):ctx.lineTo(Math.cos(angle)*rad,Math.sin(angle)*rad);}ctx.closePath();ctx.fill();ctx.restore();});animLoop=requestAnimationFrame(frame);}frame();}
+function animBubbles(cv,colors){const ctx=cv.getContext('2d');const bubs=Array.from({length:40},()=>({x:Math.random()*cv.width,y:cv.height+50,r:3+Math.random()*8,vy:-(0.25+Math.random()*.5),a:Math.random(),c:colors[Math.floor(Math.random()*colors.length)],wobble:Math.random()*Math.PI*2,ws:(Math.random()-.5)*.02}));function frame(){ctx.clearRect(0,0,cv.width,cv.height);bubs.forEach(b=>{b.y+=b.vy;b.wobble+=b.ws;b.a+=0.006;if(b.y<-20){b.y=cv.height+30;b.x=Math.random()*cv.width;b.a=0;}b.x+=Math.sin(b.wobble)*.4;const alpha=.35*Math.sin(Math.PI*Math.min(b.a,1));ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.strokeStyle=b.c+(Math.round(alpha*255).toString(16).padStart(2,'0'));ctx.lineWidth=1;ctx.stroke();ctx.beginPath();ctx.arc(b.x-b.r*.3,b.y-b.r*.3,b.r*.25,0,Math.PI*2);ctx.fillStyle=`rgba(255,255,255,${alpha*.5})`;ctx.fill();});animLoop=requestAnimationFrame(frame);}frame();}
+function animGeometric(colors){const layer=document.getElementById('shape-layer');if(!document.getElementById('geoKF')){const s=document.createElement('style');s.id='geoKF';s.textContent=`@keyframes geoRise{0%{opacity:0;transform:translateY(0) rotate(0) scale(1)}5%{opacity:.4}95%{opacity:.15}100%{opacity:0;transform:translateY(-115vh) rotate(720deg) scale(.4)}}@keyframes geoFall{0%{opacity:0;transform:translateY(-100px) rotate(0)}5%{opacity:.35}95%{opacity:.1}100%{opacity:0;transform:translateY(115vh) rotate(-540deg)}}`;document.head.appendChild(s);}function mkShape(){const el=document.createElement('div');const sz=8+Math.random()*20;const c=colors[Math.floor(Math.random()*colors.length)];const type=Math.random();const dur=10+Math.random()*8;const anim=Math.random()<.5?'geoRise':'geoFall';const startY=anim==='geoRise'?`bottom:${-50}px;`:`top:${-50}px;`;let shape='';if(type<.33)shape=`border-radius:50%;width:${sz}px;height:${sz}px;background:${c};opacity:.4;`;else if(type<.66)shape=`width:${sz*.7}px;height:${sz*.7}px;background:${c};opacity:.3;transform:rotate(45deg);`;else shape=`width:0;height:0;border-left:${sz*.5}px solid transparent;border-right:${sz*.5}px solid transparent;border-bottom:${sz*.9}px solid ${c};opacity:.25;`;el.style.cssText=`position:absolute;left:${Math.random()*100}%;${startY}animation:${anim} ${dur}s ${Math.random()*4}s linear forwards;${shape}`;layer.appendChild(el);setTimeout(()=>el.remove(),(dur+5)*1000);}for(let i=0;i<14;i++)setTimeout(mkShape,i*500);petalTimer=setInterval(mkShape,1400);}
+function animBotanical(colors){const layer=document.getElementById('shape-layer');if(!document.getElementById('botKF')){const s=document.createElement('style');s.id='botKF';s.textContent=`@keyframes leafFall{0%{opacity:0;transform:translateY(-40px) rotate(-20deg)}5%{opacity:.5}95%{opacity:.2}100%{opacity:0;transform:translateY(115vh) rotate(520deg) translateX(60px)}}`;document.head.appendChild(s);}function mkLeaf(){const el=document.createElement('div');const sz=10+Math.random()*18;const c=colors[Math.floor(Math.random()*colors.length)];const dur=11+Math.random()*9;el.style.cssText=`position:absolute;left:${Math.random()*100}%;top:-60px;animation:leafFall ${dur}s ${Math.random()*3}s linear forwards;`;el.innerHTML=`<svg width="${sz}" height="${sz*1.8}" viewBox="0 0 20 36"><path d="M10 2 C16 8 18 14 14 22 C12 28 10 34 10 34 C10 34 8 28 6 22 C2 14 4 8 10 2Z" fill="${c}" opacity=".65"/><path d="M10 2 L10 34" stroke="${c}" stroke-width=".5" opacity=".3"/></svg>`;layer.appendChild(el);setTimeout(()=>el.remove(),(dur+4)*1000);}for(let i=0;i<10;i++)setTimeout(mkLeaf,i*700);petalTimer=setInterval(mkLeaf,1800);}
+function animAurora(cv,colors){const ctx=cv.getContext('2d');const blobs=colors.slice(0,4).map((c,i)=>({x:cv.width*(0.2+i*.2),y:cv.height*(0.3+i*.15),vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.3,r:cv.width*.18+i*30,c}));let tick=0;function frame(){tick++;ctx.clearRect(0,0,cv.width,cv.height);blobs.forEach((b,i)=>{b.x+=b.vx+Math.sin(tick*.007+i)*0.5;b.y+=b.vy+Math.cos(tick*.009+i)*0.4;if(b.x<0||b.x>cv.width)b.vx*=-1;if(b.y<0||b.y>cv.height)b.vy*=-1;const g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);g.addColorStop(0,b.c+'18');g.addColorStop(1,b.c+'00');ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();});animLoop=requestAnimationFrame(frame);}frame();}
+function animConfetti(cv,colors){const ctx=cv.getContext('2d');let particles=[];function burst(n=120){for(let i=0;i<n;i++){particles.push({x:Math.random()*cv.width,y:-20,vx:(Math.random()-.5)*5,vy:1.5+Math.random()*4,w:4+Math.random()*9,h:6+Math.random()*5,rot:Math.random()*Math.PI*2,rs:(Math.random()-.5)*.18,c:colors[Math.floor(Math.random()*colors.length)],op:1,shape:Math.random()<.5?'rect':'circle'});}}burst(140);setInterval(()=>burst(60),4000);function frame(){ctx.clearRect(0,0,cv.width,cv.height);particles=particles.filter(p=>p.y<cv.height+30&&p.op>.02);particles.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.rot+=p.rs;p.vy+=.04;if(p.y>cv.height*.75)p.op-=.015;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=p.op;ctx.fillStyle=p.c;if(p.shape==='rect')ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);else{ctx.beginPath();ctx.arc(0,0,p.w/2,0,Math.PI*2);ctx.fill();}ctx.restore();});animLoop=requestAnimationFrame(frame);}frame();}
 
-  const isCurrentYear = (year === lastBdayYear);
-  const isTodayBday   = isToday(BDAY.month, BDAY.day) && year===CY;
-  const canGoBack     = (year-1) >= (BDAY.birthYear+1);
-  const canGoForward  = !isCurrentYear && (year+1) <= lastBdayYear;
+function spawnLoaderPetals(){const layer=document.getElementById('ld-petals');if(!layer)return;const colors=['#F0C8CC','#F4DEC8','#FAE8DC','#EDD8D0','#F8E0DC'];for(let i=0;i<14;i++){const el=document.createElement('div');el.className='ld-petal';const sz=7+Math.random()*14;const c=colors[Math.floor(Math.random()*colors.length)];const dur=8+Math.random()*7;el.style.cssText=`left:${Math.random()*100}%;top:-40px;animation-duration:${dur}s;animation-delay:${Math.random()*5}s;`;el.innerHTML=`<svg width="${sz}" height="${sz*1.4}" viewBox="0 0 20 28"><ellipse cx="10" cy="14" rx="6" ry="13" fill="${c}" opacity=".6" transform="rotate(${Math.random()*25-12},10,14)"/></svg>`;layer.appendChild(el);}}
 
-  // Timeline of all past birthdays at the bottom
-  const timelineItems = [];
-  for(let y=Math.max(BDAY.birthYear+1, year-4); y<=Math.min(year, lastBdayYear); y++){
-    const a=y-BDAY.birthYear;
-    const th=getBdayTheme(a);
-    timelineItems.push(`<div class="tl-item">
-      <div class="tl-dot ${y===year?'current':''}"></div>
-      <div class="tl-year">${y} · Age ${a}</div>
-      <div class="tl-title">${th.name}</div>
-      <div class="tl-text">${th.tagline}</div>
-    </div>`);
-  }
-
-  const html = `
-  <div class="page-enter">
-
-    ${!isCurrentYear ? `<div style="padding:14px 20px 0;max-width:760px;margin:0 auto;">
-      <div class="viewing-past-banner">You are viewing <strong>${year}</strong> — Sindhu's ${ordinal(age)} Birthday · <button onclick="renderBirthday(${lastBdayYear})" style="background:var(--acc-mid);color:white;border:none;cursor:pointer;padding:3px 12px;border-radius:20px;font-size:.75rem;margin-left:6px;">Return to ${lastBdayYear} →</button></div>
-    </div>` : ''}
-
-    <!-- Hero -->
-    <div class="psec" style="text-align:center;padding-bottom:20px;">
-      <div class="psec-inner">
-        <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.55em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:20px;opacity:0;animation:ldUp .8s ease forwards .1s;">
-          ${MN[BDAY.month-1]} ${BDAY.day}, ${year} &nbsp;·&nbsp; ${ordinal(age)} Birthday
-        </div>
-        <span class="event-title" style="opacity:0;animation:ldUp 1s ease forwards .25s;">Happy Birthday</span>
-        <h2 class="event-subtitle" style="opacity:0;animation:ldUp .9s ease forwards .45s;margin-top:8px;">${t.name}</h2>
-        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(.95rem,2.8vw,1.2rem);color:var(--ink-3);margin:14px auto 28px;max-width:500px;line-height:1.9;opacity:0;animation:ldUp .9s ease forwards .6s;">${t.tagline}</p>
-
-        <!-- Age badge -->
-        <div style="display:inline-flex;align-items:center;gap:14px;padding:12px 28px;border-radius:50px;background:var(--acc-pale);border:1px solid var(--acc-lt);margin-bottom:40px;opacity:0;animation:ldUp .8s ease forwards .75s;">
-          <div style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,6vw,2.8rem);font-weight:900;color:var(--acc-mid);line-height:1;">${age}</div>
-          <div style="text-align:left;">
-            <div style="font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-4);">Years of</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink-2);">Being Extraordinary</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Poem -->
-    <div class="psec" style="padding-top:0;">
-      <div class="psec-inner sr">
-        <div class="poem-block">
-          ${t.poem.map(l=>`<span class="poem-line">${l}</span>`).join('')}
-        </div>
-      </div>
-    </div>
-
-    <!-- Message -->
-    <div class="psec" style="background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(255,255,255,.3));">
-      <div class="psec-inner">
-        <div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">A Letter to You</span><div class="so-line so-line-r"></div></div>
-        <div class="message-card sr">
-          <p class="message-para">${t.msgA}</p>
-          <p class="message-para">${t.msgB}</p>
-          <p class="message-para">${t.msgC}</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Milestone -->
-    <div class="psec">
-      <div class="psec-inner sr">
-        <div class="milestone-banner">
-          <div class="mb-icon">${t.milestone.split(' ')[0]}</div>
-          <div>
-            <div class="mb-label">This Year's Milestone</div>
-            <div class="mb-title">${t.mileTitle}</div>
-            <div class="mb-text">${t.mileText}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Wishes -->
-    <div class="psec" style="background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.2));">
-      <div class="psec-inner">
-        <div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Birthday Wishes</span><div class="so-line so-line-r"></div></div>
-        <div class="wishes-grid sr">
-          ${t.wishes.map(w=>`<div class="wish-card"><span class="wc-icon">${w.icon}</span><div class="wc-title">${w.title}</div><div class="wc-text">${w.text}</div></div>`).join('')}
-        </div>
-      </div>
-    </div>
-
-    <!-- Journey timeline -->
-    ${timelineItems.length > 1 ? `
-    <div class="psec">
-      <div class="psec-inner">
-        <div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">The Years So Far</span><div class="so-line so-line-r"></div></div>
-        <div class="timeline sr">${timelineItems.join('')}</div>
-      </div>
-    </div>` : ''}
-
-    <!-- Year Navigation -->
-    <div class="psec" style="padding-top:20px;padding-bottom:30px;">
-      <div class="psec-inner" style="text-align:center;">
-        ${canGoBack||canGoForward ? `
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--ink-4);margin-bottom:16px;">Browse other celebrations</div>
-        <div class="year-nav">
-          ${canGoBack ? `<button class="yn-btn" onclick="renderBirthday(${year-1})"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H4M6 4l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> ${year-1} · Age ${age-1}</button>` : ''}
-          ${canGoForward ? `<button class="yn-btn fwd" onclick="renderBirthday(${year+1})">${year+1} · Age ${age+1} <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 7h6M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>` : ''}
-          ${(year+1) > lastBdayYear ? `<div class="locked-msg" style="margin-top:10px;"><div class="locked-icon">🔮</div><div class="locked-title">A Future Surprise</div><div class="locked-text">Come back on September 25th, ${year+1} to discover what ${year+1} holds for you. Some things are worth waiting for.</div></div>` : ''}
-        </div>` : ''}
-        ${fromWaiting ? `<div style="margin-top:20px;"><button class="yn-btn" onclick="renderWaiting()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H4M6 4l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Back to Home</button></div>` : ''}
-      </div>
-    </div>
-
-    <!-- Signature -->
-    <div class="signature-section sr">
-      <div class="sig-from">— with every piece of my heart, always —</div>
-      <div class="sig-name">Your Chandu <span class="sig-heart">🌹</span></div>
-    </div>
-
-  </div>`;
-
-  document.getElementById('app').innerHTML = html;
-  window.scrollTo({top:0,behavior:'smooth'});
-  initReveal();
-}
-
-/* ══════════════════════════════════════════════════════
-   RENDER: ANNIVERSARY PAGE
-══════════════════════════════════════════════════════ */
-function renderAnniversary(year, fromWaiting=false) {
-  const years = year - ANNIV.startYear;
-  const t     = getAnnivTheme(years);
-  applyTheme(t);
-  startAnim(t.animType, t.animColors);
-
-  const isCurrentYear = (year === lastAnnivYear);
-  const canGoBack     = (year-1) > ANNIV.startYear;
-  const canGoForward  = !isCurrentYear && (year+1) <= lastAnnivYear;
-
-  // Journey timeline
-  const tlItems = [];
-  for(let y=ANNIV.startYear+1; y<=Math.min(year, lastAnnivYear); y++){
-    const yrs=y-ANNIV.startYear;
-    const th=getAnnivTheme(yrs);
-    tlItems.push(`<div class="tl-item">
-      <div class="tl-dot ${y===year?'current':''}"></div>
-      <div class="tl-year">${y} · Year ${yrs}</div>
-      <div class="tl-title">${th.name}</div>
-      <div class="tl-text">${th.journeyNote||th.tagline}</div>
-    </div>`);
-  }
-
-  const html = `
-  <div class="page-enter">
-
-    ${!isCurrentYear ? `<div style="padding:14px 20px 0;max-width:760px;margin:0 auto;">
-      <div class="viewing-past-banner">Viewing <strong>${year}</strong> — Our ${ordinal(years)} Anniversary · <button onclick="renderAnniversary(${lastAnnivYear})" style="background:var(--acc-mid);color:white;border:none;cursor:pointer;padding:3px 12px;border-radius:20px;font-size:.75rem;margin-left:6px;">Return to ${lastAnnivYear} →</button></div>
-    </div>` : ''}
-
-    <!-- Hero -->
-    <div class="psec" style="text-align:center;padding-bottom:20px;">
-      <div class="psec-inner">
-        <div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.55em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:16px;opacity:0;animation:ldUp .8s ease forwards .1s;">
-          ${MN[ANNIV.month-1]} ${ANNIV.day}, ${year} &nbsp;·&nbsp; ${ordinal(years)} Anniversary
-        </div>
-        <span class="event-title" style="opacity:0;animation:ldUp 1s ease forwards .25s;">Happy Anniversary</span>
-        <h2 class="event-subtitle" style="opacity:0;animation:ldUp .9s ease forwards .45s;margin-top:8px;">${t.name}</h2>
-        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.95rem,2.8vw,1.2rem);color:var(--ink-3);margin:14px auto 28px;max-width:500px;line-height:1.9;opacity:0;animation:ldUp .9s ease forwards .6s;">${t.tagline}</p>
-
-        <!-- Years badge -->
-        <div style="display:inline-flex;align-items:center;gap:16px;padding:14px 32px;border-radius:50px;background:var(--acc-pale);border:1px solid var(--acc-lt);margin-bottom:40px;opacity:0;animation:ldUp .8s ease forwards .75s;">
-          <div style="font-family:'Playfair Display',serif;font-size:clamp(2rem,7vw,3.2rem);font-weight:900;color:var(--acc-mid);line-height:1;">${years}</div>
-          <div style="text-align:left;">
-            <div style="font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-4);">Years of</div>
-            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink-2);">Extraordinary Love</div>
-          </div>
-        </div>
-
-        <!-- Traditional milestone -->
-        <div style="max-width:420px;margin:0 auto;padding:14px 20px;background:var(--acc-pale);border-radius:14px;border:1px solid var(--acc-lt);opacity:0;animation:ldUp .8s ease forwards .9s;">
-          <div style="font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.4em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:5px;">Traditional Gift</div>
-          <div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:var(--ink);margin-bottom:4px;">${t.traditional}</div>
-          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--ink-3);">${t.traditionalNote}</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Poem -->
-    <div class="psec" style="padding-top:0;">
-      <div class="psec-inner sr">
-        <div class="poem-block">
-          ${t.poem.map(l=>`<span class="poem-line">${l}</span>`).join('')}
-        </div>
-      </div>
-    </div>
-
-    <!-- Message -->
-    <div class="psec" style="background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(255,255,255,.3));">
-      <div class="psec-inner">
-        <div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">To My Wife</span><div class="so-line so-line-r"></div></div>
-        <div class="message-card sr">
-          <p class="message-para">${t.msgA}</p>
-          <p class="message-para">${t.msgB}</p>
-          <p class="message-para">${t.msgC}</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Milestone -->
-    <div class="psec">
-      <div class="psec-inner sr">
-        <div class="milestone-banner">
-          <div class="mb-icon">💍</div>
-          <div>
-            <div class="mb-label">Anniversary Milestone</div>
-            <div class="mb-title">${t.mileTitle}</div>
-            <div class="mb-text">${t.mileText}</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Wishes -->
-    <div class="psec" style="background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.2));">
-      <div class="psec-inner">
-        <div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Anniversary Wishes</span><div class="so-line so-line-r"></div></div>
-        <div class="wishes-grid sr">
-          ${t.wishes.map(w=>`<div class="wish-card"><span class="wc-icon">${w.icon}</span><div class="wc-title">${w.title}</div><div class="wc-text">${w.text}</div></div>`).join('')}
-        </div>
-      </div>
-    </div>
-
-    <!-- Journey Timeline -->
-    ${tlItems.length > 1 ? `
-    <div class="psec">
-      <div class="psec-inner">
-        <div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Our Journey</span><div class="so-line so-line-r"></div></div>
-        <div class="timeline sr">${tlItems.join('')}</div>
-      </div>
-    </div>` : ''}
-
-    <!-- Year Navigation -->
-    <div class="psec" style="padding-top:20px;padding-bottom:30px;">
-      <div class="psec-inner" style="text-align:center;">
-        ${canGoBack||canGoForward ? `
-        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--ink-4);margin-bottom:16px;">Browse our anniversaries</div>
-        <div class="year-nav">
-          ${canGoBack ? `<button class="yn-btn" onclick="renderAnniversary(${year-1})"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H4M6 4l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> ${year-1} · Year ${years-1}</button>` : ''}
-          ${canGoForward ? `<button class="yn-btn fwd" onclick="renderAnniversary(${year+1})">${year+1} · Year ${years+1} <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 7h6M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>` : ''}
-          ${(year+1) > lastAnnivYear ? `<div class="locked-msg" style="margin-top:10px;"><div class="locked-icon">🔮</div><div class="locked-title">A Future Surprise</div><div class="locked-text">Return on November 19th, ${year+1} to discover what Year ${years+1} brings for us. Surprises are the most beautiful anniversaries of all.</div></div>` : ''}
-        </div>` : ''}
-        ${fromWaiting ? `<div style="margin-top:20px;"><button class="yn-btn" onclick="renderWaiting()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H4M6 4l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Back to Home</button></div>` : ''}
-      </div>
-    </div>
-
-    <!-- Signature -->
-    <div class="signature-section sr">
-      <div class="sig-from">— yours, completely, in every year of this beautiful life —</div>
-      <div class="sig-name">Your Chandu <span class="sig-heart">💍</span></div>
-    </div>
-
-  </div>`;
-
-  document.getElementById('app').innerHTML = html;
-  window.scrollTo({top:0,behavior:'smooth'});
-  initReveal();
-}
-
-/* ══════════════════════════════════════════════════════
-   SCROLL REVEAL
-══════════════════════════════════════════════════════ */
-function initReveal() {
-  const io = new IntersectionObserver(entries=>{
-    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  },{threshold:.1});
-  document.querySelectorAll('.sr,.sr-l,.sr-r').forEach(el=>io.observe(el));
-}
-
-/* ══════════════════════════════════════════════════════
-   ANIMATION ENGINE
-══════════════════════════════════════════════════════ */
-let animLoop = null;
-let petalTimer = null;
-
-function clearAnim() {
-  if(animLoop){ cancelAnimationFrame(animLoop); animLoop=null; }
-  if(petalTimer){ clearInterval(petalTimer); petalTimer=null; }
-  document.getElementById('petal-layer').innerHTML='';
-  document.getElementById('shape-layer').innerHTML='';
-  const cv=document.getElementById('fx-canvas');
-  const ctx=cv.getContext('2d');
-  ctx.clearRect(0,0,cv.width,cv.height);
-}
-
-function startAnim(type, colors) {
-  clearAnim();
-  const cv=document.getElementById('fx-canvas');
-  function resize(){cv.width=innerWidth;cv.height=innerHeight;}
-  resize(); window.addEventListener('resize',resize);
-
-  if(type==='petals')    animPetals(colors);
-  else if(type==='sparkles')  animSparkles(cv, colors);
-  else if(type==='starfall')  animStarfall(cv, colors);
-  else if(type==='bubbles')   animBubbles(cv, colors);
-  else if(type==='geometric') animGeometric(colors);
-  else if(type==='botanical') animBotanical(colors);
-  else if(type==='aurora')    animAurora(cv, colors);
-  else if(type==='confetti')  animConfetti(cv, colors);
-  else animSparkles(cv, colors);
-}
-
-/* ── petals ── */
-function animPetals(colors) {
-  function mkPetal() {
-    const layer=document.getElementById('petal-layer');
-    const el=document.createElement('div');
-    const sz=7+Math.random()*15;
-    const c=colors[Math.floor(Math.random()*colors.length)];
-    const dur=12+Math.random()*10;
-    el.style.cssText=`position:absolute;left:${Math.random()*100}%;top:-60px;pointer-events:none;opacity:0;animation:petal${Math.floor(Math.random()*3)+1} ${dur}s ${Math.random()*3}s linear forwards;`;
-    el.innerHTML=`<svg width="${sz}" height="${sz*1.4}" viewBox="0 0 20 28"><ellipse cx="10" cy="14" rx="6" ry="13" fill="${c}" opacity=".75" transform="rotate(${Math.random()*25-12.5},10,14)"/></svg>`;
-    layer.appendChild(el);
-    setTimeout(()=>el.remove(), (dur+4)*1000);
-  }
-  // Inject keyframes
-  if(!document.getElementById('petalKF')){
-    const s=document.createElement('style'); s.id='petalKF';
-    s.textContent=`
-      @keyframes petal1{0%{opacity:0;transform:translateY(0) rotate(0)}5%{opacity:.55}95%{opacity:.2}100%{opacity:0;transform:translateY(115vh) rotate(720deg) translateX(80px)}}
-      @keyframes petal2{0%{opacity:0;transform:translateY(0) rotate(0)}5%{opacity:.45}95%{opacity:.15}100%{opacity:0;transform:translateY(115vh) rotate(-540deg) translateX(-60px)}}
-      @keyframes petal3{0%{opacity:0;transform:translateY(0) rotate(0)}5%{opacity:.5}95%{opacity:.18}100%{opacity:0;transform:translateY(115vh) rotate(900deg) translateX(50px)}}`;
-    document.head.appendChild(s);
-  }
-  for(let i=0;i<10;i++) setTimeout(mkPetal,i*600);
-  petalTimer=setInterval(mkPetal, 1600);
-}
-
-/* ── sparkles (canvas) ── */
-function animSparkles(cv, colors) {
-  const ctx=cv.getContext('2d');
-  const pts=Array.from({length:60},()=>({
-    x:Math.random()*cv.width, y:Math.random()*cv.height,
-    r:0.6+Math.random()*2, vx:(Math.random()-.5)*.2,
-    vy:-(0.1+Math.random()*.3), a:Math.random(),
-    va:0.005+Math.random()*.012,
-    c:colors[Math.floor(Math.random()*colors.length)]
-  }));
-  function frame(){
-    ctx.clearRect(0,0,cv.width,cv.height);
-    pts.forEach((p,i)=>{
-      p.x+=p.vx; p.y+=p.vy; p.a+=p.va;
-      if(p.y<-10||p.a>1.05){
-        p.x=Math.random()*cv.width; p.y=cv.height+10; p.a=0;
-      }
-      const alpha=.55*Math.sin(Math.PI*p.a);
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=p.c+(Math.round(alpha*255).toString(16).padStart(2,'0'));
-      ctx.fill();
-    });
-    animLoop=requestAnimationFrame(frame);
-  }
-  frame();
-}
-
-/* ── starfall (canvas) ── */
-function animStarfall(cv, colors) {
-  const ctx=cv.getContext('2d');
-  const stars=Array.from({length:55},()=>({
-    x:Math.random()*cv.width, y:Math.random()*cv.height,
-    r:0.5+Math.random()*1.8, vy:0.3+Math.random()*.8,
-    a:Math.random(), c:colors[Math.floor(Math.random()*colors.length)]
-  }));
-  function frame(){
-    ctx.clearRect(0,0,cv.width,cv.height);
-    stars.forEach(s=>{
-      s.y+=s.vy; s.a+=0.008;
-      if(s.y>cv.height+10){ s.y=-10; s.x=Math.random()*cv.width; }
-      const alpha=.5*Math.abs(Math.sin(s.a));
-      // 4-point star
-      ctx.save(); ctx.translate(s.x,s.y); ctx.fillStyle=s.c+(Math.round(alpha*255).toString(16).padStart(2,'0'));
-      ctx.beginPath();
-      const r=s.r*1.8, ri=s.r*.4;
-      for(let i=0;i<8;i++){
-        const angle=i*Math.PI/4;
-        const rad=i%2===0?r:ri;
-        i===0?ctx.moveTo(Math.cos(angle)*rad,Math.sin(angle)*rad):ctx.lineTo(Math.cos(angle)*rad,Math.sin(angle)*rad);
-      }
-      ctx.closePath(); ctx.fill(); ctx.restore();
-    });
-    animLoop=requestAnimationFrame(frame);
-  }
-  frame();
-}
-
-/* ── bubbles (canvas) ── */
-function animBubbles(cv, colors) {
-  const ctx=cv.getContext('2d');
-  const bubs=Array.from({length:40},()=>({
-    x:Math.random()*cv.width, y:cv.height+50,
-    r:3+Math.random()*8, vy:-(0.25+Math.random()*.5),
-    a:Math.random(), c:colors[Math.floor(Math.random()*colors.length)],
-    wobble:Math.random()*Math.PI*2, ws:(Math.random()-.5)*.02
-  }));
-  function frame(){
-    ctx.clearRect(0,0,cv.width,cv.height);
-    bubs.forEach(b=>{
-      b.y+=b.vy; b.wobble+=b.ws; b.a+=0.006;
-      if(b.y<-20){ b.y=cv.height+30; b.x=Math.random()*cv.width; b.a=0; }
-      b.x+=Math.sin(b.wobble)*.4;
-      const alpha=.35*Math.sin(Math.PI*Math.min(b.a,1));
-      ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-      ctx.strokeStyle=b.c+(Math.round(alpha*255).toString(16).padStart(2,'0'));
-      ctx.lineWidth=1; ctx.stroke();
-      // highlight
-      ctx.beginPath(); ctx.arc(b.x-b.r*.3,b.y-b.r*.3,b.r*.25,0,Math.PI*2);
-      ctx.fillStyle=`rgba(255,255,255,${alpha*.5})`;
-      ctx.fill();
-    });
-    animLoop=requestAnimationFrame(frame);
-  }
-  frame();
-}
-
-/* ── geometric (CSS shapes) ── */
-function animGeometric(colors) {
-  const layer=document.getElementById('shape-layer');
-  if(!document.getElementById('geoKF')){
-    const s=document.createElement('style'); s.id='geoKF';
-    s.textContent=`
-      @keyframes geoRise{0%{opacity:0;transform:translateY(0) rotate(0) scale(1)}5%{opacity:.4}95%{opacity:.15}100%{opacity:0;transform:translateY(-115vh) rotate(720deg) scale(.4)}}
-      @keyframes geoFall{0%{opacity:0;transform:translateY(-100px) rotate(0)}5%{opacity:.35}95%{opacity:.1}100%{opacity:0;transform:translateY(115vh) rotate(-540deg)}}`;
-    document.head.appendChild(s);
-  }
-  function mkShape(){
-    const el=document.createElement('div');
-    const sz=8+Math.random()*20;
-    const c=colors[Math.floor(Math.random()*colors.length)];
-    const type=Math.random();
-    const dur=10+Math.random()*8;
-    const anim=Math.random()<.5?'geoRise':'geoFall';
-    const startY=anim==='geoRise'?`bottom:${-50}px;`:`top:${-50}px;`;
-    let shape='';
-    if(type<.33) shape=`border-radius:50%;width:${sz}px;height:${sz}px;background:${c};opacity:.4;`;
-    else if(type<.66) shape=`width:${sz*.7}px;height:${sz*.7}px;background:${c};opacity:.3;transform:rotate(45deg);`;
-    else shape=`width:0;height:0;border-left:${sz*.5}px solid transparent;border-right:${sz*.5}px solid transparent;border-bottom:${sz*.9}px solid ${c};opacity:.25;`;
-    el.style.cssText=`position:absolute;left:${Math.random()*100}%;${startY}animation:${anim} ${dur}s ${Math.random()*4}s linear forwards;${shape}`;
-    layer.appendChild(el);
-    setTimeout(()=>el.remove(),(dur+5)*1000);
-  }
-  for(let i=0;i<14;i++) setTimeout(mkShape,i*500);
-  petalTimer=setInterval(mkShape,1400);
-}
-
-/* ── botanical (CSS leaves) ── */
-function animBotanical(colors) {
-  const layer=document.getElementById('shape-layer');
-  if(!document.getElementById('botKF')){
-    const s=document.createElement('style');s.id='botKF';
-    s.textContent=`@keyframes leafFall{0%{opacity:0;transform:translateY(-40px) rotate(-20deg)}5%{opacity:.5}95%{opacity:.2}100%{opacity:0;transform:translateY(115vh) rotate(520deg) translateX(60px)}}`;
-    document.head.appendChild(s);
-  }
-  function mkLeaf(){
-    const el=document.createElement('div');
-    const sz=10+Math.random()*18;
-    const c=colors[Math.floor(Math.random()*colors.length)];
-    const dur=11+Math.random()*9;
-    el.style.cssText=`position:absolute;left:${Math.random()*100}%;top:-60px;animation:leafFall ${dur}s ${Math.random()*3}s linear forwards;`;
-    el.innerHTML=`<svg width="${sz}" height="${sz*1.8}" viewBox="0 0 20 36"><path d="M10 2 C16 8 18 14 14 22 C12 28 10 34 10 34 C10 34 8 28 6 22 C2 14 4 8 10 2Z" fill="${c}" opacity=".65"/><path d="M10 2 L10 34" stroke="${c}" stroke-width=".5" opacity=".3"/></svg>`;
-    layer.appendChild(el);
-    setTimeout(()=>el.remove(),(dur+4)*1000);
-  }
-  for(let i=0;i<10;i++) setTimeout(mkLeaf,i*700);
-  petalTimer=setInterval(mkLeaf,1800);
-}
-
-/* ── aurora (canvas smooth blobs) ── */
-function animAurora(cv, colors) {
-  const ctx=cv.getContext('2d');
-  const blobs=colors.slice(0,4).map((c,i)=>({
-    x:cv.width*(0.2+i*.2), y:cv.height*(0.3+i*.15),
-    vx:(Math.random()-.5)*.4, vy:(Math.random()-.5)*.3,
-    r:cv.width*.18+i*30, c
-  }));
-  let tick=0;
-  function frame(){
-    tick++;
-    ctx.clearRect(0,0,cv.width,cv.height);
-    blobs.forEach((b,i)=>{
-      b.x+=b.vx+Math.sin(tick*.007+i)*0.5;
-      b.y+=b.vy+Math.cos(tick*.009+i)*0.4;
-      if(b.x<0||b.x>cv.width) b.vx*=-1;
-      if(b.y<0||b.y>cv.height) b.vy*=-1;
-      const g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);
-      g.addColorStop(0,b.c+'18');
-      g.addColorStop(1,b.c+'00');
-      ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
-      ctx.fillStyle=g; ctx.fill();
-    });
-    animLoop=requestAnimationFrame(frame);
-  }
-  frame();
-}
-
-/* ── confetti (canvas burst) ── */
-function animConfetti(cv, colors) {
-  const ctx=cv.getContext('2d');
-  let particles=[];
-  function burst(n=120){
-    for(let i=0;i<n;i++){
-      particles.push({
-        x:Math.random()*cv.width, y:-20,
-        vx:(Math.random()-.5)*5, vy:1.5+Math.random()*4,
-        w:4+Math.random()*9, h:6+Math.random()*5,
-        rot:Math.random()*Math.PI*2, rs:(Math.random()-.5)*.18,
-        c:colors[Math.floor(Math.random()*colors.length)], op:1,
-        shape:Math.random()<.5?'rect':'circle'
-      });
-    }
-  }
-  burst(140);
-  setInterval(()=>burst(60), 4000);
-  function frame(){
-    ctx.clearRect(0,0,cv.width,cv.height);
-    particles=particles.filter(p=>p.y<cv.height+30&&p.op>.02);
-    particles.forEach(p=>{
-      p.x+=p.vx; p.y+=p.vy; p.rot+=p.rs; p.vy+=.04;
-      if(p.y>cv.height*.75) p.op-=.015;
-      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
-      ctx.globalAlpha=p.op; ctx.fillStyle=p.c;
-      if(p.shape==='rect') ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
-      else { ctx.beginPath(); ctx.arc(0,0,p.w/2,0,Math.PI*2); ctx.fill(); }
-      ctx.restore();
-    });
-    animLoop=requestAnimationFrame(frame);
-  }
-  frame();
-}
-
-/* ══════════════════════════════════════════════════════
-   INIT
-══════════════════════════════════════════════════════ */
-
-/* Spawn soft petals inside the loader while it's visible */
-function spawnLoaderPetals() {
-  const layer = document.getElementById('ld-petals');
-  if (!layer) return;
-  const colors = ['#F0C8CC','#F4DEC8','#FAE8DC','#EDD8D0','#F8E0DC'];
-  for (let i = 0; i < 14; i++) {
-    const el = document.createElement('div');
-    el.className = 'ld-petal';
-    const sz = 7 + Math.random() * 14;
-    const c  = colors[Math.floor(Math.random() * colors.length)];
-    const dur = 8 + Math.random() * 7;
-    el.style.cssText = `
-      left:${Math.random()*100}%;
-      top:-40px;
-      animation-duration:${dur}s;
-      animation-delay:${Math.random()*5}s;
-    `;
-    el.innerHTML = `<svg width="${sz}" height="${sz*1.4}" viewBox="0 0 20 28">
-      <ellipse cx="10" cy="14" rx="6" ry="13" fill="${c}" opacity=".6"
-        transform="rotate(${Math.random()*25-12},10,14)"/>
-    </svg>`;
-    layer.appendChild(el);
-  }
-}
-
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded',()=>{
   spawnLoaderPetals();
   detectPage();
-
-  // Reveal bg + app after loader exit
-  setTimeout(() => {
+  setTimeout(()=>{
     document.getElementById('loader').classList.add('out');
-    // Slight delay so loader starts fading before content appears
-    setTimeout(() => {
+    setTimeout(()=>{
       document.getElementById('bg-base').classList.add('in');
       document.querySelector('.bg-noise').classList.add('in');
       document.getElementById('app').classList.add('in');
-    }, 200);
-  }, 2400);
+    },200);
+  },2800);
 });
 </script>
 </body>
