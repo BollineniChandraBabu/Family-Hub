@@ -809,12 +809,59 @@ a{color:inherit;text-decoration:none;}
 
 /* ── WEDDING INVITATION CARD ── */
 .wedding-card {
+  --wc-header-bg: linear-gradient(120deg, #2C1F18 0%, #4A2E24 45%, #3A2318 100%);
+  --wc-orb-bg: rgba(192,154,82,.07);
+  --wc-stripe: linear-gradient(90deg, transparent, var(--gold), var(--rose), var(--gold), transparent);
+  --wc-eyebrow-c: rgba(192,154,82,.7);
+  --wc-title-c: var(--gold-lt);
+  --wc-subtitle-c: rgba(255,255,255,.5);
+  --wc-badge-border: rgba(192,154,82,.3);
+  --wc-badge-bg: rgba(192,154,82,.08);
+  --wc-day-c: var(--gold-lt);
+  --wc-month-c: rgba(255,255,255,.5);
+  --wc-year-c: rgba(192,154,82,.6);
+  --wc-cta-bg: linear-gradient(135deg, #C09A52, #A07830);
+  --wc-cta-shadow: 0 4px 18px rgba(160,120,48,.35);
+  --wc-cta-hover-shadow: 0 6px 24px rgba(160,120,48,.45);
+
   background: var(--white); border-radius: var(--r);
   box-shadow: var(--shadow-md); overflow: hidden;
   display: block; text-decoration: none; color: inherit;
   position: relative; grid-column: 1 / -1;
   opacity: 0; transform: translateY(28px);
   transition: opacity .7s var(--ease), transform .7s var(--ease), box-shadow .5s var(--ease);
+}
+.card-valentine {
+  --wc-header-bg: linear-gradient(120deg, #3A1C2A 0%, #5F2D43 46%, #7A3E5C 100%);
+  --wc-orb-bg: rgba(255,214,227,.12);
+  --wc-stripe: linear-gradient(90deg, transparent, #F0B7C7, #D889A4, #F0B7C7, transparent);
+  --wc-eyebrow-c: rgba(247,203,220,.8);
+  --wc-title-c: #F8DCE7;
+  --wc-subtitle-c: rgba(255,238,245,.72);
+  --wc-badge-border: rgba(246,190,212,.45);
+  --wc-badge-bg: rgba(255,220,236,.12);
+  --wc-day-c: #FFD3E4;
+  --wc-month-c: rgba(255,236,246,.72);
+  --wc-year-c: rgba(255,211,228,.86);
+  --wc-cta-bg: linear-gradient(135deg, #C86D93, #9F3F68);
+  --wc-cta-shadow: 0 4px 18px rgba(159,63,104,.35);
+  --wc-cta-hover-shadow: 0 6px 24px rgba(159,63,104,.45);
+}
+.card-annaprasan {
+  --wc-header-bg: linear-gradient(120deg, #1E3B4A 0%, #2D5F70 50%, #417A76 100%);
+  --wc-orb-bg: rgba(208,245,238,.12);
+  --wc-stripe: linear-gradient(90deg, transparent, #8AD4C2, #DCC080, #8AD4C2, transparent);
+  --wc-eyebrow-c: rgba(211,243,236,.85);
+  --wc-title-c: #E5F8F2;
+  --wc-subtitle-c: rgba(230,250,244,.75);
+  --wc-badge-border: rgba(169,228,211,.45);
+  --wc-badge-bg: rgba(182,239,223,.14);
+  --wc-day-c: #D8F3EA;
+  --wc-month-c: rgba(232,252,247,.75);
+  --wc-year-c: rgba(205,244,233,.85);
+  --wc-cta-bg: linear-gradient(135deg, #49A58F, #2E7E6F);
+  --wc-cta-shadow: 0 4px 18px rgba(46,126,111,.35);
+  --wc-cta-hover-shadow: 0 6px 24px rgba(46,126,111,.45);
 }
 .wedding-card.in { opacity: 1; transform: none; }
 .wedding-card:hover { transform: translateY(-6px) scale(1.005); box-shadow: var(--shadow-lg); }
@@ -828,43 +875,43 @@ a{color:inherit;text-decoration:none;}
 .wc-header {
   position: relative; overflow: hidden;
   padding: clamp(28px,4vw,44px) clamp(24px,4vw,48px) clamp(22px,3vw,36px);
-  background: linear-gradient(120deg, #2C1F18 0%, #4A2E24 45%, #3A2318 100%);
+  background: var(--wc-header-bg);
   display: flex; align-items: center; gap: clamp(16px,3vw,32px); flex-wrap: wrap;
 }
 .wc-header::before {
   content: ''; position: absolute; width: 300px; height: 300px; border-radius: 50%;
-  background: rgba(192,154,82,.07); top: -100px; right: -80px; pointer-events: none;
+  background: var(--wc-orb-bg); top: -100px; right: -80px; pointer-events: none;
 }
 .wc-header-stripe {
   position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, transparent, var(--gold), var(--rose), var(--gold), transparent);
+  background: var(--wc-stripe);
 }
 .wc-rings { flex-shrink: 0; position: relative; z-index: 2; width: clamp(60px,8vw,80px); height: clamp(60px,8vw,80px); }
 .wc-identity { flex: 1; min-width: 160px; position: relative; z-index: 2; }
 .wc-eyebrow {
   font-size: .58rem; font-weight: 300; letter-spacing: .65em; text-transform: uppercase;
-  color: rgba(192,154,82,.7); margin-bottom: 8px;
+  color: var(--wc-eyebrow-c); margin-bottom: 8px;
 }
 .wc-title {
   font-family: 'Great Vibes', cursive; font-size: clamp(1.8rem,4.5vw,3rem);
-  color: var(--gold-lt); line-height: 1.1; margin-bottom: 6px;
+  color: var(--wc-title-c); line-height: 1.1; margin-bottom: 6px;
   filter: drop-shadow(0 2px 12px rgba(192,154,82,.3));
 }
 .wc-subtitle {
   font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300;
-  font-size: clamp(.85rem,2vw,1.05rem); color: rgba(255,255,255,.5);
+  font-size: clamp(.85rem,2vw,1.05rem); color: var(--wc-subtitle-c);
 }
 .wc-date-badge {
   flex-shrink: 0; position: relative; z-index: 2; text-align: center;
   padding: 14px 20px; border-radius: 14px;
-  border: 1px solid rgba(192,154,82,.3); background: rgba(192,154,82,.08);
+  border: 1px solid var(--wc-badge-border); background: var(--wc-badge-bg);
 }
 .wc-date-day {
   font-family: 'Playfair Display', serif; font-size: clamp(1.8rem,4vw,2.6rem);
-  font-weight: 900; color: var(--gold-lt); line-height: 1;
+  font-weight: 900; color: var(--wc-day-c); line-height: 1;
 }
-.wc-date-month { font-size: .6rem; font-weight: 300; letter-spacing: .45em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-top: 2px; }
-.wc-date-year { font-size: .65rem; font-weight: 300; letter-spacing: .25em; color: rgba(192,154,82,.6); margin-top: 4px; }
+.wc-date-month { font-size: .6rem; font-weight: 300; letter-spacing: .45em; text-transform: uppercase; color: var(--wc-month-c); margin-top: 2px; }
+.wc-date-year { font-size: .65rem; font-weight: 300; letter-spacing: .25em; color: var(--wc-year-c); margin-top: 4px; }
 .wc-body {
   padding: clamp(20px,3vw,32px) clamp(24px,4vw,48px);
   display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
@@ -877,11 +924,11 @@ a{color:inherit;text-decoration:none;}
   display: flex; align-items: center; gap: 8px; flex-shrink: 0;
   padding: 12px 28px; border-radius: 50px;
   font-size: .68rem; font-weight: 400; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--white); background: linear-gradient(135deg, #C09A52, #A07830);
-  box-shadow: 0 4px 18px rgba(160,120,48,.35);
+  color: var(--white); background: var(--wc-cta-bg);
+  box-shadow: var(--wc-cta-shadow);
   transition: transform .3s var(--spring), box-shadow .3s;
 }
-.wedding-card:hover .wc-cta { transform: scale(1.06); box-shadow: 0 6px 24px rgba(160,120,48,.45); }
+.wedding-card:hover .wc-cta { transform: scale(1.06); box-shadow: var(--wc-cta-hover-shadow); }
 @media(max-width:520px) { .wc-date-badge { display: none; } .wc-body { flex-direction: column; align-items: flex-start; } }
 
 </style>
@@ -1175,6 +1222,7 @@ a{color:inherit;text-decoration:none;}
     <div class="ft-links">
       <a href="sindhu.html"   class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'sindhu'})">Sindhu</a>
       <a href="yokshith.html" class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'yokshith'})">Yokshith</a>
+      <a href="https://chandu-sindhu-valentine.web.app/" class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'valentine_site'})">💘 Valentine Event</a>
       <a href="https://chandusindhu.web.app/" class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'wedding_site'})">💍 Wedding Invitation</a>
     </div>
     <div class="ft-copy">
@@ -1385,7 +1433,7 @@ function buildCards(){
   /* ── Wedding Invitation Card ── */
   const wc = document.createElement('a');
   wc.href = 'https://chandusindhu.web.app/';
-  wc.className = 'wedding-card';
+  wc.className = 'wedding-card card-wedding';
 
   /* ── GA: track wedding card click ── */
   wc.addEventListener('click', () => {
@@ -1423,12 +1471,51 @@ function buildCards(){
   grid.appendChild(wc);
   setTimeout(()=>wc.classList.add('in'), 100 + FAMILY.length*140 + 80);
 
+  /* ── Valentine's Event Card ── */
+  const ve = document.createElement('a');
+  ve.href = 'https://chandu-sindhu-valentine.web.app/';
+  ve.className = 'wedding-card card-valentine';
+
+  /* ── GA: track Valentine's card click ── */
+  ve.addEventListener('click', () => {
+    gtag('event', 'valentine_card_click', {
+      destination: 'https://chandu-sindhu-valentine.web.app/'
+    });
+  });
+
+  ve.innerHTML = `
+  <div class="wc-header">
+    <div class="wc-header-stripe"></div>
+    <div class="wc-rings">
+      <svg viewBox="0 0 80 80" fill="none" width="100%" height="100%" aria-hidden="true">
+        <path d="M40 61 C40 61 18 47 18 31 C18 23 24 17 32 17 C36.5 17 39.3 19.1 40 22.5 C40.7 19.1 43.5 17 48 17 C56 17 62 23 62 31 C62 47 40 61 40 61 Z" fill="#C07880" opacity=".9"/>
+        <path d="M40 55 C40 55 24 44 24 33 C24 27.5 28.2 23.5 33.2 23.5 C36.2 23.5 38.2 24.9 40 27 C41.8 24.9 43.8 23.5 46.8 23.5 C51.8 23.5 56 27.5 56 33 C56 44 40 55 40 55 Z" fill="#FCE8EE" opacity=".95"/>
+        <circle cx="58" cy="20" r="3" fill="#DCC080"/>
+        <circle cx="22" cy="55" r="2.2" fill="#DCC080" opacity=".85"/>
+      </svg>
+    </div>
+    <div class="wc-identity">
+      <div class="wc-eyebrow">💘 Valentine Celebration</div>
+      <div class="wc-title">Chandu &amp; Sindhu</div>
+      <div class="wc-subtitle">A page filled with our sweetest love moments</div>
+    </div>
+    <div class="wc-date-badge">
+      <div class="wc-date-day">14</div>
+      <div class="wc-date-month">February</div>
+      <div class="wc-date-year">Forever</div>
+    </div>
+  </div>
+  <div class="wc-body">
+    <p class="wc-desc">Step into our Valentine special — a romantic space dedicated to love notes, cherished memories, and the little moments that mean everything.</p>
+    <div class="wc-cta">Open Valentine <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M8 3l3.5 3.5L8 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>`;
+  grid.appendChild(ve);
+  setTimeout(()=>ve.classList.add('in'), 100 + FAMILY.length*140 + 120);
+
   /* ── Yokshith Annaprasan Card ── */
   const ya = document.createElement('a');
   ya.href = 'https://yokshith-42777.web.app/';
-  ya.target = '_blank';
-  ya.rel = 'noopener noreferrer';
-  ya.className = 'wedding-card';
+  ya.className = 'wedding-card card-annaprasan';
 
   /* ── GA: track Annaprasan card click ── */
   ya.addEventListener('click', () => {
@@ -1476,7 +1563,7 @@ function buildCards(){
     <div class="wc-cta">Open Event <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M8 3l3.5 3.5L8 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
   </div>`;
   grid.appendChild(ya);
-  setTimeout(()=>ya.classList.add('in'), 100 + FAMILY.length*140 + 160);
+  setTimeout(()=>ya.classList.add('in'), 100 + FAMILY.length*140 + 200);
 
   /* Add member card */
   const add = document.createElement('div');
