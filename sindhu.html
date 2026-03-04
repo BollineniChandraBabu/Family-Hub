@@ -301,6 +301,90 @@ button{cursor:pointer;border:none;background:none;font:inherit;}
 .ft-copy strong{color:rgba(192,154,82,.5);font-weight:400;}
 @media(max-width:580px){.wishes-grid{grid-template-columns:1fr 1fr;}.milestone-banner{flex-direction:column;}.timeline{padding-left:28px;}}
 @media(max-width:360px){.wishes-grid{grid-template-columns:1fr;}}
+
+/* ═══ ANIMATED HEART ICON (replaces 💍 everywhere) ═══ */
+.hb-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  vertical-align: middle;
+}
+.hb-icon svg {
+  display: block;
+  overflow: visible;
+}
+
+/* Cinematic lub-dub heartbeat: two quick beats then long rest */
+@keyframes hbIconBeat {
+  0%          { transform: scale(1);    filter: drop-shadow(0 0 0px rgba(192,120,128,0)); }
+  5%          { transform: scale(1.22); filter: drop-shadow(0 0 8px rgba(192,120,128,.7)); }
+  10%         { transform: scale(0.94); filter: drop-shadow(0 0 2px rgba(192,120,128,.2)); }
+  16%         { transform: scale(1.14); filter: drop-shadow(0 0 6px rgba(192,120,128,.5)); }
+  22%         { transform: scale(1);    filter: drop-shadow(0 0 0px rgba(192,120,128,0)); }
+  100%        { transform: scale(1);    filter: drop-shadow(0 0 0px rgba(192,120,128,0)); }
+}
+/* Pulse ring that radiates outward on each beat */
+@keyframes hbRingPulse {
+  0%   { transform: scale(0.6); opacity: .7; }
+  40%  { transform: scale(2.2); opacity: 0; }
+  100% { opacity: 0; }
+}
+/* Glowing EKG trace that sweeps below the heart icon */
+@keyframes hbTraceDraw {
+  0%          { stroke-dashoffset: 120; opacity: 0; }
+  4%          { opacity: 1; }
+  38%         { stroke-dashoffset: 0; opacity: 1; }
+  52%         { opacity: 0; }
+  100%        { stroke-dashoffset: 120; opacity: 0; }
+}
+@keyframes hbTraceEcho {
+  0%          { stroke-dashoffset: 120; opacity: 0; }
+  8%          { opacity: .35; }
+  44%         { stroke-dashoffset: 0; opacity: .2; }
+  56%         { opacity: 0; }
+  100%        { stroke-dashoffset: 120; opacity: 0; }
+}
+
+.hb-icon-heart {
+  animation: hbIconBeat 2.8s cubic-bezier(.4,0,.2,1) infinite;
+  transform-origin: center;
+}
+.hb-ring {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+.hb-ring circle {
+  animation: hbRingPulse 2.8s ease-out infinite;
+  transform-origin: center;
+}
+.hb-ring circle:nth-child(2) {
+  animation-delay: .12s;
+}
+.hb-trace {
+  display: block;
+  overflow: visible;
+}
+.hb-trace-path {
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  animation: hbTraceDraw 2.8s cubic-bezier(.38,0,.35,1) infinite;
+}
+.hb-trace-echo {
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  animation: hbTraceEcho 2.8s cubic-bezier(.38,0,.35,1) infinite;
+}
+/* Size variants */
+.hb-icon--sm  { --hb-sz: 22px; }
+.hb-icon--md  { --hb-sz: 36px; }
+.hb-icon--lg  { --hb-sz: 56px; }
+.hb-icon--xl  { --hb-sz: 80px; }
+
 </style>
 </head>
 <body>
@@ -446,6 +530,58 @@ button{cursor:pointer;border:none;background:none;font:inherit;}
 <script>
 'use strict';
 
+/* ── Animated heart icon (replaces 💍) ── */
+function heartIcon(sizePx, delay='0s', colorMid, colorDark) {
+  const cm = colorMid  || 'var(--acc-mid,#C07880)';
+  const cd = colorDark || 'var(--acc-dark,#904050)';
+  const s  = sizePx || 36;
+  const uid = Math.random().toString(36).slice(2,7);
+  return `<span class="hb-icon" style="width:${s}px;height:${s+10}px;flex-direction:column;gap:0;animation-delay:${delay}">
+    <span class="hb-ring" style="width:${s}px;height:${s}px;">
+      <svg width="${s}" height="${s}" viewBox="0 0 36 36" fill="none" style="position:absolute">
+        <circle cx="18" cy="17" r="12" fill="none" stroke="${cm}" stroke-width="1" opacity=".55"/>
+        <circle cx="18" cy="17" r="12" fill="none" stroke="${cm}" stroke-width="1" opacity=".35"/>
+      </svg>
+    </span>
+    <svg class="hb-icon-heart" style="animation-delay:${delay};width:${s}px;height:${s}px;" viewBox="0 0 36 36" fill="none">
+      <defs>
+        <radialGradient id="hbg${uid}" cx="40%" cy="35%" r="60%">
+          <stop offset="0%"  stop-color="#F0C8D0"/>
+          <stop offset="45%" stop-color="${cm}"/>
+          <stop offset="100%" stop-color="${cd}"/>
+        </radialGradient>
+        <filter id="hbf${uid}" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <path d="M18 30 C18 30 5 21 5 12.5 C5 7.5 9 4 13 4 C15.5 4 17 5.5 18 7.5 C19 5.5 20.5 4 23 4 C27 4 31 7.5 31 12.5 C31 21 18 30 18 30Z"
+        fill="url(#hbg${uid})" filter="url(#hbf${uid})"/>
+      <path d="M12 11 Q18 7 24 11" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".9" stroke-linecap="round"/>
+    </svg>
+    <svg class="hb-trace" style="width:${s*1.8}px;height:${Math.round(s*.38)}px;margin-top:-2px;" viewBox="0 0 65 14" fill="none">
+      <defs>
+        <linearGradient id="htg${uid}" x1="0" y1="0" x2="65" y2="0" gradientUnits="userSpaceOnUse">
+          <stop offset="0%"   stop-color="${cm}" stop-opacity="0"/>
+          <stop offset="25%"  stop-color="${cm}" stop-opacity=".9"/>
+          <stop offset="55%"  stop-color="#D4A860"/>
+          <stop offset="80%"  stop-color="${cm}" stop-opacity=".8"/>
+          <stop offset="100%" stop-color="${cm}" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="htf${uid}" x="-5%" y="-100%" width="110%" height="300%">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      <path class="hb-trace-echo" d="M0,8 L14,8 L16,6 L18,8 L20,8 L21,11 L22,2 L23,13 L25,8 Q28,5 31,8 L65,8"
+        stroke="${cm}" stroke-width="2.2" stroke-linecap="round" fill="none" filter="url(#htf${uid})" style="animation-delay:${delay}"/>
+      <path class="hb-trace-path"  d="M0,8 L14,8 L16,6 L18,8 L20,8 L21,11 L22,2 L23,13 L25,8 Q28,5 31,8 L65,8"
+        stroke="url(#htg${uid})" stroke-width="1.4" stroke-linecap="round" fill="none" filter="url(#htf${uid})" style="animation-delay:${delay}"/>
+    </svg>
+  </span>`;
+}
+
+
 const BDAY  = { month:9,  day:25, birthYear:1994 };
 const ANNIV = { month:11, day:19, startYear:2023 };
 const NOW   = new Date();
@@ -506,8 +642,8 @@ function renderWaiting(){
   startAnim('petals',['#F0C8CC','#DDB890','#F8D8DC','#E8C8A0']);
   const memoryItems=[];
   for(let yr=BDAY_MIN_YEAR;yr<=lastBdayYear;yr++){const age=yr-BDAY.birthYear;const t=getBdayTheme(age);memoryItems.push(`<div class="memory-card" onclick="openMemory('birthday',${yr})"><span class="mc-emoji">🎂</span><div class="mc-year">${yr}</div><div class="mc-label">${t.name.split('—')[0].trim()||('Age '+age)}</div></div>`);}
-  for(let yr=ANNIV_MIN_YEAR;yr<=lastAnnivYear;yr++){const yrs=yr-ANNIV.startYear;const t=getAnnivTheme(yrs);memoryItems.push(`<div class="memory-card" onclick="openMemory('anniversary',${yr})"><span class="mc-emoji">💍</span><div class="mc-year">${yr}</div><div class="mc-label">${t.name.split('—')[0].trim()||(yrs+' Year')}</div></div>`);}
-  const html=`<div class="page-enter"><div class="psec" style="text-align:center;padding-bottom:0;"><div class="psec-inner"><div style="margin-bottom:24px;"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" style="margin:0 auto;"><circle cx="32" cy="32" r="30" stroke="#E8A8B0" stroke-width="1" stroke-dasharray="4 6" opacity=".6"/><path d="M32 48C32 48 14 37 14 25C14 18.5 19 14 25 14C28.5 14 31 16 32 19C33 16 35.5 14 39 14C45 14 50 18.5 50 25C50 37 32 48 32 48Z" fill="url(#wlg)" opacity=".8"/><defs><linearGradient id="wlg" x1="14" y1="14" x2="50" y2="48"><stop stop-color="#D4A85C"/><stop offset="1" stop-color="#C07880"/></linearGradient></defs></svg></div><div style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.55em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:16px;">A Special Day Awaits</div><h1 style="font-family:'Great Vibes',cursive;font-size:clamp(3rem,11vw,6rem);color:var(--acc-mid);line-height:1;filter:drop-shadow(0 2px 16px rgba(192,120,128,.2));">Sindhu</h1><p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(1rem,3vw,1.35rem);color:var(--ink-3);margin:14px 0 36px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.9;">Some of the most beautiful things in life are worth waiting for.<br>Your special day is coming — and when it arrives, this space will be<br>filled with something made entirely, lovingly, for <em>you</em>.</p></div></div><div class="psec" style="padding-top:30px;"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Your Next Celebrations</span><div class="so-line so-line-r"></div></div><div class="wait-event-cards sr"><div class="wait-ev-card" style="--ev-stripe:linear-gradient(90deg,#C07880,#D4A85C)"><span class="wec-icon">🌹</span><div class="wec-label">Birthday</div><div class="wec-name">Sindhu's Birthday</div><div class="wec-date">September 25th</div><div class="wec-countdown"><div class="wcc-unit"><span class="wcc-num" id="bd-d">--</span><div class="wcc-lbl">Days</div></div><div class="wcc-unit"><span class="wcc-num" id="bd-h">--</span><div class="wcc-lbl">Hrs</div></div><div class="wcc-unit"><span class="wcc-num" id="bd-m">--</span><div class="wcc-lbl">Min</div></div><div class="wcc-unit"><span class="wcc-num" id="bd-s">--</span><div class="wcc-lbl">Sec</div></div></div></div><div class="wait-ev-card" style="--ev-stripe:linear-gradient(90deg,#C09A52,#C07880)"><span class="wec-icon">💍</span><div class="wec-label">Anniversary</div><div class="wec-name">Wedding Anniversary</div><div class="wec-date">November 19th</div><div class="wec-countdown"><div class="wcc-unit"><span class="wcc-num" id="an-d">--</span><div class="wcc-lbl">Days</div></div><div class="wcc-unit"><span class="wcc-num" id="an-h">--</span><div class="wcc-lbl">Hrs</div></div><div class="wcc-unit"><span class="wcc-num" id="an-m">--</span><div class="wcc-lbl">Min</div></div><div class="wcc-unit"><span class="wcc-num" id="an-s">--</span><div class="wcc-lbl">Sec</div></div></div></div></div></div></div><div class="psec" style="background:linear-gradient(135deg,rgba(248,234,234,.5),rgba(252,244,232,.5));"><div class="psec-inner" style="text-align:center;"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">While You Wait</span><div class="so-line so-line-r"></div></div><div class="message-card sr" style="text-align:left;"><p class="message-para">There is a particular kind of love that doesn't require a special day to be felt — and that is the love that fills this space every moment you are not here. <em>This page exists for you, Sindhu</em>. For the days when the calendar aligns and the words finally have a stage. But know that on all the days in between, the love behind these words is just as present.</p><p class="message-para">On your birthday, this page will open into something made for exactly how old you are in exactly that year — because you deserve celebrations that know you, specifically, not celebrations that could belong to anyone. And on our anniversary, it will hold something that knows what our particular love has grown into that particular year.</p><p class="message-para">Until then — come back when the day arrives. <strong>It will be worth the wait. You always are.</strong></p></div></div></div>${memoryItems.length>0?`<div class="psec"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Relive the Memories</span><div class="so-line so-line-r"></div></div><p style="text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink-3);margin-bottom:28px;" class="sr">Every year held something beautiful. Browse the ones that already belong to us.</p><div class="memory-grid sr">${memoryItems.join('')}</div></div></div>`:''}<div class="signature-section sr"><div class="sig-from">— waiting for your special day — with all my love —</div><div class="sig-name">Your Chandu <span class="sig-heart">🌹</span></div></div></div>`;
+  for(let yr=ANNIV_MIN_YEAR;yr<=lastAnnivYear;yr++){const yrs=yr-ANNIV.startYear;const t=getAnnivTheme(yrs);memoryItems.push(`<div class="memory-card" onclick="openMemory('anniversary',${yr})"><span class="mc-emoji" style="display:flex;justify-content:center;">${heartIcon(28,'0s')}</span><div class="mc-year">${yr}</div><div class="mc-label">${t.name.split('—')[0].trim()||(yrs+' Year')}</div></div>`);}
+  const html=`<div class="page-enter"><div class="psec" style="text-align:center;padding-bottom:0;"><div class="psec-inner"><div style="margin-bottom:24px;"><svg width="64" height="64" viewBox="0 0 64 64" fill="none" style="margin:0 auto;"><circle cx="32" cy="32" r="30" stroke="#E8A8B0" stroke-width="1" stroke-dasharray="4 6" opacity=".6"/><path d="M32 48C32 48 14 37 14 25C14 18.5 19 14 25 14C28.5 14 31 16 32 19C33 16 35.5 14 39 14C45 14 50 18.5 50 25C50 37 32 48 32 48Z" fill="url(#wlg)" opacity=".8"/><defs><linearGradient id="wlg" x1="14" y1="14" x2="50" y2="48"><stop stop-color="#D4A85C"/><stop offset="1" stop-color="#C07880"/></linearGradient></defs></svg></div><div style="font-family:'Cinzel',serif;font-size:.6rem;letter-spacing:.55em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:16px;">A Special Day Awaits</div><h1 style="font-family:'Great Vibes',cursive;font-size:clamp(3rem,11vw,6rem);color:var(--acc-mid);line-height:1;filter:drop-shadow(0 2px 16px rgba(192,120,128,.2));">Sindhu</h1><p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:clamp(1rem,3vw,1.35rem);color:var(--ink-3);margin:14px 0 36px;max-width:500px;margin-left:auto;margin-right:auto;line-height:1.9;">Some of the most beautiful things in life are worth waiting for.<br>Your special day is coming — and when it arrives, this space will be<br>filled with something made entirely, lovingly, for <em>you</em>.</p></div></div><div class="psec" style="padding-top:30px;"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Your Next Celebrations</span><div class="so-line so-line-r"></div></div><div class="wait-event-cards sr"><div class="wait-ev-card" style="--ev-stripe:linear-gradient(90deg,#C07880,#D4A85C)"><span class="wec-icon">🌹</span><div class="wec-label">Birthday</div><div class="wec-name">Sindhu's Birthday</div><div class="wec-date">September 25th</div><div class="wec-countdown"><div class="wcc-unit"><span class="wcc-num" id="bd-d">--</span><div class="wcc-lbl">Days</div></div><div class="wcc-unit"><span class="wcc-num" id="bd-h">--</span><div class="wcc-lbl">Hrs</div></div><div class="wcc-unit"><span class="wcc-num" id="bd-m">--</span><div class="wcc-lbl">Min</div></div><div class="wcc-unit"><span class="wcc-num" id="bd-s">--</span><div class="wcc-lbl">Sec</div></div></div></div><div class="wait-ev-card" style="--ev-stripe:linear-gradient(90deg,#C09A52,#C07880)"><span class="wec-icon" style="display:flex;justify-content:center;">${heartIcon(44,'0s')}</span><div class="wec-label">Anniversary</div><div class="wec-name">Wedding Anniversary</div><div class="wec-date">November 19th</div><div class="wec-countdown"><div class="wcc-unit"><span class="wcc-num" id="an-d">--</span><div class="wcc-lbl">Days</div></div><div class="wcc-unit"><span class="wcc-num" id="an-h">--</span><div class="wcc-lbl">Hrs</div></div><div class="wcc-unit"><span class="wcc-num" id="an-m">--</span><div class="wcc-lbl">Min</div></div><div class="wcc-unit"><span class="wcc-num" id="an-s">--</span><div class="wcc-lbl">Sec</div></div></div></div></div></div></div><div class="psec" style="background:linear-gradient(135deg,rgba(248,234,234,.5),rgba(252,244,232,.5));"><div class="psec-inner" style="text-align:center;"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">While You Wait</span><div class="so-line so-line-r"></div></div><div class="message-card sr" style="text-align:left;"><p class="message-para">There is a particular kind of love that doesn't require a special day to be felt — and that is the love that fills this space every moment you are not here. <em>This page exists for you, Sindhu</em>. For the days when the calendar aligns and the words finally have a stage. But know that on all the days in between, the love behind these words is just as present.</p><p class="message-para">On your birthday, this page will open into something made for exactly how old you are in exactly that year — because you deserve celebrations that know you, specifically, not celebrations that could belong to anyone. And on our anniversary, it will hold something that knows what our particular love has grown into that particular year.</p><p class="message-para">Until then — come back when the day arrives. <strong>It will be worth the wait. You always are.</strong></p></div></div></div>${memoryItems.length>0?`<div class="psec"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Relive the Memories</span><div class="so-line so-line-r"></div></div><p style="text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink-3);margin-bottom:28px;" class="sr">Every year held something beautiful. Browse the ones that already belong to us.</p><div class="memory-grid sr">${memoryItems.join('')}</div></div></div>`:''}<div class="signature-section sr"><div class="sig-from">— waiting for your special day — with all my love —</div><div class="sig-name">Your Chandu <span class="sig-heart">🌹</span></div></div></div>`;
   document.getElementById('app').innerHTML=html;
   initReveal();tickWaiting();setInterval(tickWaiting,1000);
 }
@@ -529,7 +665,7 @@ function renderAnniversary(year,fromWaiting=false){
   const isCurrentYear=(year===lastAnnivYear);const canGoBack=(year-1)>ANNIV.startYear;const canGoForward=!isCurrentYear&&(year+1)<=lastAnnivYear;
   const tlItems=[];
   for(let y=ANNIV.startYear+1;y<=Math.min(year,lastAnnivYear);y++){const yrs=y-ANNIV.startYear;const th=getAnnivTheme(yrs);tlItems.push(`<div class="tl-item"><div class="tl-dot ${y===year?'current':''}"></div><div class="tl-year">${y} · Year ${yrs}</div><div class="tl-title">${th.name}</div><div class="tl-text">${th.journeyNote||th.tagline}</div></div>`);}
-  const html=`<div class="page-enter">${!isCurrentYear?`<div style="padding:14px 20px 0;max-width:760px;margin:0 auto;"><div class="viewing-past-banner">Viewing <strong>${year}</strong> — Our ${ordinal(years)} Anniversary · <button onclick="renderAnniversary(${lastAnnivYear})" style="background:var(--acc-mid);color:white;border:none;cursor:pointer;padding:3px 12px;border-radius:20px;font-size:.75rem;margin-left:6px;">Return to ${lastAnnivYear} →</button></div></div>`:''}<div class="psec" style="text-align:center;padding-bottom:20px;"><div class="psec-inner"><div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.55em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:16px;opacity:0;animation:ldUp .8s ease forwards .1s;">${MN[ANNIV.month-1]} ${ANNIV.day}, ${year} &nbsp;·&nbsp; ${ordinal(years)} Anniversary</div><span class="event-title" style="opacity:0;animation:ldUp 1s ease forwards .25s;">Happy Anniversary</span><h2 class="event-subtitle" style="opacity:0;animation:ldUp .9s ease forwards .45s;margin-top:8px;">${t.name}</h2><p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.95rem,2.8vw,1.2rem);color:var(--ink-3);margin:14px auto 28px;max-width:500px;line-height:1.9;opacity:0;animation:ldUp .9s ease forwards .6s;">${t.tagline}</p><div style="display:inline-flex;align-items:center;gap:16px;padding:14px 32px;border-radius:50px;background:var(--acc-pale);border:1px solid var(--acc-lt);margin-bottom:40px;opacity:0;animation:ldUp .8s ease forwards .75s;"><div style="font-family:'Playfair Display',serif;font-size:clamp(2rem,7vw,3.2rem);font-weight:900;color:var(--acc-mid);line-height:1;">${years}</div><div style="text-align:left;"><div style="font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-4);">Years of</div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink-2);">Extraordinary Love</div></div></div><div style="max-width:420px;margin:0 auto;padding:14px 20px;background:var(--acc-pale);border-radius:14px;border:1px solid var(--acc-lt);opacity:0;animation:ldUp .8s ease forwards .9s;"><div style="font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.4em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:5px;">Traditional Gift</div><div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:var(--ink);margin-bottom:4px;">${t.traditional}</div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--ink-3);">${t.traditionalNote}</div></div></div></div><div class="psec" style="padding-top:0;"><div class="psec-inner sr"><div class="poem-block">${t.poem.map(l=>`<span class="poem-line">${l}</span>`).join('')}</div></div></div><div class="psec" style="background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(255,255,255,.3));"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">To My Wife</span><div class="so-line so-line-r"></div></div><div class="message-card sr"><p class="message-para">${t.msgA}</p><p class="message-para">${t.msgB}</p><p class="message-para">${t.msgC}</p></div></div></div><div class="psec"><div class="psec-inner sr"><div class="milestone-banner"><div class="mb-icon">💍</div><div><div class="mb-label">Anniversary Milestone</div><div class="mb-title">${t.mileTitle}</div><div class="mb-text">${t.mileText}</div></div></div></div></div><div class="psec" style="background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.2));"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Anniversary Wishes</span><div class="so-line so-line-r"></div></div><div class="wishes-grid sr">${t.wishes.map(w=>`<div class="wish-card"><span class="wc-icon">${w.icon}</span><div class="wc-title">${w.title}</div><div class="wc-text">${w.text}</div></div>`).join('')}</div></div></div>${tlItems.length>1?`<div class="psec"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Our Journey</span><div class="so-line so-line-r"></div></div><div class="timeline sr">${tlItems.join('')}</div></div></div>`:''}<div class="psec" style="padding-top:20px;padding-bottom:30px;"><div class="psec-inner" style="text-align:center;">${canGoBack||canGoForward?`<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--ink-4);margin-bottom:16px;">Browse our anniversaries</div><div class="year-nav">${canGoBack?`<button class="yn-btn" onclick="renderAnniversary(${year-1})"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H4M6 4l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> ${year-1} · Year ${years-1}</button>`:''}${canGoForward?`<button class="yn-btn fwd" onclick="renderAnniversary(${year+1})">${year+1} · Year ${years+1} <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 7h6M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`:''}${(year+1)>lastAnnivYear?`<div class="locked-msg" style="margin-top:10px;"><div class="locked-icon">🔮</div><div class="locked-title">A Future Surprise</div><div class="locked-text">Return on November 19th, ${year+1} to discover what Year ${years+1} brings for us.</div></div>`:''}</div>`:''} ${fromWaiting?`<div style="margin-top:20px;"><button class="yn-btn" onclick="renderWaiting()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H4M6 4l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Back to Home</button></div>`:''}</div></div><div class="signature-section sr"><div class="sig-from">— yours, completely, in every year of this beautiful life —</div><div class="sig-name">Your Chandu <span class="sig-heart">💍</span></div></div></div>`;
+  const html=`<div class="page-enter">${!isCurrentYear?`<div style="padding:14px 20px 0;max-width:760px;margin:0 auto;"><div class="viewing-past-banner">Viewing <strong>${year}</strong> — Our ${ordinal(years)} Anniversary · <button onclick="renderAnniversary(${lastAnnivYear})" style="background:var(--acc-mid);color:white;border:none;cursor:pointer;padding:3px 12px;border-radius:20px;font-size:.75rem;margin-left:6px;">Return to ${lastAnnivYear} →</button></div></div>`:''}<div class="psec" style="text-align:center;padding-bottom:20px;"><div class="psec-inner"><div style="font-family:'Cinzel',serif;font-size:.62rem;letter-spacing:.55em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:16px;opacity:0;animation:ldUp .8s ease forwards .1s;">${MN[ANNIV.month-1]} ${ANNIV.day}, ${year} &nbsp;·&nbsp; ${ordinal(years)} Anniversary</div><span class="event-title" style="opacity:0;animation:ldUp 1s ease forwards .25s;">Happy Anniversary</span><h2 class="event-subtitle" style="opacity:0;animation:ldUp .9s ease forwards .45s;margin-top:8px;">${t.name}</h2><p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(.95rem,2.8vw,1.2rem);color:var(--ink-3);margin:14px auto 28px;max-width:500px;line-height:1.9;opacity:0;animation:ldUp .9s ease forwards .6s;">${t.tagline}</p><div style="display:inline-flex;align-items:center;gap:16px;padding:14px 32px;border-radius:50px;background:var(--acc-pale);border:1px solid var(--acc-lt);margin-bottom:40px;opacity:0;animation:ldUp .8s ease forwards .75s;"><div style="font-family:'Playfair Display',serif;font-size:clamp(2rem,7vw,3.2rem);font-weight:900;color:var(--acc-mid);line-height:1;">${years}</div><div style="text-align:left;"><div style="font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--ink-4);">Years of</div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1rem;color:var(--ink-2);">Extraordinary Love</div></div></div><div style="max-width:420px;margin:0 auto;padding:14px 20px;background:var(--acc-pale);border-radius:14px;border:1px solid var(--acc-lt);opacity:0;animation:ldUp .8s ease forwards .9s;"><div style="font-family:'Cinzel',serif;font-size:.55rem;letter-spacing:.4em;text-transform:uppercase;color:var(--acc-mid);margin-bottom:5px;">Traditional Gift</div><div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:var(--ink);margin-bottom:4px;">${t.traditional}</div><div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--ink-3);">${t.traditionalNote}</div></div></div></div><div class="psec" style="padding-top:0;"><div class="psec-inner sr"><div class="poem-block">${t.poem.map(l=>`<span class="poem-line">${l}</span>`).join('')}</div></div></div><div class="psec" style="background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(255,255,255,.3));"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">To My Wife</span><div class="so-line so-line-r"></div></div><div class="message-card sr"><p class="message-para">${t.msgA}</p><p class="message-para">${t.msgB}</p><p class="message-para">${t.msgC}</p></div></div></div><div class="psec"><div class="psec-inner sr"><div class="milestone-banner"><div class="mb-icon">${heartIcon(48,'0s')}</div><div><div class="mb-label">Anniversary Milestone</div><div class="mb-title">${t.mileTitle}</div><div class="mb-text">${t.mileText}</div></div></div></div></div><div class="psec" style="background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,.2));"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Anniversary Wishes</span><div class="so-line so-line-r"></div></div><div class="wishes-grid sr">${t.wishes.map(w=>`<div class="wish-card"><span class="wc-icon">${w.icon}</span><div class="wc-title">${w.title}</div><div class="wc-text">${w.text}</div></div>`).join('')}</div></div></div>${tlItems.length>1?`<div class="psec"><div class="psec-inner"><div class="section-ornament sr"><div class="so-line so-line-l"></div><span class="so-text">Our Journey</span><div class="so-line so-line-r"></div></div><div class="timeline sr">${tlItems.join('')}</div></div></div>`:''}<div class="psec" style="padding-top:20px;padding-bottom:30px;"><div class="psec-inner" style="text-align:center;">${canGoBack||canGoForward?`<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.9rem;color:var(--ink-4);margin-bottom:16px;">Browse our anniversaries</div><div class="year-nav">${canGoBack?`<button class="yn-btn" onclick="renderAnniversary(${year-1})"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H4M6 4l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> ${year-1} · Year ${years-1}</button>`:''}${canGoForward?`<button class="yn-btn fwd" onclick="renderAnniversary(${year+1})">${year+1} · Year ${years+1} <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M4 7h6M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`:''}${(year+1)>lastAnnivYear?`<div class="locked-msg" style="margin-top:10px;"><div class="locked-icon">🔮</div><div class="locked-title">A Future Surprise</div><div class="locked-text">Return on November 19th, ${year+1} to discover what Year ${years+1} brings for us.</div></div>`:''}</div>`:''} ${fromWaiting?`<div style="margin-top:20px;"><button class="yn-btn" onclick="renderWaiting()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 7H4M6 4l-3 3 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Back to Home</button></div>`:''}</div></div><div class="signature-section sr"><div class="sig-from">— yours, completely, in every year of this beautiful life —</div><div class="sig-name">Your Chandu <span class="sig-heart hb-icon" style="display:inline-flex;flex-direction:column;align-items:center;gap:0;vertical-align:middle;"><svg class="hb-icon-heart" style="width:32px;height:32px;" viewBox="0 0 36 36" fill="none"><defs><radialGradient id="shbg" cx="40%" cy="35%" r="60%"><stop offset="0%" stop-color="#F0C8D0"/><stop offset="45%" stop-color="#C09A52"/><stop offset="100%" stop-color="#A07030"/></radialGradient><filter id="shbf" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path d="M18 30 C18 30 5 21 5 12.5 C5 7.5 9 4 13 4 C15.5 4 17 5.5 18 7.5 C19 5.5 20.5 4 23 4 C27 4 31 7.5 31 12.5 C31 21 18 30 18 30Z" fill="url(#shbg)" filter="url(#shbf)"/><path d="M12 11 Q18 7 24 11" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".9" stroke-linecap="round"/></svg><svg style="width:48px;height:10px;display:block;" viewBox="0 0 65 14" fill="none"><defs><linearGradient id="sthg" x1="0" y1="0" x2="65" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#C09A52" stop-opacity="0"/><stop offset="25%" stop-color="#C09A52" stop-opacity=".9"/><stop offset="55%" stop-color="#D4A860"/><stop offset="80%" stop-color="#C09A52" stop-opacity=".8"/><stop offset="100%" stop-color="#C09A52" stop-opacity="0"/></linearGradient><filter id="sthf" x="-5%" y="-100%" width="110%" height="300%"><feGaussianBlur in="SourceGraphic" stdDeviation="1" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><path class="hb-trace-echo" d="M0,8 L14,8 L16,6 L18,8 L20,8 L21,11 L22,2 L23,13 L25,8 Q28,5 31,8 L65,8" stroke="#C09A52" stroke-width="2.2" stroke-linecap="round" fill="none" filter="url(#sthf)"/><path class="hb-trace-path"  d="M0,8 L14,8 L16,6 L18,8 L20,8 L21,11 L22,2 L23,13 L25,8 Q28,5 31,8 L65,8" stroke="url(#sthg)" stroke-width="1.4" stroke-linecap="round" fill="none" filter="url(#sthf)"/></svg></span></div></div></div>`;
   document.getElementById('app').innerHTML=html;window.scrollTo({top:0,behavior:'smooth'});initReveal();
 }
 
