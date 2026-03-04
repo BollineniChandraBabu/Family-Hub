@@ -1113,6 +1113,17 @@ function animConfetti(cv,colors){const ctx=cv.getContext('2d');let particles=[];
 function spawnLoaderPetals(){const layer=document.getElementById('ld-petals');if(!layer)return;const colors=['#F0C8CC','#F4DEC8','#FAE8DC','#EDD8D0','#F8E0DC'];for(let i=0;i<14;i++){const el=document.createElement('div');el.className='ld-petal';const sz=7+Math.random()*14;const c=colors[Math.floor(Math.random()*colors.length)];const dur=8+Math.random()*7;el.style.cssText=`left:${Math.random()*100}%;top:-40px;animation-duration:${dur}s;animation-delay:${Math.random()*5}s;`;el.innerHTML=`<svg width="${sz}" height="${sz*1.4}" viewBox="0 0 20 28"><ellipse cx="10" cy="14" rx="6" ry="13" fill="${c}" opacity=".6" transform="rotate(${Math.random()*25-12},10,14)"/></svg>`;layer.appendChild(el);}}
 
 window.addEventListener('DOMContentLoaded',()=>{
+  const bgMusic = new Audio('assets/Manmadhudu.mp3');
+  bgMusic.loop = true;
+  bgMusic.play().catch(()=>{
+    const startOnFirstTap = () => {
+      bgMusic.play().finally(() => {
+        document.removeEventListener('click', startOnFirstTap);
+      });
+    };
+    document.addEventListener('click', startOnFirstTap, { once: true });
+  });
+
   spawnLoaderPetals();
   detectPage();
   setTimeout(()=>{
