@@ -1175,6 +1175,7 @@ a{color:inherit;text-decoration:none;}
     <div class="ft-links">
       <a href="sindhu.html"   class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'sindhu'})">Sindhu</a>
       <a href="yokshith.html" class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'yokshith'})">Yokshith</a>
+      <a href="https://chandu-sindhu-valentine.web.app/" class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'valentine_site'})">💘 Valentine Event</a>
       <a href="https://chandusindhu.web.app/" class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'wedding_site'})">💍 Wedding Invitation</a>
     </div>
     <div class="ft-copy">
@@ -1423,11 +1424,50 @@ function buildCards(){
   grid.appendChild(wc);
   setTimeout(()=>wc.classList.add('in'), 100 + FAMILY.length*140 + 80);
 
+  /* ── Valentine's Event Card ── */
+  const ve = document.createElement('a');
+  ve.href = 'https://chandu-sindhu-valentine.web.app/';
+  ve.className = 'wedding-card';
+
+  /* ── GA: track Valentine's card click ── */
+  ve.addEventListener('click', () => {
+    gtag('event', 'valentine_card_click', {
+      destination: 'https://chandu-sindhu-valentine.web.app/'
+    });
+  });
+
+  ve.innerHTML = `
+  <div class="wc-header">
+    <div class="wc-header-stripe"></div>
+    <div class="wc-rings">
+      <svg viewBox="0 0 80 80" fill="none" width="100%" height="100%" aria-hidden="true">
+        <path d="M40 61 C40 61 18 47 18 31 C18 23 24 17 32 17 C36.5 17 39.3 19.1 40 22.5 C40.7 19.1 43.5 17 48 17 C56 17 62 23 62 31 C62 47 40 61 40 61 Z" fill="#C07880" opacity=".9"/>
+        <path d="M40 55 C40 55 24 44 24 33 C24 27.5 28.2 23.5 33.2 23.5 C36.2 23.5 38.2 24.9 40 27 C41.8 24.9 43.8 23.5 46.8 23.5 C51.8 23.5 56 27.5 56 33 C56 44 40 55 40 55 Z" fill="#FCE8EE" opacity=".95"/>
+        <circle cx="58" cy="20" r="3" fill="#DCC080"/>
+        <circle cx="22" cy="55" r="2.2" fill="#DCC080" opacity=".85"/>
+      </svg>
+    </div>
+    <div class="wc-identity">
+      <div class="wc-eyebrow">💘 Valentine Celebration</div>
+      <div class="wc-title">Chandu &amp; Sindhu</div>
+      <div class="wc-subtitle">A page filled with our sweetest love moments</div>
+    </div>
+    <div class="wc-date-badge">
+      <div class="wc-date-day">14</div>
+      <div class="wc-date-month">February</div>
+      <div class="wc-date-year">Forever</div>
+    </div>
+  </div>
+  <div class="wc-body">
+    <p class="wc-desc">Step into our Valentine special — a romantic space dedicated to love notes, cherished memories, and the little moments that mean everything.</p>
+    <div class="wc-cta">Open Valentine <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M8 3l3.5 3.5L8 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>`;
+  grid.appendChild(ve);
+  setTimeout(()=>ve.classList.add('in'), 100 + FAMILY.length*140 + 120);
+
   /* ── Yokshith Annaprasan Card ── */
   const ya = document.createElement('a');
   ya.href = 'https://yokshith-42777.web.app/';
-  ya.target = '_blank';
-  ya.rel = 'noopener noreferrer';
   ya.className = 'wedding-card';
 
   /* ── GA: track Annaprasan card click ── */
@@ -1476,7 +1516,7 @@ function buildCards(){
     <div class="wc-cta">Open Event <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M8 3l3.5 3.5L8 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
   </div>`;
   grid.appendChild(ya);
-  setTimeout(()=>ya.classList.add('in'), 100 + FAMILY.length*140 + 160);
+  setTimeout(()=>ya.classList.add('in'), 100 + FAMILY.length*140 + 200);
 
   /* Add member card */
   const add = document.createElement('div');
