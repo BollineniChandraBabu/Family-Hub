@@ -11,101 +11,125 @@
   gtag('config', 'G-7X8J9M550J');
 </script>
 <script src="ga-events.js"></script>
-<title>Chandu & Sindhu — Final Update</title>
+<title>Chandu & Sindhu — Final Legal Update</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Great+Vibes&family=Lato:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Great+Vibes&family=Lato:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0f1014; --bg-2:#171a22; --ink:#ece7de; --ink-2:#c9c3b8;
-  --gold:#c09a52; --rose:#a96670; --muted:#93897c;
-  --card:rgba(20,21,27,.78); --line:rgba(255,255,255,.13); --ease:cubic-bezier(.4,0,.2,1);
+  --bg:#f7f2ea;--bg-2:#f2e8da;--ink:#35291f;--ink-2:#6f5d4e;--gold:#bf9955;--rose:#b16d75;
+  --line:rgba(103,75,48,.18);--card:rgba(255,255,255,.82);--ease:cubic-bezier(.4,0,.2,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Lato',sans-serif;background:radial-gradient(circle at 20% 20%,#1f2530 0%,#11141b 45%,#0b0d12 100%);color:var(--ink);min-height:100vh;overflow-x:hidden}
-#loader{position:fixed;inset:0;background:#0b0d12;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .8s var(--ease),visibility .8s var(--ease)}
+body{font-family:'Lato',sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;background:
+  radial-gradient(circle at 12% 18%, #fff6ec 0%, transparent 38%),
+  radial-gradient(circle at 86% 15%, #fcece9 0%, transparent 35%),
+  linear-gradient(135deg,var(--bg),var(--bg-2));}
+
+#loader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:linear-gradient(145deg,#f8efe3,#f2e3d2);transition:opacity .9s var(--ease),visibility .9s var(--ease)}
 #loader.out{opacity:0;visibility:hidden;pointer-events:none}
-.ld-name{font-family:'Great Vibes',cursive;font-size:clamp(2.1rem,7vw,4rem);color:var(--gold);animation:rise .9s var(--ease) both}
-.ld-sub{margin-top:8px;letter-spacing:.35em;text-transform:uppercase;color:var(--muted);font-size:.62rem;animation:rise .9s var(--ease) both .2s}
-.ld-line{margin-top:18px;width:min(260px,65vw);height:2px;background:rgba(255,255,255,.08);overflow:hidden;border-radius:99px}
-.ld-bar{height:100%;width:0;background:linear-gradient(90deg,var(--rose),var(--gold));animation:fill 1.4s var(--ease) forwards .3s}
-@keyframes fill{to{width:100%}} @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.ld-shell{display:grid;gap:14px;justify-items:center;animation:ldRise 1s var(--ease) both}
+.ld-title{font-family:'Great Vibes',cursive;font-size:clamp(2rem,6vw,3.6rem);color:#9f6870}
+.ld-sub{font-size:.62rem;letter-spacing:.46em;text-transform:uppercase;color:#8f7a67}
+.ld-progress{width:min(260px,70vw);height:2px;border-radius:999px;background:rgba(103,75,48,.14);overflow:hidden}
+.ld-progress > span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--rose),var(--gold));animation:ldFill 1.8s var(--ease) forwards}
+@keyframes ldFill{to{width:100%}}
+@keyframes ldRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 
-.bg-noise,.bg-vignette,.orb{position:fixed;inset:0;pointer-events:none}
-.bg-noise{opacity:.07;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.95' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:220px 220px;animation:noiseMove 8s linear infinite}
-@keyframes noiseMove{to{transform:translate3d(25px,-20px,0)}}
-.bg-vignette{background:radial-gradient(circle at center,transparent 48%,rgba(0,0,0,.55) 100%)}
-.orb{border-radius:50%;filter:blur(90px);opacity:.35}
-.orb-1{width:430px;height:430px;left:-140px;top:-120px;background:#5f3a66;animation:float 10s ease-in-out infinite alternate}
-.orb-2{width:390px;height:390px;right:-120px;bottom:-80px;background:#40525e;animation:float 12s ease-in-out infinite alternate-reverse}
-@keyframes float{to{transform:translate(35px,-28px) scale(1.08)}}
+.fx-noise,.fx-vignette{position:fixed;inset:0;pointer-events:none}
+.fx-noise{opacity:.05;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:220px 220px;animation:grain 7s linear infinite}
+.fx-vignette{background:radial-gradient(circle at center,transparent 42%,rgba(74,54,32,.12) 100%)}
+@keyframes grain{to{transform:translate3d(24px,-18px,0)}}
+.orb{position:fixed;border-radius:50%;filter:blur(70px);pointer-events:none;opacity:.35}
+.orb-1{width:360px;height:360px;left:-100px;top:-90px;background:#efc7c7;animation:drift 12s ease-in-out infinite alternate}
+.orb-2{width:340px;height:340px;right:-120px;bottom:-80px;background:#efd9b5;animation:drift 10s ease-in-out infinite alternate-reverse}
+@keyframes drift{to{transform:translate(24px,-22px) scale(1.08)}}
 
-.page{position:relative;z-index:5;display:grid;place-items:center;min-height:100vh;padding:28px}
-.card{width:min(840px,100%);border:1px solid var(--line);border-radius:24px;background:var(--card);backdrop-filter:blur(8px);box-shadow:0 24px 60px rgba(0,0,0,.45);overflow:hidden;opacity:0;transform:translateY(20px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.page{position:relative;z-index:2;min-height:100vh;display:grid;place-items:center;padding:30px}
+.card{width:min(920px,100%);border:1px solid var(--line);border-radius:24px;background:var(--card);backdrop-filter:blur(8px);box-shadow:0 25px 65px rgba(76,57,35,.15);overflow:hidden;opacity:0;transform:translateY(20px) scale(.99);transition:opacity .9s var(--ease),transform .9s var(--ease)}
 .card.in{opacity:1;transform:none}
-.card-top{padding:38px 32px 24px;position:relative;background:linear-gradient(120deg,rgba(169,102,112,.12),rgba(192,154,82,.06))}
-.card-top::after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 25%,rgba(255,255,255,.12) 47%,transparent 66%);transform:translateX(-120%);animation:shine 4.5s ease-in-out infinite}
-@keyframes shine{45%,100%{transform:translateX(130%)}}
-.kicker{font-size:.64rem;letter-spacing:.5em;text-transform:uppercase;color:var(--muted)}
-h1{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,5vw,2.8rem);margin-top:14px}
-.script{font-family:'Great Vibes',cursive;color:var(--gold);font-size:clamp(1.7rem,4vw,2.4rem);margin-top:6px}
-.card-body{padding:26px 32px 34px}
-.copy{font-family:'Cormorant Garamond',serif;font-size:clamp(1.15rem,2.9vw,1.45rem);line-height:1.65;color:var(--ink-2)}
-.pill-row{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px}
-.pill{border:1px solid rgba(192,154,82,.45);padding:8px 12px;border-radius:999px;font-size:.82rem;letter-spacing:.08em;color:#e9dcc7;background:rgba(192,154,82,.13)}
-.timeline{margin-top:24px;border-top:1px solid var(--line);padding-top:20px;display:grid;gap:14px}
-.t-item{display:flex;align-items:flex-start;gap:14px}
-.t-dot{width:10px;height:10px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--gold));margin-top:8px;box-shadow:0 0 0 8px rgba(169,102,112,.08)}
-.t-content b{font-size:.95rem;letter-spacing:.12em;text-transform:uppercase;color:#ead7bd}
-.t-content p{margin-top:5px;color:#c8c0b3;line-height:1.55}
-.footer-note{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;color:#857c70}
-@media (max-width:640px){.card-top,.card-body{padding-inline:20px}}
+.top{padding:36px 30px 24px;background:linear-gradient(120deg,rgba(177,109,117,.14),rgba(191,153,85,.09));position:relative;overflow:hidden}
+.top::after{content:'';position:absolute;inset:0;background:linear-gradient(130deg,transparent 18%,rgba(255,255,255,.45) 50%,transparent 72%);transform:translateX(-120%);animation:sheen 5s ease-in-out infinite}
+@keyframes sheen{48%,100%{transform:translateX(125%)}}
+.kicker{font-size:.63rem;letter-spacing:.5em;text-transform:uppercase;color:#8a7562}
+h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4.5vw,2.9rem);margin-top:14px}
+.script{font-family:'Great Vibes',cursive;color:#a1676f;font-size:clamp(1.8rem,4vw,2.6rem);margin-top:8px}
+
+.body{padding:28px 30px 34px}
+.copy{font-family:'Cormorant Garamond',serif;font-size:clamp(1.2rem,2.6vw,1.5rem);line-height:1.66;color:var(--ink-2)}
+.badges{margin-top:20px;display:flex;flex-wrap:wrap;gap:10px}
+.badge{border:1px solid rgba(166,120,67,.4);padding:8px 13px;border-radius:999px;font-size:.82rem;letter-spacing:.08em;background:rgba(255,255,255,.62)}
+
+.break-heart{margin-top:26px;padding:18px;border:1px dashed rgba(166,120,67,.38);border-radius:16px;background:linear-gradient(120deg,rgba(255,255,255,.65),rgba(246,236,223,.68));display:grid;justify-items:center;gap:10px}
+.break-heart svg{width:min(240px,70vw);height:auto;filter:drop-shadow(0 5px 15px rgba(177,109,117,.25));}
+.heart-left{transform-origin:40% 50%;animation:leftSplit 3.6s ease-in-out infinite}
+.heart-right{transform-origin:60% 50%;animation:rightSplit 3.6s ease-in-out infinite}
+.crack{stroke-dasharray:130;stroke-dashoffset:130;animation:crackDraw 3.6s ease-in-out infinite}
+@keyframes leftSplit{0%,20%,100%{transform:translateX(0)}36%,60%{transform:translateX(-9px) rotate(-4deg)}}
+@keyframes rightSplit{0%,20%,100%{transform:translateX(0)}36%,60%{transform:translateX(9px) rotate(4deg)}}
+@keyframes crackDraw{0%,20%{stroke-dashoffset:130}38%,62%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
+
+.timeline{margin-top:22px;padding-top:18px;border-top:1px solid var(--line);display:grid;gap:12px}
+.t{display:flex;gap:12px;align-items:flex-start}
+.dot{width:10px;height:10px;margin-top:8px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--gold));box-shadow:0 0 0 7px rgba(177,109,117,.1)}
+.t b{font-size:.93rem;letter-spacing:.12em;text-transform:uppercase;color:#8d6e4d}
+.t p{margin-top:4px;color:#716050;line-height:1.55}
+.note{margin-top:22px;padding-top:15px;border-top:1px solid var(--line);font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;color:#8d7d6f}
+@media (max-width:640px){.top,.body{padding-inline:20px}}
 </style>
 </head>
 <body>
 <div id="loader">
-  <div class="ld-name">Chandu & Sindhu</div>
-  <div class="ld-sub">Final Chapter</div>
-  <div class="ld-line"><div class="ld-bar"></div></div>
+  <div class="ld-shell">
+    <div class="ld-title">Chandu & Sindhu</div>
+    <div class="ld-sub">Final Legal Record</div>
+    <div class="ld-progress"><span></span></div>
+  </div>
 </div>
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
-<div class="bg-noise"></div>
-<div class="bg-vignette"></div>
+<div class="fx-noise"></div>
+<div class="fx-vignette"></div>
+
 <main class="page">
   <section class="card" id="card">
-    <div class="card-top">
-      <div class="kicker">Official Record</div>
-      <h1>Final Legal Update</h1>
-      <div class="script">A life event now complete</div>
+    <div class="top">
+      <div class="kicker">Official Update</div>
+      <h1>Final Legal Milestone</h1>
+      <div class="script">A chapter concluded with clarity</div>
     </div>
-    <div class="card-body">
+    <div class="body">
       <p class="copy">
-        This page formally records that <strong>Chandu</strong> and <strong>Sindhu</strong>
-        are finally divorced on <strong>26/02/2026</strong>.
+        This page records that <strong>Chandu</strong> and <strong>Sindhu</strong> are finally divorced on
+        <strong>26/02/2026</strong>.
       </p>
-      <div class="pill-row">
-        <div class="pill">Wife: Sindhu</div>
-        <div class="pill">Husband: Chandu</div>
-        <div class="pill">Date: 26/02/2026</div>
+      <div class="badges">
+        <div class="badge">Wife: Sindhu</div>
+        <div class="badge">Husband: Chandu</div>
+        <div class="badge">Finalized: 26/02/2026</div>
       </div>
+
+      <div class="break-heart">
+        <svg viewBox="0 0 220 130" fill="none" aria-label="Cinematic broken heart symbol">
+          <path class="heart-left" d="M108 111C106 111 52 79 39 50C31 32 43 14 63 14C78 14 91 22 97 36C100 43 102 52 104 60" fill="#d88d94" stroke="#a55f67" stroke-width="2"/>
+          <path class="heart-right" d="M112 111C114 111 168 79 181 50C189 32 177 14 157 14C142 14 129 22 123 36C120 43 118 52 116 60" fill="#d88d94" stroke="#a55f67" stroke-width="2"/>
+          <path class="crack" d="M109 33L102 53L112 53L104 75L114 75L108 96" stroke="#fff6ee" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p style="font-size:.9rem;color:#7e6e60;letter-spacing:.12em;text-transform:uppercase;">Symbolic cinematic transition</p>
+      </div>
+
       <div class="timeline">
-        <div class="t-item">
-          <div class="t-dot"></div>
-          <div class="t-content"><b>Status</b><p>Marriage legally concluded and relationship status updated.</p></div>
-        </div>
-        <div class="t-item">
-          <div class="t-dot"></div>
-          <div class="t-content"><b>Reference Date</b><p>Finalized on 26 February 2026.</p></div>
-        </div>
+        <div class="t"><div class="dot"></div><div><b>Status</b><p>Marriage legally dissolved and the relationship status is officially updated.</p></div></div>
+        <div class="t"><div class="dot"></div><div><b>Reference Date</b><p>The legal finalization date is 26 February 2026.</p></div></div>
       </div>
-      <div class="footer-note">Documented as a personal milestone update.</div>
+      <div class="note">Personal record page for final legal update.</div>
     </div>
   </section>
 </main>
+
 <script>
-setTimeout(()=>document.getElementById('loader').classList.add('out'), 1900);
 setTimeout(()=>document.getElementById('card').classList.add('in'), 800);
+setTimeout(()=>document.getElementById('loader').classList.add('out'), 2000);
 </script>
 </body>
 </html>

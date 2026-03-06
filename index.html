@@ -1300,6 +1300,9 @@ const CY    = NOW.getFullYear();
 const MONTHS     = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const MONTHS_S   = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const WEEKDAYS   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const CELEBRATION_TYPES = new Set(['birthday','anniversary']);
+function isCelebrationEvent(e){ return CELEBRATION_TYPES.has(e.type); }
+
 
 function nextOcc(mo,dy){
   let d = new Date(CY, mo-1, dy);
@@ -1323,16 +1326,17 @@ document.getElementById('hero-date-txt').textContent =
 document.getElementById('ft-year').textContent = CY;
 
 /* ── story stats ── */
-const totalEvents = FAMILY.reduce((s,m)=>s+m.events.length,0);
-const allDays = FAMILY.flatMap(m=>m.events.map(e=>daysTo(e.month,e.day)));
-const nxtDays = Math.min(...allDays);
-const thisMo  = FAMILY.flatMap(m=>m.events).filter(e=>e.month===NOW.getMonth()+1).length;
+const celebrationEvents = FAMILY.flatMap(m => m.events.filter(isCelebrationEvent));
+const totalEvents = celebrationEvents.length;
+const allDays = celebrationEvents.map(e=>daysTo(e.month,e.day));
+const nxtDays = allDays.length ? Math.min(...allDays) : null;
+const thisMo  = celebrationEvents.filter(e=>e.month===NOW.getMonth()+1).length;
 const storyYrs = Math.max(...FAMILY.flatMap(m=>m.events.filter(e=>e.type==='anniversary').map(e=>CY-e.startYear)));
 
 document.getElementById('story-years').textContent   = isNaN(storyYrs)||storyYrs<0?1:storyYrs;
 document.getElementById('sf-events').textContent      = totalEvents;
 document.getElementById('sf-members').textContent     = FAMILY.length;
-document.getElementById('sf-upcoming').textContent    = nxtDays===0?'Today':nxtDays;
+document.getElementById('sf-upcoming').textContent    = nxtDays===null?'—':(nxtDays===0?'Today':nxtDays);
 document.getElementById('sf-this-month').textContent  = thisMo||'0';
 
 /* ═══════════════════════════════════════════
@@ -1353,12 +1357,13 @@ function buildCards(){
   FAMILY.forEach((m,i)=>{
     const {ev,days} = nextEvOf(m);
     const td = days===0;
-    const cd = cdTo(ev.month,ev.day);
+    const isMilestoneCard = m.id==='final-update' || ev.type==='milestone';
+    const cd = isMilestoneCard ? null : cdTo(ev.month,ev.day);
 
     const card = document.createElement('a');
     card.href = m.page;
     card.className = 'm-card';
-    card.setAttribute('aria-label',`Open ${m.name}'s celebration page`);
+    card.setAttribute('aria-label',`Open ${m.name} page`);
     card.style.transitionDelay = `${i*0.12}s`;
     card.style.setProperty('--c-accent', m.accent);
 
@@ -1368,7 +1373,8 @@ function buildCards(){
         member_name: m.name,
         member_relation: m.relation,
         next_event: ev.label,
-        days_to_next_event: days
+        days_to_next_event: days,
+        card_type: isMilestoneCard ? 'milestone' : 'celebration'
       });
     });
 
@@ -1383,9 +1389,11 @@ function buildCards(){
           <div class="cel-name">${e.label}</div>
           <div class="cel-date" style="display:flex;align-items:center;gap:6px;">
             <span>${MONTHS_S[e.month-1]} ${e.day}</span>
-            ${isTd
-              ? `<span class="cel-today-badge">Today!</span>`
-              : `<span style="color:var(--ink-4)">· in ${du}d</span>`}
+            ${e.type==='milestone'
+              ? `<span style="color:var(--ink-4)">· recorded milestone</span>`
+              : (isTd
+                ? `<span class="cel-today-badge">Today!</span>`
+                : `<span style="color:var(--ink-4)">· in ${du}d</span>`)}
           </div>
         </div>`;
       }).join('');
@@ -1406,36 +1414,38 @@ function buildCards(){
       </div>
       <div class="c-body">
         <div class="c-event-highlight" style="--c-ev-bg:${m.evBg};--c-ev-border:${m.evBorder};--c-ev-stripe:${m.evStripe}">
-          <div class="ceh-lbl">${td?'🎉 Celebrating Today':'Next Celebration'}</div>
+          <div class="ceh-lbl">${isMilestoneCard ? 'Official Milestone' : (td?'🎉 Celebrating Today':'Next Celebration')}</div>
           <div class="ceh-name">${ev.label} · ${MONTHS[ev.month-1]} ${ev.day}</div>
-          ${td
-            ? `<div class="ceh-today">The special day is here! Open to celebrate 🎊</div>`
-            : `<div class="ceh-countdown">
-                <div class="cc-unit">
-                  <span class="cc-num" id="${m.id}-d">${pad(cd.d)}</span>
-                  <div class="cc-lbl">Days</div>
-                </div>
-                <span class="cc-sep">:</span>
-                <div class="cc-unit">
-                  <span class="cc-num" id="${m.id}-h">${pad(cd.h)}</span>
-                  <div class="cc-lbl">Hrs</div>
-                </div>
-                <span class="cc-sep">:</span>
-                <div class="cc-unit">
-                  <span class="cc-num" id="${m.id}-m">${pad(cd.m)}</span>
-                  <div class="cc-lbl">Min</div>
-                </div>
-                <span class="cc-sep">:</span>
-                <div class="cc-unit">
-                  <span class="cc-num" id="${m.id}-s">${pad(cd.s)}</span>
-                  <div class="cc-lbl">Sec</div>
-                </div>
-              </div>`}
+          ${isMilestoneCard
+            ? `<div class="ceh-today">Recorded legal milestone. Open page to view complete details.</div>`
+            : (td
+              ? `<div class="ceh-today">The special day is here! Open to celebrate 🎊</div>`
+              : `<div class="ceh-countdown">
+                  <div class="cc-unit">
+                    <span class="cc-num" id="${m.id}-d">${pad(cd.d)}</span>
+                    <div class="cc-lbl">Days</div>
+                  </div>
+                  <span class="cc-sep">:</span>
+                  <div class="cc-unit">
+                    <span class="cc-num" id="${m.id}-h">${pad(cd.h)}</span>
+                    <div class="cc-lbl">Hrs</div>
+                  </div>
+                  <span class="cc-sep">:</span>
+                  <div class="cc-unit">
+                    <span class="cc-num" id="${m.id}-m">${pad(cd.m)}</span>
+                    <div class="cc-lbl">Min</div>
+                  </div>
+                  <span class="cc-sep">:</span>
+                  <div class="cc-unit">
+                    <span class="cc-num" id="${m.id}-s">${pad(cd.s)}</span>
+                    <div class="cc-lbl">Sec</div>
+                  </div>
+                </div>`)}
         </div>
         <div class="c-events-list">${evList}</div>
       </div>
       <div class="c-footer">
-        <span class="cf-label">View Celebration</span>
+        <span class="cf-label">${isMilestoneCard ? 'View Update' : 'View Celebration'}</span>
         <div class="cf-btn" style="background:${m.accent};">
           Open
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
@@ -1658,9 +1668,9 @@ function buildStats(){
       <div class="stat-sub">cherished every year</div>
     </div>
     <div class="stat-item">
-      <span class="stat-num">${nxtDays===0?'Today':nxtDays}</span>
-      <div class="stat-lbl">${nxtDays===0?'Special Day!':'Days to Next Event'}</div>
-      <div class="stat-sub">${nxtDays===0?'Celebrate now!':'coming up soon'}</div>
+      <span class="stat-num">${nxtDays===null?'—':(nxtDays===0?'Today':nxtDays)}</span>
+      <div class="stat-lbl">${nxtDays===null?'No Upcoming Celebrations':(nxtDays===0?'Special Day!':'Days to Next Event')}</div>
+      <div class="stat-sub">${nxtDays===null?'family milestones excluded':'coming up soon'}</div>
     </div>
     <div class="stat-item">
       <span class="stat-num">${thisMo||'0'}</span>
@@ -1674,7 +1684,7 @@ function buildStats(){
 ═══════════════════════════════════════════ */
 function buildUpcoming(){
   const evs = [];
-  FAMILY.forEach(m=>m.events.forEach(e=>{
+  FAMILY.forEach(m=>m.events.filter(isCelebrationEvent).forEach(e=>{
     const td = isToday(e.month,e.day);
     const ds = td?0:daysTo(e.month,e.day);
     evs.push({m,e,ds});
@@ -1720,7 +1730,7 @@ function buildUpcoming(){
 function tick(){
   FAMILY.forEach(m=>{
     const{ev,days}=nextEvOf(m);
-    if(days===0) return;
+    if(days===0 || ev.type==='milestone') return;
     const c=cdTo(ev.month,ev.day);
     ['d','h','m','s'].forEach(k=>{
       const el=document.getElementById(`${m.id}-${k}`);
