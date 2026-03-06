@@ -6,7 +6,7 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7X8J9M550J"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
+  function gtag(){dataLayer.push(arguments);} 
   gtag('js', new Date());
   gtag('config', 'G-7X8J9M550J');
 </script>
@@ -14,193 +14,138 @@
 <title>Chandu & Sindhu — Final Legal Update</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=Great+Vibes&family=Lato:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;800&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Great+Vibes&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ivory:#fbf7f0; --ivory-2:#f4ecdf; --rose:#b56f78; --rose-soft:#efd6d8; --gold:#c09a52;
-  --ink:#2f241b; --ink-2:#6f5f52; --line:rgba(70,52,32,.14); --card:rgba(255,255,255,.85);
-  --ease:cubic-bezier(.4,0,.2,1); --spring:cubic-bezier(.34,1.56,.64,1);
+  --bg:#f6efe5;--bg2:#efe2cf;--glass:rgba(255,255,255,.58);--line:rgba(88,64,42,.18);
+  --ink:#2f2219;--muted:#7a6a5c;--rose:#b76776;--gold:#bd9652;--ease:cubic-bezier(.4,0,.2,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:'Lato',sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;
-  background:
-    radial-gradient(ellipse 65% 45% at 7% 8%, rgba(239,214,216,.65) 0%, transparent 65%),
-    radial-gradient(ellipse 45% 35% at 95% 18%, rgba(243,221,184,.5) 0%, transparent 65%),
-    linear-gradient(135deg,var(--ivory),var(--ivory-2));
-}
+body{font-family:'Inter',sans-serif;min-height:100vh;color:var(--ink);overflow-x:hidden;
+background:radial-gradient(1000px 500px at 10% -10%,#f3d9d9 0%,transparent 60%),radial-gradient(700px 460px at 100% 0%,#f6e5bf 0%,transparent 56%),linear-gradient(140deg,var(--bg),var(--bg2));}
 
-#loader{
-  position:fixed;inset:0;z-index:9999;display:grid;place-items:center;
-  background:linear-gradient(160deg,#f9f1e6,#f2e4d1);
-  transition:opacity .9s var(--ease),visibility .9s var(--ease);
-}
+#loader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:linear-gradient(150deg,#f8efe3,#f1e2cd);transition:opacity .9s var(--ease),visibility .9s var(--ease)}
 #loader.out{opacity:0;visibility:hidden;pointer-events:none}
-.ld-wrap{display:grid;justify-items:center;gap:14px;animation:ldRise .9s var(--spring) both}
-.ld-title{font-family:'Great Vibes',cursive;font-size:clamp(2.1rem,7vw,3.8rem);color:#a66870;line-height:1}
-.ld-sub{font-size:.62rem;letter-spacing:.48em;text-transform:uppercase;color:#8e7763}
-.ld-progress{width:min(280px,68vw);height:2px;border-radius:99px;background:rgba(98,72,47,.14);overflow:hidden}
-.ld-progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--rose),var(--gold));animation:ldFill 1.7s var(--ease) forwards}
-@keyframes ldFill{to{width:100%}}
-@keyframes ldRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.loader-card{display:grid;justify-items:center;gap:12px;padding:22px 24px;border:1px solid rgba(120,86,60,.2);border-radius:18px;background:rgba(255,255,255,.42);backdrop-filter:blur(10px);box-shadow:0 20px 40px rgba(56,36,18,.12)}
+.loader-logo{font-family:'Great Vibes',cursive;font-size:clamp(2.1rem,8vw,3.5rem);color:#a45f69;animation:float 1.8s ease-in-out infinite}
+.loader-sub{font-size:.62rem;letter-spacing:.43em;text-transform:uppercase;color:#876f59}
+.loader-progress{width:min(260px,68vw);height:2px;border-radius:99px;background:rgba(70,45,26,.16);overflow:hidden}
+.loader-progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--rose),var(--gold));animation:load 1.8s var(--ease) forwards}
+@keyframes load{to{width:100%}} @keyframes float{50%{transform:translateY(-3px)}}
 
-.fx-noise,.fx-vignette,.orb{position:fixed;inset:0;pointer-events:none}
-.fx-noise{opacity:.045;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 220 220' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:220px 220px;animation:grain 8s linear infinite}
-.fx-vignette{background:radial-gradient(circle at center,transparent 45%,rgba(92,68,43,.12) 100%)}
-@keyframes grain{to{transform:translate3d(18px,-16px,0)}}
-.orb{border-radius:50%;filter:blur(80px);opacity:.35}
-.orb-1{width:380px;height:380px;left:-140px;top:-120px;background:#efcdd2;animation:drift1 11s ease-in-out infinite alternate}
-.orb-2{width:330px;height:330px;right:-120px;bottom:-90px;background:#f2dfb7;animation:drift2 13s ease-in-out infinite alternate}
-@keyframes drift1{to{transform:translate(32px,-24px) scale(1.08)}}
-@keyframes drift2{to{transform:translate(-24px,26px) scale(1.06)}}
+.orb,.noise,.vignette{position:fixed;inset:0;pointer-events:none}
+.orb{border-radius:50%;filter:blur(80px);opacity:.34}
+.orb.a{width:360px;height:360px;left:-130px;top:-120px;background:#f0c8d0;animation:d1 11s ease-in-out infinite alternate}
+.orb.b{width:320px;height:320px;right:-120px;bottom:-90px;background:#f0d9a8;animation:d2 13s ease-in-out infinite alternate}
+@keyframes d1{to{transform:translate(26px,-24px) scale(1.08)}} @keyframes d2{to{transform:translate(-20px,20px) scale(1.06)}}
+.noise{opacity:.04;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:210px 210px}
+.vignette{background:radial-gradient(circle at center,transparent 45%,rgba(80,58,35,.12) 100%)}
 
-.page{position:relative;z-index:3;min-height:100vh;display:grid;place-items:center;padding:30px 20px}
-.shell{width:min(980px,100%);opacity:0;transform:translateY(18px) scale(.99);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.page{position:relative;z-index:5;min-height:100vh;padding:16px;display:grid;place-items:center}
+.shell{width:min(980px,100%);opacity:0;transform:translateY(18px) scale(.99);transition:opacity .8s var(--ease),transform .8s var(--ease)}
 .shell.in{opacity:1;transform:none}
 
-.hero-card{
-  border:1px solid var(--line);border-radius:26px;background:var(--card);backdrop-filter:blur(9px);
-  box-shadow:0 24px 70px rgba(77,56,34,.14);overflow:hidden;
-}
-.hero-top{
-  padding:38px clamp(20px,4vw,38px) 24px;position:relative;
-  background:linear-gradient(120deg,rgba(181,111,120,.14),rgba(192,154,82,.09));
-}
-.hero-top::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(130deg,transparent 20%,rgba(255,255,255,.48) 48%,transparent 72%);
-  transform:translateX(-130%);animation:sheen 5.2s ease-in-out infinite;
-}
+.glass{border:1px solid var(--line);background:var(--glass);backdrop-filter:blur(14px);border-radius:24px;box-shadow:0 24px 70px rgba(62,43,24,.14);overflow:hidden}
+.head{padding:26px 18px;background:linear-gradient(125deg,rgba(183,103,118,.18),rgba(189,150,82,.11));position:relative}
+.head:after{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent 28%,rgba(255,255,255,.5) 49%,transparent 72%);transform:translateX(-130%);animation:sheen 5s ease-in-out infinite}
 @keyframes sheen{45%,100%{transform:translateX(130%)}}
-.kicker{font-size:.62rem;letter-spacing:.45em;text-transform:uppercase;color:#8f7762}
-h1{font-family:'Playfair Display',serif;font-size:clamp(1.9rem,4.8vw,3rem);margin-top:14px;line-height:1.2}
-.script{font-family:'Great Vibes',cursive;color:#ab646e;font-size:clamp(2rem,5vw,2.9rem);margin-top:8px}
+.kicker{font-size:.62rem;letter-spacing:.42em;text-transform:uppercase;color:#876f5c}
+h1{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,8vw,2.8rem);margin-top:10px}
+.script{font-family:'Great Vibes',cursive;font-size:clamp(1.8rem,8vw,2.8rem);color:#a9616d;margin-top:8px}
 
-.hero-body{padding:28px clamp(20px,4vw,38px) 34px}
-.copy{font-family:'Cormorant Garamond',serif;font-size:clamp(1.2rem,2.8vw,1.58rem);line-height:1.65;color:var(--ink-2)}
-.tags{margin-top:20px;display:flex;gap:10px;flex-wrap:wrap}
-.tag{border:1px solid rgba(166,121,68,.45);background:rgba(255,255,255,.72);padding:8px 14px;border-radius:999px;font-size:.82rem;letter-spacing:.09em}
+.body{padding:18px}
+.copy{font-family:'Cormorant Garamond',serif;font-size:clamp(1.15rem,5vw,1.52rem);line-height:1.6;color:#6f5f51}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tag{font-size:.76rem;border:1px solid rgba(148,110,73,.4);padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.72)}
 
-.break-card{
-  margin-top:24px;border:1px solid rgba(166,121,68,.24);border-radius:18px;padding:18px;
-  background:linear-gradient(130deg,rgba(255,255,255,.74),rgba(248,239,226,.75));
-  display:grid;gap:12px;justify-items:center;
-}
-.break-heart{width:min(250px,78vw);height:auto;filter:drop-shadow(0 8px 20px rgba(181,111,120,.2))}
-.break-left{transform-origin:42% 48%;animation:leftOpen 3.8s ease-in-out infinite}
-.break-right{transform-origin:58% 48%;animation:rightOpen 3.8s ease-in-out infinite}
-.break-crack{stroke-dasharray:150;stroke-dashoffset:150;animation:crack 3.8s ease-in-out infinite}
-.spark{opacity:0;animation:spark 3.8s ease-in-out infinite}
-.spark.s2{animation-delay:.15s}.spark.s3{animation-delay:.28s}
-@keyframes leftOpen{0%,18%,100%{transform:none}35%,58%{transform:translateX(-10px) rotate(-4deg)}}
-@keyframes rightOpen{0%,18%,100%{transform:none}35%,58%{transform:translateX(10px) rotate(4deg)}}
-@keyframes crack{0%,20%{stroke-dashoffset:150}37%,62%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
-@keyframes spark{0%,30%,100%{opacity:0;transform:translateY(0) scale(.8)}40%,58%{opacity:.9;transform:translateY(-6px) scale(1)}}
+.heart-wrap{margin-top:18px;border:1px solid rgba(148,110,73,.28);background:linear-gradient(130deg,rgba(255,255,255,.72),rgba(248,239,226,.76));border-radius:16px;padding:14px;display:grid;justify-items:center;position:relative;overflow:hidden}
+.heart{width:min(240px,75vw);height:auto;filter:drop-shadow(0 10px 24px rgba(176,103,115,.24))}
+.breakL{transform-origin:43% 48%;animation:splitL 3.7s ease-in-out infinite}
+.breakR{transform-origin:57% 48%;animation:splitR 3.7s ease-in-out infinite}
+.crack{stroke-dasharray:150;stroke-dashoffset:150;animation:crack 3.7s ease-in-out infinite}
+@keyframes splitL{0%,20%,100%{transform:none}37%,58%{transform:translateX(-11px) rotate(-4deg)}}
+@keyframes splitR{0%,20%,100%{transform:none}37%,58%{transform:translateX(11px) rotate(4deg)}}
+@keyframes crack{0%,22%{stroke-dashoffset:150}38%,62%{stroke-dashoffset:0}100%{stroke-dashoffset:0}}
 
-.timeline{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);display:grid;gap:14px}
-.t-item{display:flex;align-items:flex-start;gap:12px}
-.t-dot{width:10px;height:10px;margin-top:8px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--gold));box-shadow:0 0 0 7px rgba(181,111,120,.1)}
-.t-title{font-size:.93rem;letter-spacing:.12em;text-transform:uppercase;color:#8d6d4b}
-.t-text{margin-top:4px;line-height:1.55;color:#6f5e4e}
+.timeline{margin-top:18px;display:grid;gap:10px;border-top:1px solid var(--line);padding-top:14px}
+.t{display:flex;gap:10px;align-items:flex-start}
+.dot{width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,var(--rose),var(--gold));margin-top:7px;box-shadow:0 0 0 6px rgba(183,103,118,.1)}
+.t b{display:block;font-size:.86rem;letter-spacing:.09em;text-transform:uppercase;color:#8d6c4c}
+.t p{margin-top:2px;color:#6d5c4d;line-height:1.45;font-size:.92rem}
 
-.ft-note{margin-top:22px;padding-top:15px;border-top:1px solid var(--line);font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;color:#8f7b69}
-.page-footer{margin-top:20px;text-align:center;color:#7a6b5d;font-size:.85rem;line-height:1.7}
-.page-footer strong{color:#6a5948}
+footer{margin-top:14px;text-align:center;color:#76695d;font-size:.84rem;line-height:1.7}
+footer strong{color:#5f5246}
 
-@media (max-width:640px){
-  .hero-top{padding-top:30px}
-}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:6}
+@media (min-width:768px){.page{padding:28px}.head{padding:34px}.body{padding:28px}}
 </style>
 </head>
 <body>
-<div id="loader">
-  <div class="ld-wrap">
-    <div class="ld-title">Chandu & Sindhu</div>
-    <div class="ld-sub">Final Legal Record</div>
-    <div class="ld-progress"><span></span></div>
-  </div>
-</div>
-<div class="orb orb-1"></div>
-<div class="orb orb-2"></div>
-<div class="fx-noise"></div>
-<div class="fx-vignette"></div>
-
+<canvas id="confetti"></canvas>
+<div id="loader"><div class="loader-card"><div class="loader-logo">Chandu & Sindhu</div><div class="loader-sub">Final Legal Record</div><div class="loader-progress"><span></span></div></div></div>
+<div class="orb a"></div><div class="orb b"></div><div class="noise"></div><div class="vignette"></div>
 <main class="page">
   <div class="shell" id="shell">
-    <section class="hero-card">
-      <div class="hero-top">
+    <section class="glass">
+      <div class="head">
         <div class="kicker">Official Update</div>
         <h1>Final Legal Milestone</h1>
         <div class="script">A chapter respectfully concluded</div>
       </div>
-      <div class="hero-body">
-        <p class="copy">
-          This page records that <strong>Chandu</strong> and <strong>Sindhu</strong> are finally divorced on
-          <strong>26/02/2026</strong>. This is maintained as a formal personal update.
-        </p>
+      <div class="body">
+        <p class="copy">This page records that <strong>Chandu</strong> and <strong>Sindhu</strong> are finally divorced on <strong>26/02/2026</strong>. A formal personal update preserved with clarity and respect.</p>
+        <div class="tags"><span class="tag">Wife: Sindhu</span><span class="tag">Husband: Chandu</span><span class="tag">Finalized: 26/02/2026</span></div>
 
-        <div class="tags">
-          <div class="tag">Wife: Sindhu</div>
-          <div class="tag">Husband: Chandu</div>
-          <div class="tag">Date: 26/02/2026</div>
-        </div>
-
-        <div class="break-card">
-          <svg class="break-heart" viewBox="0 0 240 150" fill="none" aria-label="Broken heart animation">
-            <path class="break-left" d="M115 124C112 124 52 88 37 54C28 34 41 16 63 16C79 16 94 25 101 41C106 52 108 62 110 71" fill="#df979f" stroke="#aa616a" stroke-width="2"/>
-            <path class="break-right" d="M125 124C128 124 188 88 203 54C212 34 199 16 177 16C161 16 146 25 139 41C134 52 132 62 130 71" fill="#df979f" stroke="#aa616a" stroke-width="2"/>
-            <path class="break-crack" d="M120 34L112 56L123 56L113 80L124 80L117 104" stroke="#fff7ef" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle class="spark s1" cx="118" cy="54" r="2.4" fill="#fff1dd"/>
-            <circle class="spark s2" cx="128" cy="66" r="2" fill="#f8e0b5"/>
-            <circle class="spark s3" cx="108" cy="76" r="1.8" fill="#fff1dd"/>
+        <div class="heart-wrap">
+          <svg class="heart" viewBox="0 0 240 150" fill="none" aria-label="3D breaking heart animation">
+            <defs>
+              <linearGradient id="gHeart" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#f5aeb6"/><stop offset="1" stop-color="#c96b7a"/>
+              </linearGradient>
+              <radialGradient id="glow" cx="0.5" cy="0.5" r="0.6"><stop offset="0" stop-color="#ffe9d5"/><stop offset="1" stop-color="transparent"/></radialGradient>
+              <filter id="depth" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#7d4250" flood-opacity=".35"/></filter>
+            </defs>
+            <ellipse cx="120" cy="82" rx="80" ry="44" fill="url(#glow)" opacity=".5"/>
+            <path class="breakL" d="M115 124C112 124 52 88 37 54C28 34 41 16 63 16C79 16 94 25 101 41C106 52 108 62 110 71" fill="url(#gHeart)" stroke="#a95967" stroke-width="2" filter="url(#depth)"/>
+            <path class="breakR" d="M125 124C128 124 188 88 203 54C212 34 199 16 177 16C161 16 146 25 139 41C134 52 132 62 130 71" fill="url(#gHeart)" stroke="#a95967" stroke-width="2" filter="url(#depth)"/>
+            <path class="crack" d="M120 34L112 56L123 56L113 80L124 80L117 104" stroke="#fff7ef" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
 
         <div class="timeline">
-          <div class="t-item">
-            <div class="t-dot"></div>
-            <div>
-              <div class="t-title">Relationship Timeline</div>
-              <p class="t-text"><strong>6 Aug 2023</strong> — First meeting.</p>
-            </div>
-          </div>
-          <div class="t-item">
-            <div class="t-dot"></div>
-            <div>
-              <div class="t-title">Milestone</div>
-              <p class="t-text"><strong>17 Sep 2023</strong> — Engagement ceremony.</p>
-            </div>
-          </div>
-          <div class="t-item">
-            <div class="t-dot"></div>
-            <div>
-              <div class="t-title">Milestone</div>
-              <p class="t-text"><strong>19 Nov 2023</strong> — Marriage ceremony.</p>
-            </div>
-          </div>
-          <div class="t-item">
-            <div class="t-dot"></div>
-            <div>
-              <div class="t-title">Final Legal Update</div>
-              <p class="t-text"><strong>26 Feb 2026</strong> — Legal divorce finalized.</p>
-            </div>
-          </div>
+          <div class="t"><span class="dot"></span><div><b>Relationship Timeline</b><p><strong>6 Aug 2023</strong> — First meeting.</p></div></div>
+          <div class="t"><span class="dot"></span><div><b>Milestone</b><p><strong>17 Sep 2023</strong> — Engagement ceremony.</p></div></div>
+          <div class="t"><span class="dot"></span><div><b>Milestone</b><p><strong>19 Nov 2023</strong> — Marriage ceremony.</p></div></div>
+          <div class="t"><span class="dot"></span><div><b>Final Legal Update</b><p><strong>26 Feb 2026</strong> — Legal divorce finalized.</p></div></div>
         </div>
-
-        <div class="ft-note">Personal record page for final legal update.</div>
       </div>
     </section>
 
-    <footer class="page-footer">
-      © 2026 <strong>All Rights Reserved</strong><br>
+    <footer>
+      © <strong id="year"></strong> <strong>All Rights Reserved</strong><br>
       Made with <strong>♥ by Chandu</strong> · Every celebration, beautifully remembered.
     </footer>
   </div>
 </main>
 
 <script>
+const yearEl = document.getElementById('year');
+yearEl.textContent = new Date().getFullYear();
+
 setTimeout(()=>document.getElementById('shell').classList.add('in'), 700);
-setTimeout(()=>document.getElementById('loader').classList.add('out'), 1900);
+setTimeout(()=>document.getElementById('loader').classList.add('out'), 1850);
+
+const canvas = document.getElementById('confetti');
+const ctx = canvas.getContext('2d');
+let W=0,H=0,parts=[];
+function resize(){W=canvas.width=innerWidth*devicePixelRatio;H=canvas.height=innerHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);}resize();addEventListener('resize',resize);
+function spawn(n=70){
+  const colors=['#f0a8b4','#f5c983','#efdfbf','#f6f1ea','#cd7e8b'];
+  for(let i=0;i<n;i++)parts.push({x:innerWidth*.5+(Math.random()*80-40),y:innerHeight*.48+(Math.random()*40-20),vx:(Math.random()-.5)*5,vy:-2-Math.random()*5,g:.11+Math.random()*.06,s:3+Math.random()*5,r:Math.random()*Math.PI,a:.75+Math.random()*.25,c:colors[(Math.random()*colors.length)|0]});
+}
+let started=false;setTimeout(()=>{spawn(95);started=true;},1450);
+function tick(){ctx.clearRect(0,0,innerWidth,innerHeight);if(started){for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.r+=.05; p.a*=.993; if(p.y>innerHeight+20||p.a<.05)parts.splice(i,1); else{ctx.save();ctx.globalAlpha=p.a;ctx.translate(p.x,p.y);ctx.rotate(p.r);ctx.fillStyle=p.c;ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s);ctx.restore();}}}
+requestAnimationFrame(tick);}tick();
 </script>
 </body>
 </html>
