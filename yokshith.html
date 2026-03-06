@@ -203,6 +203,9 @@ button { cursor:pointer; border:none; background:none; font:inherit; }
 @keyframes ldFadeSlide { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
 @keyframes ldOrbPulse  { 0%,100%{transform:translate(-50%,-50%) scale(1);opacity:.6} 50%{transform:translate(-50%,-50%) scale(1.3);opacity:1} }
 @keyframes ldFloat     { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-25px)} }
+/* Used site-wide for entrance animations */
+@keyframes ldUp   { from{opacity:0;transform:translateY(18px) scale(.96);} to{opacity:1;transform:none;} }
+@keyframes ldFade { from{opacity:0;} to{opacity:1;} }
 
 /* ══ CANVAS / OVERLAY ══ */
 #bg-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
@@ -470,9 +473,9 @@ button { cursor:pointer; border:none; background:none; font:inherit; }
 
 /* ══ WAITING PAGE ══ */
 .wait-hero {
-  min-height:100vh; display:flex; flex-direction:column; align-items:center;
+  min-height:100dvh; display:flex; flex-direction:column; align-items:center;
   justify-content:center; text-align:center;
-  padding:clamp(90px,14vw,160px) clamp(16px,5vw,60px) clamp(80px,10vw,130px);
+  padding:clamp(40px,6vw,80px) clamp(16px,5vw,60px) clamp(36px,5vw,64px);
   position:relative; overflow:hidden;
 }
 .wait-icon { font-size:clamp(4.5rem,14vw,7rem); display:block; margin-bottom:24px; animation:rocketBounce 2.5s ease-in-out infinite; filter:drop-shadow(0 4px 20px rgba(255,107,53,.2)); }
@@ -601,7 +604,7 @@ footer { position:relative; z-index:10; text-align:center; padding:clamp(36px,5v
   window.addEventListener('resize', resize);
 
   var COLS = ['#ffffff','#ffe259','#9B5DE5','#4CC9F0','#06D6A0','#F72585'];
-  for(var i=0;i<160;i++){
+  for(var i=0;i<100;i++){
     stars.push({
       x:Math.random()*2-1, y:Math.random()*2-1, // normalised –1..1
       size:Math.random()*1.3+.2,
@@ -611,9 +614,14 @@ footer { position:relative; z-index:10; text-align:center; padding:clamp(36px,5v
     });
   }
 
-  function drawStars(){
+  var lastStar = 0;
+  function drawStars(ts){
+    rafId = requestAnimationFrame(drawStars);
+    if(document.hidden) return;
+    if(ts - lastStar < 33) return; // ~30fps
+    lastStar = ts;
     cx.clearRect(0,0,W,H);
-    var t = performance.now()/1000;
+    var t = ts/1000;
     stars.forEach(function(s){
       var px = (s.x*.5+.5)*W;
       var py = (s.y*.5+.5)*H;
@@ -625,9 +633,8 @@ footer { position:relative; z-index:10; text-align:center; padding:clamp(36px,5v
       cx.fill();
     });
     cx.globalAlpha = 1;
-    rafId = requestAnimationFrame(drawStars);
   }
-  drawStars();
+  rafId = requestAnimationFrame(drawStars);
 
   /* ── Name letters ── */
   var name = 'YOKSHITH';
@@ -2796,7 +2803,12 @@ function applyTheme(t){
 }
 
 /* ══ CANVAS ANIMATION ENGINE ══ */
-let _animId = null, _floatTimer = null;
+let _animId = null, _floatTimer = null, _animPaused = false;
+
+// Pause all animations when tab is hidden — major perf win
+document.addEventListener('visibilitychange', ()=>{
+  _animPaused = document.hidden;
+});
 
 function stopAnim(){
   if(_animId){ cancelAnimationFrame(_animId); _animId=null; }
@@ -2809,6 +2821,7 @@ function stopAnim(){
 function startAnim(theme){
   stopAnim();
   const cv = document.getElementById('bg-canvas');
+  // Use logical pixels only — no devicePixelRatio upscale (unnecessary for blobs)
   let W = cv.width = innerWidth, H = cv.height = innerHeight;
   const onResize = ()=>{ W=cv.width=innerWidth; H=cv.height=innerHeight; };
   window.addEventListener('resize', onResize);
@@ -2818,13 +2831,19 @@ function startAnim(theme){
     {x:W*.75, y:H*.6,  r:W*.18, c:theme.blob2, vx:-.3, vy:.35},
     {x:W*.5,  y:H*.1,  r:W*.15, c:theme.blob3, vx:.2, vy:-.3},
   ];
-  let tick=0;
-  function frame(){
+  let tick=0, lastDraw=0;
+  const TARGET_FPS = 30; // throttle blobs to 30fps — plenty smooth, halves CPU
+  const FRAME_MS   = 1000/TARGET_FPS;
+  function frame(ts){
+    _animId = requestAnimationFrame(frame);
+    if(_animPaused) return;
+    if(ts - lastDraw < FRAME_MS) return; // skip frame
+    lastDraw = ts;
     tick++;
     ctx.clearRect(0,0,W,H);
     blobs.forEach((b,i)=>{
-      b.x += b.vx + Math.sin(tick*.004+i)*.5;
-      b.y += b.vy + Math.cos(tick*.006+i)*.4;
+      b.x += b.vx + Math.sin(tick*.008+i)*.5;
+      b.y += b.vy + Math.cos(tick*.012+i)*.4;
       if(b.x<-b.r||b.x>W+b.r) b.vx*=-1;
       if(b.y<-b.r||b.y>H+b.r) b.vy*=-1;
       const g=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r);
@@ -2832,11 +2851,12 @@ function startAnim(theme){
       ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,Math.PI*2);
       ctx.fillStyle=g; ctx.fill();
     });
-    _animId = requestAnimationFrame(frame);
   }
-  frame();
+  _animId = requestAnimationFrame(frame);
   spawnFloaters(theme.floatType, theme.primary, theme.secondary);
 }
+
+const MAX_FLOATERS = 18; // hard cap — prevents unbounded DOM growth
 
 function spawnFloaters(type, c1, c2){
   const layer = document.getElementById('float-layer');
@@ -2845,7 +2865,6 @@ function spawnFloaters(type, c1, c2){
     s.textContent=`
       @keyframes floatUp{0%{opacity:0;transform:translateY(0) rotate(0deg);}5%{opacity:.6;}90%{opacity:.3;}100%{opacity:0;transform:translateY(-110vh) rotate(540deg) translateX(40px);}}
       @keyframes floatDown{0%{opacity:0;transform:translateY(-50px) rotate(0);}5%{opacity:.5;}90%{opacity:.2;}100%{opacity:0;transform:translateY(110vh) rotate(-360deg) translateX(-30px);}}
-      @keyframes floatSway{0%,100%{transform:translateX(0) rotate(-5deg);}50%{transform:translateX(20px) rotate(5deg);}}
     `;
     document.head.appendChild(s);
   }
@@ -2857,9 +2876,9 @@ function spawnFloaters(type, c1, c2){
     particles:['·','•','⬤','◉','◎','○']
   };
   const items = maps[type] || maps.stars;
-  const isTextItem = (s)=>s.length<=1 && !['🍃','🌿','🍀','🌱','🍂','🌾','✨','⭐','💫','🌟'].includes(s);
   function mk(){
     if(!document.getElementById('float-layer')) return;
+    if(document.getElementById('float-layer').children.length >= MAX_FLOATERS) return;
     const el = document.createElement('div');
     const item = items[Math.floor(Math.random()*items.length)];
     const sz = 10+Math.random()*18;
@@ -2867,14 +2886,14 @@ function spawnFloaters(type, c1, c2){
     const dir = Math.random()<.5 ? 'floatUp' : 'floatDown';
     const yStart = dir==='floatUp' ? 'bottom:-50px;' : 'top:-50px;';
     const col = Math.random()<.5 ? c1 : c2;
-    el.style.cssText = `position:absolute;left:${Math.random()*100}%;${yStart}font-size:${sz}px;opacity:0;animation:${dir} ${dur}s ${Math.random()*4}s ease-in-out forwards;color:${col};`;
-    if(isTextItem(item)){ el.style.color = col; el.style.opacity='0'; }
+    el.style.cssText = `position:absolute;left:${Math.random()*100}%;${yStart}font-size:${sz}px;opacity:0;animation:${dir} ${dur}s ${Math.random()*2}s ease-in-out forwards;color:${col};will-change:transform;`;
     el.textContent = item;
     layer.appendChild(el);
-    setTimeout(()=>el.remove(),(dur+5)*1000);
+    setTimeout(()=>{ if(el.parentNode) el.remove(); },(dur+3)*1000);
   }
-  for(let i=0;i<14;i++) setTimeout(mk, i*400);
-  _floatTimer = setInterval(mk, 1600);
+  // Initial stagger — 8 items max to start
+  for(let i=0;i<8;i++) setTimeout(mk, i*500);
+  _floatTimer = setInterval(mk, 2400); // slower interval = fewer DOM ops
 }
 
 /* ══ CONFETTI ══ */
