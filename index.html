@@ -237,6 +237,27 @@ a{color:inherit;text-decoration:none;}
   opacity:0;animation:ldUp .9s var(--ease) forwards 3.3s;
 }
 .hero-tagline strong{font-style:normal;color:var(--gold-2);font-weight:500;}
+.hero-tagline .highlight-link{
+  display:inline-flex;align-items:center;gap:8px;
+  font-style:normal;font-weight:700;letter-spacing:.01em;
+  color:var(--rose-2);
+  padding:4px 14px;border-radius:999px;
+  border:1px solid rgba(192,154,82,.45);
+  background:linear-gradient(120deg,rgba(242,228,192,.65),rgba(248,236,233,.9));
+  box-shadow:0 0 0 0 rgba(192,154,82,.45);
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease),color .3s var(--ease);
+  animation:highlightPulse 2.8s ease-in-out infinite;
+}
+.hero-tagline .highlight-link::before{content:'✨';font-size:.85em;}
+.hero-tagline .highlight-link:hover{
+  transform:translateY(-2px);
+  color:var(--ink);
+  box-shadow:0 10px 22px rgba(192,154,82,.24);
+}
+@keyframes highlightPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(192,154,82,.18);}
+  50%{box-shadow:0 0 0 10px rgba(192,154,82,0);}
+}
 
 /* Date pill */
 .date-pill{
@@ -1037,7 +1058,7 @@ a{color:inherit;text-decoration:none;}
   <p class="hero-tagline">
     A living family album — <strong>birthdays, anniversaries, milestones</strong> —<br>
     each moment treasured, each year remembered forever.<br>
-    Visit <a href="https://chandu-goldengreetings.web.app/" target="_blank" rel="noopener noreferrer">chandu-goldengreetings.web.app</a> —
+    Visit <a href="https://chandu-goldengreetings.web.app/" class="highlight-link" target="_blank" rel="noopener noreferrer">Golden Greetings</a> —
     an application developed to send birthday wishes, anniversary wishes, good morning, good night, and festival wishes to family &amp; friends.
   </p>
 
