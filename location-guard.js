@@ -14,8 +14,7 @@ async function checkLocation() {
 
     if (
       data.country === 'IN' &&
-      data.region === 'Andhra Pradesh' &&
-      data.city === 'Nellore'
+       (data.region === "Andhra Pradesh" || data.region === "Telangana")
     ) {
       console.log('Access allowed');
     } else {
