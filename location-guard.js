@@ -18,7 +18,7 @@ async function checkLocation() {
     ) {
       console.log('Access allowed');
     } else {
-      restrictAccess('Access Restricted', 'This site is only available in Nellore.');
+      restrictAccess('Access Restricted', 'This site is only available in selected regions.');
     }
   } catch (e) {
     restrictAccess('Location check failed');
