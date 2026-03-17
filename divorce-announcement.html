@@ -998,12 +998,14 @@ footer::after{
       <div class="ft-orn-line"></div>
     </div>
     <div class="ft-text"><span class="gld">2023 – 2026</span> &nbsp;·&nbsp; A Story Honestly Remembered</div>
-    <div class="ft-text">© <span class="gld">2026</span> &nbsp;·&nbsp; Made with <span class="rose">♥</span> by <span class="gld">Chandu</span></div>
+    <div class="ft-text">© <span class="gld" id="ft-year"></span> &nbsp;·&nbsp; Made with <span class="rose">♥</span> by <span class="gld">Chandu</span></div>
   </footer>
 
 </main>
 
 <script>
+document.getElementById('ft-year').textContent = new Date().getFullYear();
+
 /* ═══════════ LOADER ═══════════ */
 (function(){
   function letterize(el,text,base){
