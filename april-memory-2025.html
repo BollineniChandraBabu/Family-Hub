@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script src="location-guard.js"></script>
 <title>April 3, 2025 — A Memory</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1018,13 +1019,15 @@ footer::after {
     <div class="ft-brand">Chandu <span>&amp;</span> Family</div>
     <div class="ft-orn"><div class="ft-orn-line"></div><div class="ft-orn-sym">✦ ✦ ✦</div><div class="ft-orn-line"></div></div>
     <div class="ft-text">April 3, 2025 &nbsp;·&nbsp; A Memory Preserved</div>
-    <div class="ft-text" style="color:rgba(215,200,185,.28)">© 2026 &nbsp;·&nbsp; Made with care by Chandu</div>
+    <div class="ft-text" style="color:rgba(215,200,185,.28)">© <span id="ft-year"></span> &nbsp;·&nbsp; Made with care by Chandu</div>
     <a href="index.html" class="ft-link">← Return to Family Home</a>
   </footer>
 </main>
 
 <script>
 'use strict';
+
+document.getElementById('ft-year').textContent = new Date().getFullYear();
 
 /* ════════════════════════════════════════════════
    HEART UTILITY FUNCTIONS
