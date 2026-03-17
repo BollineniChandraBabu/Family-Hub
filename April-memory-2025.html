@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>April 3, 2025 — A Memory</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600;1,9..144,700&family=Outfit:wght@300;400;500;600&family=Cinzel:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════ */
+:root {
+  /* Light warm palette */
+  --cream:     #FBF8F4;
+  --cream2:    #F5EFE6;
+  --cream3:    #EDE4D8;
+  --paper:     #FEFCFA;
+  --paper2:    #F9F5F0;
+
+  --ink:       #1C140E;
+  --ink2:      #3A2C22;
+  --ink3:      #7A6558;
+  --ink4:      #B5A49A;
+  --ink5:      #D8CDC6;
+
+  --rose:      #B53045;
+  --rose2:     #D04560;
+  --rose3:     #E87080;
+  --rose-pale: #FAE8EC;
+  --rose-mid:  rgba(181,48,69,.14);
+
+  --gold:      #B87832;
+  --gold2:     #D4983E;
+  --gold3:     #EDBE78;
+  --gold-pale: #FDF3E3;
+  --gold-mid:  rgba(184,120,50,.14);
+
+  --border:    rgba(60,44,34,.10);
+  --border2:   rgba(60,44,34,.05);
+  --shadow:    rgba(28,20,14,.07);
+  --shadow2:   rgba(28,20,14,.13);
+
+  --ease:      cubic-bezier(.4,0,.2,1);
+  --spring:    cubic-bezier(.34,1.56,.64,1);
+  --silk:      cubic-bezier(.25,.46,.45,.94);
+  --expo:      cubic-bezier(.16,1,.3,1);
+}
+
+/* ═══════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════ */
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:16px; scroll-behavior:smooth; -webkit-text-size-adjust:100%; }
+body {
+  font-family:'Outfit', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color:inherit; text-decoration:none; }
+
+/* ═══════════════════════════════════
+   FIXED BACKGROUND LAYERS
+═══════════════════════════════════ */
+.bg-mesh {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 65% 50% at 0% 0%,   rgba(230,180,160,.18) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 45% at 100% 100%,rgba(210,155,100,.12) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 60% at 50% 50%,  rgba(252,248,244,.95) 0%, #EEE5D8 100%);
+}
+.bg-grain {
+  position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size:160px;
+}
+.bg-vign {
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 55%, rgba(90,65,45,.07) 100%);
+}
+#petal-canvas { position:fixed; inset:0; z-index:1; pointer-events:none; }
+
+/* ═══════════════════════════════════
+   LOADER
+═══════════════════════════════════ */
+#loader {
+  position:fixed; inset:0; z-index:9999;
+  background: var(--cream);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap: clamp(14px, 2.5vw, 22px);
+  overflow:hidden;
+  transition: opacity 1.2s var(--ease), visibility 1.2s var(--ease);
+}
+#loader.out { opacity:0; visibility:hidden; pointer-events:none; }
+
+/* Loader corner ornaments */
+.ld-corner {
+  position:absolute; width:clamp(48px,8vw,72px); height:clamp(48px,8vw,72px);
+  pointer-events:none;
+}
+.ld-corner::before, .ld-corner::after {
+  content:''; position:absolute; background:rgba(180,120,50,.2);
+}
+.ld-corner::before { width:100%; height:1px; top:0; left:0;
+  transform:scaleX(0); transform-origin:left; animation:growW .6s .3s var(--ease) forwards; }
+.ld-corner::after  { width:1px; height:100%; top:0; left:0;
+  transform:scaleY(0); transform-origin:top;  animation:growH .6s .5s var(--ease) forwards; }
+.ld-corner.tl { top:18px; left:18px; }
+.ld-corner.tr { top:18px; right:18px; transform:scaleX(-1); }
+.ld-corner.bl { bottom:18px; left:18px; transform:scaleY(-1); }
+.ld-corner.br { bottom:18px; right:18px; transform:scale(-1); }
+@keyframes growW { to { transform:scaleX(1); } }
+@keyframes growH { to { transform:scaleY(1); } }
+
+.ld-inner {
+  display:flex; flex-direction:column; align-items:center;
+  gap: clamp(10px, 2vw, 16px);
+  padding: 0 clamp(20px, 5vw, 44px);
+  width:100%; max-width:520px;
+}
+
+#ld-cvs { display:block; }
+
+.ld-eyebrow {
+  font-family:'Cinzel', serif;
+  font-size:clamp(.44rem, 1.7vw, .58rem);
+  letter-spacing:.52em; text-transform:uppercase;
+  color:rgba(180,120,50,.55);
+  opacity:0; animation:slideUp .7s .6s var(--ease) forwards;
+}
+.ld-title {
+  font-family:'Fraunces', serif; font-style:italic; font-weight:400;
+  font-size:clamp(1.3rem, 4.5vw, 2rem);
+  color:var(--ink2); text-align:center; line-height:1.3; max-width:380px;
+  opacity:0; animation:slideUp .8s .9s var(--ease) forwards;
+}
+.ld-sub {
+  font-family:'Outfit', sans-serif; font-weight:300; font-style:italic;
+  font-size:clamp(.8rem, 2.3vw, .96rem);
+  color:var(--ink4); text-align:center;
+  opacity:0; animation:slideUp .7s 1.1s var(--ease) forwards;
+}
+.ld-bar-wrap {
+  width:min(200px, 55vw);
+  opacity:0; animation:slideUp .5s 1.3s var(--ease) forwards;
+}
+.ld-track { height:1px; background:var(--border); border-radius:2px; overflow:visible; position:relative; }
+.ld-fill {
+  height:100%; width:0; border-radius:2px;
+  background:linear-gradient(90deg, var(--rose), var(--gold));
+  animation:fillBar 2.6s 1.4s var(--silk) forwards;
+  position:relative;
+}
+.ld-fill::after {
+  content:''; position:absolute; right:-5px; top:50%; transform:translateY(-50%);
+  width:9px; height:9px; border-radius:50%;
+  background:var(--gold2);
+  box-shadow:0 0 12px rgba(212,152,62,.9);
+}
+.ld-caption {
+  font-family:'Cinzel', serif; font-size:.46rem; letter-spacing:.38em; text-transform:uppercase;
+  color:var(--ink5); display:flex; align-items:center; gap:7px;
+  opacity:0; animation:slideUp .5s 1.4s var(--ease) forwards;
+}
+.ldot {
+  width:3px; height:3px; border-radius:50%;
+  background:rgba(180,120,50,.3); animation:dotBlink 1.4s ease-in-out infinite alternate;
+}
+.ldot:nth-child(2){animation-delay:.22s;} .ldot:nth-child(4){animation-delay:.44s;}
+
+@keyframes fillBar   { to { width:100%; } }
+@keyframes slideUp   { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+@keyframes dotBlink  { from { opacity:.15; transform:scale(.5); } to { opacity:1; transform:scale(1.4); } }
+
+/* ═══════════════════════════════════
+   PAGE WRAPPER + REVEAL SYSTEM
+═══════════════════════════════════ */
+#page { position:relative; z-index:5; opacity:0; transition:opacity 1s var(--ease); }
+#page.in { opacity:1; }
+
+/* Staggered reveal classes */
+.rv    { opacity:0; transform:translateY(32px);  transition:opacity .9s var(--ease), transform .9s var(--ease); }
+.rv-l  { opacity:0; transform:translateX(-26px); transition:opacity .9s var(--ease), transform .9s var(--ease); }
+.rv-r  { opacity:0; transform:translateX(26px);  transition:opacity .9s var(--ease), transform .9s var(--ease); }
+.rv-s  { opacity:0; transform:scale(.97);        transition:opacity .9s var(--ease), transform .9s var(--ease); }
+.rv.in, .rv-l.in, .rv-r.in, .rv-s.in { opacity:1; transform:none; }
+.d1{transition-delay:.08s!important;} .d2{transition-delay:.16s!important;}
+.d3{transition-delay:.24s!important;} .d4{transition-delay:.32s!important;}
+
+/* ═══════════════════════════════════
+   HERO — split layout
+═══════════════════════════════════ */
+.hero {
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  padding: clamp(80px,11vw,130px) clamp(24px,6vw,80px) clamp(70px,9vw,110px);
+  gap: clamp(40px,6vw,80px);
+  position:relative; overflow:hidden;
+}
+@media(max-width:720px) {
+  .hero { grid-template-columns:1fr; padding-bottom:100px; }
+  .hero-stage-col { order:-1; }
+}
+
+/* Decorative lines behind hero */
+.hero-bg-lines {
+  position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0;
+}
+.hero-bg-lines::before, .hero-bg-lines::after {
+  content:''; position:absolute; background:rgba(180,120,50,.06);
+}
+.hero-bg-lines::before { width:1px; height:100%; left:50%; top:0; }
+.hero-bg-lines::after  { width:100%; height:1px; top:50%; left:0; }
+
+.hero-text-col { position:relative; z-index:2; }
+
+.hero-kicker {
+  font-family:'Cinzel', serif;
+  font-size:clamp(.48rem, 1.8vw, .64rem);
+  letter-spacing:.52em; text-transform:uppercase;
+  color:var(--rose); margin-bottom:clamp(18px,3vw,28px);
+  display:flex; align-items:center; gap:14px;
+  opacity:0; animation:slideUp .7s .2s var(--ease) forwards;
+}
+.hero-kicker::before { content:''; width:28px; height:1px; background:currentColor; opacity:.6; }
+
+.hero-date {
+  font-family:'Fraunces', serif; font-weight:700;
+  font-size:clamp(3.5rem,10vw,7.5rem);
+  line-height:.88; letter-spacing:-.03em;
+  color:var(--ink); margin-bottom:clamp(16px,2.5vw,26px);
+  opacity:0; animation:slideUp 1s .35s var(--expo) forwards;
+}
+.hero-date .sep { color:var(--rose2); opacity:.7; margin:0 .08em; }
+
+.hero-headline {
+  font-family:'Fraunces', serif; font-style:italic; font-weight:400;
+  font-size:clamp(1.5rem,3.8vw,2.6rem);
+  color:var(--ink2); line-height:1.2;
+  margin-bottom:clamp(16px,2.5vw,26px);
+  opacity:0; animation:slideUp .9s .55s var(--expo) forwards;
+}
+
+.hero-body {
+  font-family:'Outfit', sans-serif; font-weight:300;
+  font-size:clamp(.98rem,2.3vw,1.14rem);
+  color:var(--ink3); line-height:1.9; max-width:440px;
+  margin-bottom:clamp(24px,4vw,38px);
+  opacity:0; animation:slideUp .9s .72s var(--expo) forwards;
+}
+
+/* Pill tags */
+.hero-pills {
+  display:flex; flex-wrap:wrap; gap:10px;
+  opacity:0; animation:slideUp .8s .88s var(--expo) forwards;
+}
+.pill {
+  font-family:'Cinzel', serif; font-size:clamp(.44rem,1.6vw,.58rem);
+  letter-spacing:.35em; text-transform:uppercase;
+  padding:9px 18px; border-radius:3px;
+  border:1px solid var(--border);
+  background:var(--paper2); color:var(--ink3);
+  transition:border-color .3s, color .3s, background .3s;
+}
+.pill:hover { border-color:rgba(181,48,69,.3); color:var(--rose); background:var(--rose-pale); }
+.pill.rose { color:var(--rose); border-color:rgba(181,48,69,.25); background:var(--rose-pale); }
+.pill.gold { color:var(--gold); border-color:rgba(184,120,50,.28); background:var(--gold-pale); }
+
+/* Hero heart stage */
+.hero-stage-col {
+  display:flex; align-items:center; justify-content:center;
+  position:relative; z-index:2;
+}
+.heart-stage {
+  position:relative;
+  width:min(440px,100%);
+  height:clamp(280px,55vw,380px);
+}
+#hero-cvs { position:absolute; inset:0; width:100%; height:100%; }
+
+/* Ambient pulse rings */
+.pulse-ring {
+  position:absolute; top:50%; left:50%; border-radius:50%;
+  border:1px solid rgba(181,48,69,.12);
+  transform:translate(-50%,-50%) scale(0);
+  pointer-events:none;
+}
+.pulse-ring.p1{width:190px;height:190px; animation:ringOut 4s 1.4s ease-out infinite;}
+.pulse-ring.p2{width:270px;height:270px; animation:ringOut 4s 2.1s ease-out infinite;}
+.pulse-ring.p3{width:350px;height:350px; animation:ringOut 4s 2.8s ease-out infinite;}
+@keyframes ringOut {
+  0%   { transform:translate(-50%,-50%) scale(.3); opacity:.7; }
+  100% { transform:translate(-50%,-50%) scale(1);  opacity:0; }
+}
+
+/* Scroll cue */
+.scroll-cue {
+  position:absolute; bottom:28px; left:50%; transform:translateX(-50%);
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  opacity:0; animation:slideUp .8s 1.4s var(--ease) forwards;
+}
+.sc-label { font-family:'Cinzel',serif; font-size:.48rem; letter-spacing:.4em; text-transform:uppercase; color:var(--ink5); }
+.sc-needle { width:1px; height:38px; background:linear-gradient(to bottom,var(--ink4),transparent); animation:needleBob 2.4s ease-in-out infinite; }
+@keyframes needleBob { 0%,100%{transform:scaleY(1);opacity:.5;} 50%{transform:scaleY(.65);opacity:1;} }
+
+/* ═══════════════════════════════════
+   LAYOUT SYSTEM
+═══════════════════════════════════ */
+.section     { padding:clamp(70px,9vw,110px) clamp(24px,6vw,80px); }
+.container   { max-width:780px;  margin:0 auto; }
+.container-w { max-width:1080px; margin:0 auto; }
+
+/* Chapter header */
+.chapter-header {
+  display:flex; align-items:center; gap:16px;
+  margin-bottom:clamp(32px,5vw,52px);
+}
+.ch-num {
+  font-family:'Cinzel', serif; font-size:.52rem; letter-spacing:.5em; text-transform:uppercase;
+  color:var(--rose); white-space:nowrap;
+  padding:6px 14px; border:1px solid rgba(181,48,69,.22);
+  border-radius:3px; background:var(--rose-pale);
+}
+.ch-line { flex:1; height:1px; background:var(--border); max-width:60px; }
+.ch-title {
+  font-family:'Cinzel', serif; font-size:.52rem; letter-spacing:.48em; text-transform:uppercase;
+  color:var(--ink3);
+}
+
+/* ═══════════════════════════════════
+   DATE BLOCK
+═══════════════════════════════════ */
+.date-block {
+  background:var(--paper);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:clamp(44px,7vw,72px) clamp(30px,5.5vw,60px);
+  position:relative; overflow:hidden; text-align:center;
+  box-shadow:0 2px 20px var(--shadow), 0 8px 40px var(--shadow);
+}
+.date-block::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,transparent,var(--rose),var(--gold),transparent);
+}
+.date-block::after {
+  content:''; position:absolute;
+  width:500px; height:260px; top:50%; left:50%; transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(181,48,69,.04) 0%,transparent 70%);
+  pointer-events:none;
+}
+/* inner frame */
+.db-frame {
+  position:absolute; inset:14px;
+  border:1px solid rgba(180,120,50,.06); border-radius:9px;
+  pointer-events:none;
+}
+.db-label {
+  font-family:'Cinzel', serif; font-size:.56rem; letter-spacing:.5em; text-transform:uppercase;
+  color:rgba(180,120,50,.5); margin-bottom:clamp(20px,3.5vw,30px); position:relative; z-index:1;
+}
+.db-date {
+  font-family:'Fraunces', serif; font-weight:700;
+  font-size:clamp(3rem,10vw,6.5rem);
+  line-height:.9; letter-spacing:-.02em;
+  color:var(--ink); position:relative; z-index:1;
+}
+.db-date .sep { color:var(--rose2); opacity:.65; }
+.db-location {
+  font-family:'Outfit', sans-serif; font-weight:300;
+  font-size:clamp(.9rem,2.4vw,1.1rem); color:var(--ink3);
+  margin-top:clamp(14px,2.5vw,22px); letter-spacing:.04em; position:relative; z-index:1;
+}
+.db-caption {
+  font-family:'Fraunces', serif; font-style:italic; font-weight:300;
+  font-size:clamp(1rem,2.8vw,1.25rem); color:var(--ink2);
+  margin-top:clamp(18px,3vw,28px); line-height:1.75;
+  max-width:460px; margin-left:auto; margin-right:auto; position:relative; z-index:1;
+}
+
+/* ═══════════════════════════════════
+   PROSE
+═══════════════════════════════════ */
+.prose-card {
+  background:var(--paper);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:clamp(36px,5.5vw,60px) clamp(28px,5vw,52px);
+  position:relative; overflow:hidden;
+  box-shadow:0 2px 20px var(--shadow);
+}
+.prose-card::before {
+  content:''; position:absolute;
+  top:0; left:0; bottom:0; width:3px;
+  background:linear-gradient(to bottom,var(--rose),var(--gold2),transparent);
+  border-radius:3px 0 0 3px;
+}
+
+/* Drop cap */
+.prose-card p:first-of-type::first-letter {
+  font-family:'Fraunces', serif; font-style:italic; font-weight:600;
+  font-size:clamp(3.5rem,9vw,5rem);
+  color:var(--rose);
+  float:left; line-height:.74; margin-right:12px; margin-top:10px;
+}
+.prose-p {
+  font-family:'Outfit', sans-serif; font-weight:300;
+  font-size:clamp(.98rem,2.4vw,1.14rem);
+  line-height:1.95; color:var(--ink2);
+  margin-bottom:clamp(18px,2.8vw,28px);
+}
+.prose-p:last-child { margin-bottom:0; }
+.prose-p strong { font-weight:500; color:var(--ink); }
+.prose-p em { color:var(--rose); font-style:italic; }
+.p-divider {
+  display:flex; align-items:center; gap:12px;
+  margin:clamp(22px,3.5vw,34px) 0;
+}
+.pdl { flex:1; height:1px; background:var(--border); }
+.pdg { width:6px; height:6px; background:var(--gold2); transform:rotate(45deg); opacity:.45; flex-shrink:0; }
+
+/* ═══════════════════════════════════
+   STAT CARDS
+═══════════════════════════════════ */
+.stats-grid { display:grid; grid-template-columns:1fr 1fr; gap:clamp(14px,2.5vw,22px); }
+@media(max-width:500px) { .stats-grid { grid-template-columns:1fr; } }
+
+.stat-card {
+  background:var(--paper);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:clamp(28px,4.5vw,42px);
+  position:relative; overflow:hidden;
+  box-shadow:0 2px 16px var(--shadow);
+  transition:transform .35s var(--ease), box-shadow .35s, border-color .35s;
+}
+.stat-card:hover { transform:translateY(-5px); box-shadow:0 14px 44px var(--shadow2); border-color:rgba(181,48,69,.2); }
+.stat-card::after {
+  content:''; position:absolute; bottom:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,var(--rose),var(--gold));
+  transform:scaleX(0); transform-origin:left; transition:transform .38s var(--ease);
+}
+.stat-card:hover::after { transform:scaleX(1); }
+.sc-tag { font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:.42em; text-transform:uppercase; color:var(--gold); margin-bottom:12px; }
+.sc-big {
+  font-family:'Fraunces', serif; font-weight:700;
+  font-size:clamp(3rem,8vw,5rem); line-height:.9; letter-spacing:-.02em;
+  background:linear-gradient(135deg,var(--rose),var(--gold2));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  margin-bottom:10px;
+}
+.sc-title { font-family:'Fraunces', serif; font-style:italic; font-size:clamp(1rem,2.5vw,1.18rem); color:var(--ink); margin-bottom:10px; }
+.sc-body { font-family:'Outfit',sans-serif; font-weight:300; font-size:clamp(.86rem,2.1vw,.98rem); color:var(--ink3); line-height:1.78; }
+
+/* ═══════════════════════════════════
+   MEMORY CARDS
+═══════════════════════════════════ */
+.mem-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(235px,100%),1fr)); gap:clamp(14px,2.2vw,20px); }
+.mem-card {
+  background:var(--paper); border:1px solid var(--border); border-radius:12px;
+  padding:clamp(24px,3.8vw,34px);
+  display:flex; flex-direction:column; gap:10px;
+  box-shadow:0 2px 14px var(--shadow);
+  transition:transform .32s var(--ease), box-shadow .32s, border-color .32s;
+  position:relative; overflow:hidden;
+}
+.mem-card:hover { transform:translateY(-5px); box-shadow:0 18px 48px var(--shadow2); border-color:rgba(181,48,69,.18); }
+.mem-card::before {
+  content:''; position:absolute; inset:0; border-radius:12px;
+  background:linear-gradient(135deg,transparent 45%,rgba(255,255,255,.5) 55%,transparent 65%);
+  transform:translateX(-120%); transition:transform .7s var(--ease); pointer-events:none;
+}
+.mem-card:hover::before { transform:translateX(120%); }
+.mc-num {
+  font-family:'Fraunces', serif; font-weight:700;
+  font-size:clamp(2.2rem,5.5vw,3rem); line-height:1;
+  color:transparent; -webkit-text-stroke:1px rgba(181,48,69,.15);
+}
+.mc-tag { font-family:'Cinzel',serif; font-size:.48rem; letter-spacing:.42em; text-transform:uppercase; color:var(--gold); }
+.mc-title {
+  font-family:'Fraunces', serif; font-style:italic;
+  font-size:clamp(.96rem,2.4vw,1.1rem); color:var(--ink); line-height:1.3;
+  padding-bottom:10px; border-bottom:1px solid var(--border);
+}
+.mc-body { font-family:'Outfit',sans-serif; font-weight:300; font-size:clamp(.86rem,2.1vw,.98rem); color:var(--ink3); line-height:1.78; flex:1; }
+
+/* ═══════════════════════════════════
+   QUOTE
+═══════════════════════════════════ */
+.quote-card {
+  background:linear-gradient(140deg,var(--rose-pale),var(--gold-pale));
+  border:1px solid rgba(181,48,69,.14);
+  border-radius:12px;
+  padding:clamp(44px,7vw,72px) clamp(40px,8vw,90px);
+  text-align:center; position:relative; overflow:hidden;
+  box-shadow:0 3px 24px rgba(181,48,69,.06);
+}
+.quote-card::before,.quote-card::after {
+  content:''; position:absolute; width:30px; height:30px;
+  border-style:solid; border-color:rgba(180,120,50,.35);
+}
+.quote-card::before { top:0; left:0; border-width:1px 0 0 1px; }
+.quote-card::after  { bottom:0; right:0; border-width:0 1px 1px 0; }
+.q-mark {
+  font-family:'Fraunces', serif; font-style:italic;
+  font-size:clamp(5rem,13vw,9.5rem); line-height:0;
+  color:rgba(181,48,69,.09);
+  position:absolute; top:clamp(20px,4vw,34px); left:clamp(18px,4vw,34px);
+  user-select:none; pointer-events:none;
+}
+.q-text {
+  font-family:'Fraunces', serif; font-style:italic; font-weight:400;
+  font-size:clamp(1.15rem,4vw,1.8rem); line-height:1.72; color:var(--ink2);
+  max-width:540px; margin:0 auto; position:relative; z-index:1;
+}
+.q-text strong { color:var(--ink); }
+.q-attr {
+  font-family:'Cinzel', serif; font-size:.48rem; letter-spacing:.44em; text-transform:uppercase;
+  color:var(--gold); margin-top:22px; position:relative; z-index:1;
+}
+
+/* ═══════════════════════════════════
+   TIMELINE
+═══════════════════════════════════ */
+.timeline { max-width:640px; margin:0 auto; padding-left:clamp(28px,5vw,44px); position:relative; }
+.tl-rail {
+  position:absolute; left:8px; top:6px; bottom:6px; width:1px;
+  background:linear-gradient(to bottom,var(--rose2),var(--gold2),rgba(180,120,50,.2),transparent);
+}
+.tl-item {
+  position:relative; margin-bottom:clamp(30px,4.5vw,44px);
+  opacity:0; transform:translateX(-20px);
+  transition:opacity .82s var(--ease), transform .82s var(--ease);
+}
+.tl-item.in { opacity:1; transform:none; }
+.tl-dot {
+  position:absolute; left:clamp(-31px,-5.2vw,-27px); top:4px;
+  width:14px; height:14px; border-radius:50%;
+  border:1.5px solid var(--rose2); background:var(--cream);
+  box-shadow:0 0 0 3px rgba(181,48,69,.07);
+}
+.tl-dot.key { background:var(--rose); border-color:var(--rose); box-shadow:0 0 0 5px rgba(181,48,69,.12); }
+.tl-dot.key::after {
+  content:''; position:absolute; inset:-6px; border-radius:50%;
+  border:1px solid rgba(181,48,69,.22); animation:nodeGlow 3s ease-in-out infinite;
+}
+@keyframes nodeGlow { 0%,100%{opacity:.5;transform:scale(1);} 50%{opacity:0;transform:scale(1.8);} }
+.tl-when { font-family:'Cinzel',serif; font-size:.5rem; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); margin-bottom:5px; }
+.tl-title { font-family:'Fraunces',serif; font-style:italic; font-size:clamp(.95rem,2.5vw,1.1rem); color:var(--ink); margin-bottom:5px; }
+.tl-desc  { font-family:'Outfit',sans-serif; font-weight:300; font-size:clamp(.85rem,2.1vw,.96rem); color:var(--ink3); line-height:1.75; }
+
+/* ═══════════════════════════════════
+   WORD CARDS
+═══════════════════════════════════ */
+.word-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr)); gap:clamp(12px,2vw,18px); }
+.word-card {
+  background:var(--paper); border:1px solid var(--border); border-radius:12px;
+  padding:clamp(20px,3.5vw,30px) clamp(16px,3vw,22px); text-align:center;
+  box-shadow:0 2px 12px var(--shadow);
+  transition:transform .32s var(--ease), box-shadow .32s, border-color .32s;
+}
+.word-card:hover { transform:translateY(-4px); box-shadow:0 12px 36px var(--shadow2); border-color:rgba(181,48,69,.2); }
+.wc-icon { font-size:1.8rem; display:block; margin-bottom:12px; line-height:1; }
+.wc-word { font-family:'Fraunces',serif; font-style:italic; font-size:clamp(1rem,2.8vw,1.18rem); color:var(--rose); margin-bottom:7px; }
+.wc-def  { font-family:'Outfit',sans-serif; font-weight:300; font-size:clamp(.82rem,2.1vw,.94rem); color:var(--ink4); line-height:1.65; }
+
+/* ═══════════════════════════════════
+   LETTER
+═══════════════════════════════════ */
+.letter {
+  background:var(--paper); border:1px solid var(--border); border-radius:12px;
+  padding:clamp(40px,6vw,68px) clamp(28px,5.5vw,56px);
+  position:relative; overflow:hidden;
+  box-shadow:0 3px 24px var(--shadow);
+}
+.letter::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background:linear-gradient(90deg,transparent,var(--rose),var(--gold2),transparent);
+}
+.letter::after {
+  content:''; position:absolute; inset:16px;
+  border:1px solid rgba(180,120,50,.05); border-radius:8px; pointer-events:none;
+}
+.letter-to {
+  font-family:'Cinzel',serif; font-size:.54rem; letter-spacing:.48em; text-transform:uppercase;
+  color:var(--gold); margin-bottom:clamp(26px,4vw,40px);
+  display:flex; align-items:center; gap:14px;
+}
+.letter-to::after { content:''; flex:1; height:1px; background:linear-gradient(90deg,rgba(180,120,50,.25),transparent); }
+.letter-p {
+  font-family:'Outfit', sans-serif; font-weight:300;
+  font-size:clamp(1rem,2.5vw,1.15rem); line-height:2.05; color:var(--ink2);
+  margin-bottom:clamp(16px,2.5vw,24px);
+}
+.letter-p:last-of-type { margin-bottom:0; }
+.letter-p em { color:var(--rose); } .letter-p strong { font-weight:500; color:var(--ink); }
+.letter-sig {
+  margin-top:clamp(32px,5vw,50px); padding-top:clamp(20px,3vw,30px);
+  border-top:1px solid var(--border); text-align:right;
+}
+.sig-from { font-family:'Outfit',sans-serif; font-weight:300; font-size:clamp(.86rem,2.2vw,1rem); color:var(--ink4); margin-bottom:8px; }
+.sig-name { font-family:'Fraunces',serif; font-style:italic; font-size:clamp(1.5rem,4.5vw,2.1rem); color:var(--gold); filter:drop-shadow(0 2px 10px rgba(184,120,50,.2)); }
+.sig-date { font-family:'Cinzel',serif; font-size:.48rem; letter-spacing:.36em; text-transform:uppercase; color:rgba(180,120,50,.4); margin-top:8px; }
+
+/* ═══════════════════════════════════
+   CLOSING
+═══════════════════════════════════ */
+.closing { max-width:640px; margin:0 auto; text-align:center; padding:clamp(30px,5vw,52px) 20px clamp(44px,7vw,70px); }
+.clos-orn { display:flex; align-items:center; gap:14px; margin-bottom:clamp(20px,3.5vw,32px); }
+.col { flex:1; height:1px; background:linear-gradient(to right,transparent,var(--gold)); }
+.col.r { background:linear-gradient(to left,transparent,var(--gold)); }
+.cod { width:7px; height:7px; background:var(--gold2); transform:rotate(45deg); opacity:.4; flex-shrink:0; }
+.closing-h {
+  font-family:'Fraunces', serif; font-style:italic; font-weight:400;
+  font-size:clamp(1.6rem,5.5vw,2.8rem); color:var(--ink);
+  margin-bottom:clamp(16px,3vw,26px); line-height:1.15;
+}
+.closing-body { font-family:'Outfit',sans-serif; font-weight:300; font-size:clamp(.96rem,2.4vw,1.12rem); color:var(--ink3); line-height:1.95; margin-bottom:clamp(10px,2vw,16px); }
+.closing-sig { font-family:'Fraunces',serif; font-style:italic; font-size:clamp(1.2rem,3.8vw,1.6rem); color:var(--rose2); margin-top:clamp(20px,3.5vw,30px); }
+.closing-date { font-family:'Cinzel',serif; font-size:.48rem; letter-spacing:.44em; text-transform:uppercase; color:var(--gold); margin-top:12px; }
+
+/* ═══════════════════════════════════
+   FOOTER
+═══════════════════════════════════ */
+footer {
+  background:linear-gradient(160deg,var(--ink) 0%,#3A2C1E 60%,#261A0C 100%);
+  border-top:2px solid rgba(180,120,50,.28);
+  padding:clamp(30px,5vw,48px) clamp(24px,6vw,80px);
+  text-align:center; position:relative; overflow:hidden;
+  display:flex; flex-direction:column; align-items:center; gap:14px; z-index:5;
+}
+footer::before {
+  content:''; position:absolute; top:0; left:10%; right:10%; height:1px;
+  background:linear-gradient(90deg,transparent,rgba(180,120,50,.45),transparent);
+}
+footer::after {
+  content:''; position:absolute; width:420px; height:210px; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse,rgba(181,48,69,.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.ft-brand { font-family:'Fraunces',serif; font-style:italic; font-weight:400; font-size:clamp(1.1rem,3.5vw,1.5rem); color:rgba(240,228,218,.75); position:relative; z-index:1; }
+.ft-brand span { color:var(--gold3); }
+.ft-orn { display:flex; align-items:center; gap:12px; width:min(220px,52vw); position:relative; z-index:1; }
+.ft-orn-line { flex:1; height:1px; background:var(--border); }
+.ft-orn-sym { font-size:.5rem; color:rgba(180,120,50,.4); letter-spacing:.2em; }
+.ft-text { font-family:'Cinzel',serif; font-size:clamp(.44rem,1.6vw,.58rem); letter-spacing:.32em; text-transform:uppercase; color:rgba(215,200,185,.38); position:relative; z-index:1; }
+.ft-link {
+  font-family:'Cinzel',serif; font-size:.52rem; letter-spacing:.28em; text-transform:uppercase;
+  color:rgba(181,48,69,.55); padding:9px 22px; border:1px solid rgba(181,48,69,.18);
+  border-radius:4px; position:relative; z-index:1;
+  transition:color .3s, border-color .3s, background .3s; display:inline-block; margin-top:4px;
+}
+.ft-link:hover { color:var(--rose3); border-color:rgba(181,48,69,.4); background:rgba(181,48,69,.06); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ LOADER ═══════════ -->
+<div id="loader" aria-label="Loading">
+  <div class="ld-corner tl"></div><div class="ld-corner tr"></div>
+  <div class="ld-corner bl"></div><div class="ld-corner br"></div>
+  <div class="ld-inner">
+    <canvas id="ld-cvs" width="160" height="160"></canvas>
+    <div class="ld-eyebrow">A Memory · April 3, 2025</div>
+    <div class="ld-title">The Day She<br>Walked Away</div>
+    <div class="ld-sub">Some doors, once closed, stay closed.</div>
+    <div class="ld-bar-wrap">
+      <div class="ld-track"><div class="ld-fill"></div></div>
+    </div>
+    <div class="ld-caption">
+      <span class="ldot"></span>
+      <span>Holding this memory with honesty</span>
+      <span class="ldot"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ BG ═══════════ -->
+<div class="bg-mesh"  aria-hidden="true"></div>
+<div class="bg-grain" aria-hidden="true"></div>
+<div class="bg-vign"  aria-hidden="true"></div>
+<canvas id="petal-canvas" aria-hidden="true"></canvas>
+
+<!-- ═══════════ PAGE ═══════════ -->
+<main id="page">
+
+  <!-- ── HERO ─────────────────────────── -->
+  <section class="hero">
+    <div class="hero-bg-lines" aria-hidden="true"></div>
+
+    <div class="hero-text-col">
+      <div class="hero-kicker">Memory · Nellore</div>
+      <div class="hero-date">03<span class="sep">.</span>04<span class="sep">.</span>25</div>
+      <h1 class="hero-headline">The day she decided<br>it was over.</h1>
+      <p class="hero-body">
+        They had come from Hyderabad that morning.
+        Her family arrived unannounced. A conversation began —
+        about things that had built up, problems that had no clean answers.
+        By evening, she had made her choice.
+      </p>
+      <div class="hero-pills">
+        <span class="pill rose">April 3, 2025</span>
+        <span class="pill gold">5 Months Pregnant</span>
+        <span class="pill">Nellore, AP</span>
+      </div>
+    </div>
+
+    <div class="hero-stage-col">
+      <div class="heart-stage">
+        <div class="pulse-ring p1"></div>
+        <div class="pulse-ring p2"></div>
+        <div class="pulse-ring p3"></div>
+        <canvas id="hero-cvs"></canvas>
+      </div>
+    </div>
+
+    <div class="scroll-cue" aria-hidden="true">
+      <div class="sc-label">Scroll</div>
+      <div class="sc-needle"></div>
+    </div>
+  </section>
+
+  <!-- ── DATE BLOCK ──────────────────── -->
+  <section class="section" style="padding-top:0">
+    <div class="container rv">
+      <div class="date-block">
+        <div class="db-frame"></div>
+        <div class="db-label">The Day This Chapter Ended</div>
+        <div class="db-date">3<span class="sep"> / </span>04<span class="sep"> / </span>2025</div>
+        <div class="db-location">Nellore, Andhra Pradesh · Arrived from Hyderabad</div>
+        <div class="db-caption">
+          A journey that started as a visit home<br>and became the last day of a marriage.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WHAT HAPPENED ──────────────── -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="chapter-header rv">
+        <span class="ch-num">01</span>
+        <div class="ch-line"></div>
+        <span class="ch-title">What Happened</span>
+      </div>
+      <div class="prose-card rv">
+        <p class="prose-p">
+          That Thursday, Chandu and Sindhu had come from Hyderabad together.
+          The journey was ordinary — nothing in it announced what the day was about to become.
+          When they arrived, her parents were there. <strong>Nobody had told him they were coming.</strong>
+          They sat down to talk.
+        </p>
+        <div class="p-divider"><div class="pdl"></div><div class="pdg"></div><div class="pdl"></div></div>
+        <p class="prose-p">
+          The conversation turned to <em>the things that had been accumulating between them</em> —
+          problems that had grown over time, wounds that had not healed, words spoken and unspoken,
+          the weight of a marriage that had been struggling under pressures neither had fully
+          been able to resolve. There was no single reason. There never is.
+        </p>
+        <div class="p-divider"><div class="pdl"></div><div class="pdg"></div><div class="pdl"></div></div>
+        <p class="prose-p">
+          At some point, the conversation became a decision.
+          <strong>Sindhu chose to leave.</strong>
+          She walked out with her family, and the home they had shared
+          became, in that single moment, just a place.
+          Chandu stood in the silence that followed — the kind of silence
+          that means something permanent has just occurred.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── STATS ──────────────────────── -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="chapter-header rv">
+        <span class="ch-num">02</span>
+        <div class="ch-line"></div>
+        <span class="ch-title">The Weight of It</span>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card rv d1">
+          <div class="sc-tag">Pregnancy at the time</div>
+          <div class="sc-big">5</div>
+          <div class="sc-title">Months Along</div>
+          <div class="sc-body">
+            Sindhu was five months pregnant with Yokshith when she left.
+            Chandu had been present through every step — every scan, every appointment,
+            every quiet evening of learning how to love someone not yet born.
+          </div>
+        </div>
+        <div class="stat-card rv d2">
+          <div class="sc-tag">Between then and the birth</div>
+          <div class="sc-big">~5</div>
+          <div class="sc-title">Months Later</div>
+          <div class="sc-body">
+            Yokshith arrived on September 2nd, 2025 —
+            five months after the day on April 3rd that closed this chapter.
+            A child who came into the world already carrying the weight of what had happened.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MEMORY CARDS ───────────────── -->
+  <section class="section" style="padding-top:0">
+    <div class="container-w">
+      <div class="chapter-header rv">
+        <span class="ch-num">03</span>
+        <div class="ch-line"></div>
+        <span class="ch-title">Moments That Stay</span>
+      </div>
+      <div class="mem-grid">
+        <div class="mem-card rv d1">
+          <div class="mc-num">01</div>
+          <div class="mc-tag">The Journey</div>
+          <div class="mc-title">Coming from Hyderabad Together</div>
+          <div class="mc-body">The trip was unremarkable. An ordinary morning of travel. No sign in any of it of what the hours ahead were carrying.</div>
+        </div>
+        <div class="mem-card rv d2">
+          <div class="mc-num">02</div>
+          <div class="mc-tag">The Arrival</div>
+          <div class="mc-title">Faces He Hadn't Expected to See</div>
+          <div class="mc-body">Her family appeared without warning. The day shifted in that instant — what had been a return home became something else entirely before it had even settled.</div>
+        </div>
+        <div class="mem-card rv d3">
+          <div class="mc-num">03</div>
+          <div class="mc-tag">The Conversation</div>
+          <div class="mc-title">Things That Had Been Building</div>
+          <div class="mc-body">Not one thing. A hundred small things. The accumulated weight of a marriage trying and struggling and running out of room. Some conversations don't resolve. They end.</div>
+        </div>
+        <div class="mem-card rv d4">
+          <div class="mc-num">04</div>
+          <div class="mc-tag">The Silence After</div>
+          <div class="mc-title">What Remains When a Door Closes</div>
+          <div class="mc-body">Not the sound of leaving — the quiet after it. The particular kind of stillness a room holds when something that lived in it has departed and is not coming back.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── QUOTE ──────────────────────── -->
+  <section class="section" style="padding-top:0">
+    <div class="container rv">
+      <div class="quote-card">
+        <div class="q-mark">"</div>
+        <div class="q-text">
+          The hardest part wasn't the argument —<br>
+          it was how <strong>ordinary the morning had been</strong><br>
+          before everything changed.
+        </div>
+        <div class="q-attr">— On the day that began as a journey</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TIMELINE ───────────────────── -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="chapter-header rv">
+        <span class="ch-num">04</span>
+        <div class="ch-line"></div>
+        <span class="ch-title">The Full Story</span>
+      </div>
+      <div class="timeline">
+        <div class="tl-rail"></div>
+        <div class="tl-item" id="tl1">
+          <div class="tl-dot"></div>
+          <div class="tl-when">6 August 2023</div>
+          <div class="tl-title">First Meeting</div>
+          <div class="tl-desc">Two lives crossed paths for the first time. A connection that neither had planned for — and that would set the course for everything that followed.</div>
+        </div>
+        <div class="tl-item" id="tl2" style="transition-delay:.12s">
+          <div class="tl-dot"></div>
+          <div class="tl-when">17 September 2023</div>
+          <div class="tl-title">Engagement</div>
+          <div class="tl-desc">Six weeks after they met, they were engaged. A love that moved quickly and sincerely, with families gathered and a promise made in good faith.</div>
+        </div>
+        <div class="tl-item" id="tl3" style="transition-delay:.24s">
+          <div class="tl-dot"></div>
+          <div class="tl-when">19 November 2023</div>
+          <div class="tl-title">Marriage</div>
+          <div class="tl-desc">Forty-three days later, they were married. Traditions honoured, vows spoken with full sincerity, a shared life begun with genuine hope.</div>
+        </div>
+        <div class="tl-item" id="tl4" style="transition-delay:.36s">
+          <div class="tl-dot"></div>
+          <div class="tl-when">Late 2024</div>
+          <div class="tl-title">Expecting Yokshith</div>
+          <div class="tl-desc">A pregnancy discovered and embraced. Yokshith was growing. Chandu had already begun learning how to love a child he hadn't yet met.</div>
+        </div>
+        <div class="tl-item" id="tl5" style="transition-delay:.48s">
+          <div class="tl-dot key"></div>
+          <div class="tl-when">3 April 2025</div>
+          <div class="tl-title">She Left — Five Months Into the Pregnancy</div>
+          <div class="tl-desc">They came from Hyderabad. Her family arrived unannounced. A conversation about accumulated problems became an ending. Sindhu chose to leave. She was five months pregnant with Yokshith.</div>
+        </div>
+        <div class="tl-item" id="tl6" style="transition-delay:.60s">
+          <div class="tl-dot"></div>
+          <div class="tl-when">2 September 2025</div>
+          <div class="tl-title">Yokshith Arrives</div>
+          <div class="tl-desc">Four months and twenty-nine days after April 3rd, Yokshith came into the world. He was already loved before he arrived — that part, at least, was never in doubt.</div>
+        </div>
+        <div class="tl-item" id="tl7" style="transition-delay:.72s">
+          <div class="tl-dot"></div>
+          <div class="tl-when">26 February 2026</div>
+          <div class="tl-title">Legal Closure</div>
+          <div class="tl-desc">The divorce was finalised. A legal record that confirmed, in formal terms, what April 3rd had already sealed in every way that actually mattered.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── WORD CARDS ─────────────────── -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="chapter-header rv">
+        <span class="ch-num">05</span>
+        <div class="ch-line"></div>
+        <span class="ch-title">What This Memory Is</span>
+      </div>
+      <div class="word-grid">
+        <div class="word-card rv d1"><span class="wc-icon">🌧️</span><div class="wc-word">Grief</div><div class="wc-def">Love with nowhere left to go. The cost of having cared completely.</div></div>
+        <div class="word-card rv d2"><span class="wc-icon">🕯️</span><div class="wc-word">Memory</div><div class="wc-def">What survives the ending. The part of love that no document dissolves.</div></div>
+        <div class="word-card rv d3"><span class="wc-icon">🫀</span><div class="wc-word">Honesty</div><div class="wc-def">The only way to keep a memory well. Without pretence, without revision.</div></div>
+        <div class="word-card rv d4"><span class="wc-icon">🌱</span><div class="wc-word">Forward</div><div class="wc-def">The only direction available after April 3rd. One day at a time.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── LETTER ─────────────────────── -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="chapter-header rv">
+        <span class="ch-num">06</span>
+        <div class="ch-line"></div>
+        <span class="ch-title">Words Never Sent</span>
+      </div>
+      <div class="letter rv">
+        <div class="letter-to">To Sindhu</div>
+        <p class="letter-p">
+          There are things about that day I keep returning to.
+          Not the argument itself, but the surprise of it — the fact that
+          I didn't know your family was coming. <strong>The whole shape of the day arrived without any warning,
+          and I didn't have time to prepare for it in any way.</strong>
+          That isn't a complaint. It's just an honest accounting of what happened.
+        </p>
+        <p class="letter-p">
+          I understand, now more than I did then, that the problems between us had been building
+          for a long time. That no single conversation was going to fix them.
+          That you had reached a point where leaving felt like the only real answer available to you.
+          <em>I don't know that I could have changed it, even if I had known it was coming.</em>
+          But I wish we had found a way to have that conversation differently, at some point, before it became the last one.
+        </p>
+        <p class="letter-p">
+          You were carrying Yokshith when you left.
+          He arrived on September 2nd, 2025 —
+          <strong>already loved, from long before that day.</strong>
+          Whatever happened between us, that has always been true and will always remain so.
+        </p>
+        <p class="letter-p">
+          I keep this page not to place blame or to grieve publicly.
+          I keep it because April 3rd happened, it was real, and <em>real things deserve to be acknowledged honestly</em> —
+          even when the honest version is complicated and doesn't resolve into anything clean.
+        </p>
+        <div class="letter-sig">
+          <div class="sig-from">Written with honesty, kept with care —</div>
+          <div class="sig-name">Chandu</div>
+          <div class="sig-date">April 3, 2025 &nbsp;·&nbsp; Always Remembered</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── QUOTE 2 ─────────────────────── -->
+  <section class="section" style="padding-top:0">
+    <div class="container rv">
+      <div class="quote-card">
+        <div class="q-mark">"</div>
+        <div class="q-text">
+          Some things don't end because anyone was<br>
+          entirely wrong. They end because <strong>the distance<br>
+          between two people finally becomes permanent.</strong>
+        </div>
+        <div class="q-attr">— On what April 3rd honestly was</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CLOSING ────────────────────── -->
+  <section class="section" style="padding-bottom:0">
+    <div class="closing rv">
+      <div class="clos-orn"><div class="col"></div><div class="cod"></div><div class="col r"></div></div>
+      <div class="closing-h">A Memory, Kept Honestly</div>
+      <p class="closing-body">
+        This page does not soften what happened or inflate it into something larger than it was.
+        There was a journey from Hyderabad, an unexpected conversation, a decision, a departure.
+        That is the truth of April 3rd, held as clearly and honestly as possible.
+      </p>
+      <p class="closing-body">
+        Yokshith arrived on September 2nd, 2025. He was loved before he arrived
+        and is loved now. That is the part of this story that does not change.
+      </p>
+      <div class="closing-sig">Remembered by Chandu</div>
+      <div class="closing-date">April 3, 2025 &nbsp;·&nbsp; Written With Honesty</div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="ft-brand">Chandu <span>&amp;</span> Family</div>
+    <div class="ft-orn"><div class="ft-orn-line"></div><div class="ft-orn-sym">✦ ✦ ✦</div><div class="ft-orn-line"></div></div>
+    <div class="ft-text">April 3, 2025 &nbsp;·&nbsp; A Memory Preserved</div>
+    <div class="ft-text" style="color:rgba(215,200,185,.28)">© 2026 &nbsp;·&nbsp; Made with care by Chandu</div>
+    <a href="index.html" class="ft-link">← Return to Family Home</a>
+  </footer>
+</main>
+
+<script>
+'use strict';
+
+/* ════════════════════════════════════════════════
+   HEART UTILITY FUNCTIONS
+════════════════════════════════════════════════ */
+function getHeartPoints(cx, cy, R, n) {
+  n = n || 260;
+  const k = R / 15, pts = [];
+  for (let i = 0; i <= n; i++) {
+    const t = (i / n) * Math.PI * 2;
+    pts.push([
+      cx + k * 16 * Math.pow(Math.sin(t), 3),
+      cy - k * (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t))
+    ]);
+  }
+  return pts;
+}
+
+function traceHeart(ctx, cx, cy, R) {
+  const pts = getHeartPoints(cx, cy, R);
+  ctx.beginPath();
+  pts.forEach(([x,y], i) => i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y));
+  ctx.closePath();
+}
+
+function paintHeart(ctx, cx, cy, R, dim) {
+  dim = dim || 0;
+  traceHeart(ctx, cx, cy, R);
+  const g = ctx.createRadialGradient(cx - R*.18, cy - R*.28, R*.03, cx + R*.06, cy + R*.1, R*.92);
+  g.addColorStop(0,   `hsl(348,${68-dim*20}%,${56-dim*12}%)`);
+  g.addColorStop(.38, `hsl(348,${60-dim*17}%,${45-dim*9}%)`);
+  g.addColorStop(.72, `hsl(348,${52-dim*14}%,${35-dim*7}%)`);
+  g.addColorStop(1,   `hsl(348,44%,${22-dim*4}%)`);
+  ctx.fillStyle = g;
+  ctx.fill();
+
+  // Specular
+  traceHeart(ctx, cx, cy, R);
+  const gh = ctx.createRadialGradient(cx - R*.22, cy - R*.42, 0, cx - R*.07, cy - R*.17, R*.46);
+  gh.addColorStop(0, 'rgba(255,255,255,.52)');
+  gh.addColorStop(.44, 'rgba(255,255,255,.14)');
+  gh.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = gh;
+  ctx.fill();
+
+  // Outline
+  traceHeart(ctx, cx, cy, R);
+  ctx.strokeStyle = `rgba(90,14,22,${.22 - dim*.08})`;
+  ctx.lineWidth = 1.3;
+  ctx.stroke();
+}
+
+/* ════════════════════════════════════════════════
+   SHARD MESH — polygon triangles filling the heart
+   Uses Voronoi-style irregular grid for organic shards
+════════════════════════════════════════════════ */
+function buildShards(cx, cy, R) {
+  // Offscreen inside-test
+  const tc = document.createElement('canvas');
+  tc.width = Math.ceil(R * 3); tc.height = Math.ceil(R * 3);
+  const ox = R * 1.5, oy = R * 1.5; // offset so heart fits
+  const tctx = tc.getContext('2d');
+  tctx.fillStyle = '#000';
+  tctx.fillRect(0, 0, tc.width, tc.height);
+  // Draw heart into offscreen canvas
+  const pts = getHeartPoints(ox, oy, R);
+  tctx.beginPath();
+  pts.forEach(([x,y], i) => i === 0 ? tctx.moveTo(x,y) : tctx.lineTo(x,y));
+  tctx.closePath(); tctx.fillStyle = '#fff'; tctx.fill();
+  const imgd = tctx.getImageData(0, 0, tc.width, tc.height);
+  function inside(wx, wy) {
+    const px = Math.round(wx - cx + ox), py = Math.round(wy - cy + oy);
+    if (px < 0 || py < 0 || px >= tc.width || py >= tc.height) return false;
+    return imgd.data[(py * tc.width + px) * 4] > 128;
+  }
+
+  // Seed points — dense inside heart, sparse outside
+  const seeds = [];
+  const N = 60; // number of seed points
+  for (let attempts = 0; attempts < 2000 && seeds.length < N; attempts++) {
+    const angle = Math.random() * Math.PI * 2;
+    const dist = R * (0.08 + Math.random() * 0.98);
+    const px = cx + Math.cos(angle) * dist;
+    const py = cy + Math.sin(angle) * dist * 0.88;
+    if (inside(px, py)) {
+      // Reject if too close to existing seed
+      const tooClose = seeds.some(s => {
+        const dx = s[0]-px, dy = s[1]-py;
+        return Math.sqrt(dx*dx+dy*dy) < R * 0.14;
+      });
+      if (!tooClose) seeds.push([px, py]);
+    }
+  }
+
+  // Delaunay triangulation — simple O(n²) for small N
+  function circumcircle(A, B, C) {
+    const ax = B[0]-A[0], ay = B[1]-A[1];
+    const bx = C[0]-A[0], by = C[1]-A[1];
+    const D = 2*(ax*by - ay*bx);
+    if (Math.abs(D) < 1e-10) return null;
+    const ux = (by*(ax*ax+ay*ay) - ay*(bx*bx+by*by)) / D;
+    const uy = (ax*(bx*bx+by*by) - bx*(ax*ax+ay*ay)) / D;
+    const cx0 = A[0]+ux, cy0 = A[1]+uy;
+    const r = Math.sqrt(ux*ux+uy*uy);
+    return { x:cx0, y:cy0, r };
+  }
+
+  // Bowyer-Watson
+  const superTri = [
+    [cx - R*4, cy + R*4],
+    [cx,       cy - R*4],
+    [cx + R*4, cy + R*4]
+  ];
+  let tris = [superTri];
+
+  seeds.forEach(p => {
+    let bad = [], ok = [];
+    tris.forEach(t => {
+      const c = circumcircle(t[0], t[1], t[2]);
+      if (!c) { ok.push(t); return; }
+      const dx = c.x-p[0], dy = c.y-p[1];
+      if (Math.sqrt(dx*dx+dy*dy) < c.r + .001) bad.push(t); else ok.push(t);
+    });
+    // Boundary edges
+    const edgeMap = {};
+    bad.forEach(t => {
+      [[0,1],[1,2],[2,0]].forEach(([i,j]) => {
+        const a = t[i], b = t[j];
+        const key = JSON.stringify([a,b].sort((x,y)=>x[0]-y[0]||x[1]-y[1]));
+        edgeMap[key] = (edgeMap[key]||0)+1;
+      });
+    });
+    const boundary = Object.entries(edgeMap).filter(([,v])=>v===1).map(([k])=>JSON.parse(k));
+    boundary.forEach(([a,b]) => ok.push([a, b, p]));
+    tris = ok;
+  });
+
+  // Remove triangles containing super-triangle vertices
+  tris = tris.filter(t =>
+    !t.some(v => superTri.some(sv => v[0]===sv[0] && v[1]===sv[1]))
+  );
+
+  // Keep only triangles whose centroid is inside the heart
+  const shards = tris.filter(t => {
+    const ccx = (t[0][0]+t[1][0]+t[2][0]) / 3;
+    const ccy = (t[0][1]+t[1][1]+t[2][1]) / 3;
+    return inside(ccx, ccy);
+  }).map(t => {
+    const ccx = (t[0][0]+t[1][0]+t[2][0]) / 3;
+    const ccy = (t[0][1]+t[1][1]+t[2][1]) / 3;
+    return {
+      pts: t,
+      cx: ccx, cy: ccy, // centroid
+      // Physics state
+      ox: 0, oy: 0, angle: 0,
+      vx: 0, vy: 0, va: 0,
+      alpha: 1, fade: 0
+    };
+  });
+
+  return shards;
+}
+
+/* ════════════════════════════════════════════════
+   LOADER HEART — gentle beat only
+════════════════════════════════════════════════ */
+(function() {
+  const cv = document.getElementById('ld-cvs');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const W = cv.width, H = cv.height;
+  const CX = W/2, CY = H/2 + 4, R = 48;
+  let t = 0, raf;
+
+  function frame() {
+    raf = requestAnimationFrame(frame);
+    t += .016;
+    ctx.clearRect(0, 0, W, H);
+
+    // Ambient glow
+    const ag = ctx.createRadialGradient(CX, CY, 0, CX, CY, R * 1.9);
+    ag.addColorStop(0, 'rgba(181,48,69,.10)');
+    ag.addColorStop(1, 'rgba(181,48,69,0)');
+    ctx.fillStyle = ag;
+    ctx.fillRect(0, 0, W, H);
+
+    const BD = .88, ct = t % BD;
+    let sc = 1;
+    if (ct < .08)       sc = 1 + .08*(ct/.08);
+    else if (ct < .17)  sc = 1.08 - .08*((ct-.08)/.09);
+    else if (ct < .22)  sc = 1 + .04*((ct-.17)/.05);
+    else if (ct < .29)  sc = 1.04 - .04*((ct-.22)/.07);
+
+    // Glow ring on beat
+    if (sc > 1.04) {
+      const gr = ctx.createRadialGradient(CX, CY, R*.85, CX, CY, R*1.4);
+      gr.addColorStop(0, `rgba(181,48,69,${(sc-1)*2.2})`);
+      gr.addColorStop(1, 'rgba(181,48,69,0)');
+      ctx.fillStyle = gr;
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    ctx.save();
+    ctx.translate(CX, CY); ctx.scale(sc, sc); ctx.translate(-CX, -CY);
+    paintHeart(ctx, CX, CY, R, 0);
+    ctx.restore();
+  }
+  raf = requestAnimationFrame(frame);
+  window._ldStop = () => cancelAnimationFrame(raf);
+})();
+
+
+/* ════════════════════════════════════════════════
+   HERO SHATTER ANIMATION
+   States: APPEAR → BEAT(3x) → WINDUP → SHATTER → FLY → PAUSE → REFORM → WHOLE
+════════════════════════════════════════════════ */
+(function() {
+  const cv = document.getElementById('hero-cvs');
+  if (!cv) return;
+  const ctx = cv.getContext('2d');
+  const dpr = window.devicePixelRatio || 1;
+
+  let W, H, CX, CY, R;
+  let shards = [];
+  let waves = [];
+
+  function resize() {
+    const rect = cv.parentElement.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    cv.width = W * dpr; cv.height = H * dpr;
+    cv.style.width  = W + 'px';
+    cv.style.height = H + 'px';
+    ctx.setTransform(1,0,0,1,0,0);
+    ctx.scale(dpr, dpr);
+    CX = W / 2; CY = H / 2 + 8;
+    R  = Math.min(W, H) * .325;
+    shards = buildShards(CX, CY, R);
+  }
+
+  resize();
+  window.addEventListener('resize', () => { ctx.setTransform(1,0,0,1,0,0); resize(); });
+
+  // Easing helpers
+  const eO  = t => 1 - Math.pow(1 - t, 3);
+  const eIO = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2;
+  const lerp = (a, b, t) => a + (b - a) * t;
+
+  /* ─── IMPACT ─── */
+  function impact() {
+    // Impact flash via CSS
+    const fl = document.createElement('div');
+    fl.style.cssText = 'position:absolute;inset:0;border-radius:inherit;background:rgba(255,220,180,.7);pointer-events:none;transition:opacity .18s;z-index:10;';
+    cv.parentElement.appendChild(fl);
+    requestAnimationFrame(() => { fl.style.opacity = '0'; setTimeout(() => fl.remove(), 300); });
+
+    // Screen micro-shake
+    cv.style.transition = 'transform 0s';
+    cv.style.transform = 'translate(3px,-4px)';
+    setTimeout(() => { cv.style.transform = 'translate(-2px,3px)'; }, 30);
+    setTimeout(() => { cv.style.transform = 'translate(2px,-2px)'; }, 70);
+    setTimeout(() => { cv.style.transform = 'none'; cv.style.transition = ''; }, 110);
+
+    // Shockwave rings
+    waves.push({r: R * .1, a: .9, maxR: R * 2.0, speed: R * 3.5});
+    waves.push({r: 0,      a: .6, maxR: R * 2.5, speed: R * 2.8, delay: .06});
+    waves.push({r: 0,      a: .4, maxR: R * 3.0, speed: R * 2.2, delay: .14});
+
+    // Assign shard velocities — impact from upper-middle
+    const IY = CY - R * .25;
+    shards.forEach(s => {
+      const dx = s.cx - CX;
+      const dy = s.cy - IY;
+      const dist = Math.sqrt(dx*dx + dy*dy) || 1;
+      const distNorm = dist / R;
+      // Closer shards → faster, more rotation
+      const baseSpeed = R * (3.5 + Math.random() * 2.5) / (distNorm * .5 + .2);
+      // Outward + upward bias (gravity pulls down later)
+      s.vx = (dx / dist) * baseSpeed * (.7 + Math.random() * .6) + (Math.random() - .5) * R * .8;
+      s.vy = (dy / dist) * baseSpeed * (.7 + Math.random() * .6) - R * (1.2 + Math.random() * 1.4);
+      s.va = (Math.random() - .5) * (10 + Math.random() * 16);
+      s.ox = 0; s.oy = 0; s.angle = 0;
+      s.alpha = 1; s.fade = 0;
+      // Save reform target
+      s._startOX = (Math.random() - .5) * R * 2.8;
+      s._startOY = (Math.random() - .5) * R * 2.8;
+      s._startA  = (Math.random() - .5) * Math.PI * 2.5;
+    });
+  }
+
+  /* ─── PHYSICS TICK ─── */
+  function tickShards(dt, fading) {
+    const GRAVITY = R * 4.5;
+    const AIR = 0.96; // velocity damping per second (approx)
+    shards.forEach(s => {
+      if (!fading) {
+        s.vy += GRAVITY * dt;
+        s.vx *= Math.pow(AIR, dt * 60 / 60);
+        s.vy *= Math.pow(AIR, dt * 55 / 60);
+        s.va *= Math.pow(.97, dt * 60 / 60);
+        s.ox += s.vx * dt;
+        s.oy += s.vy * dt;
+        s.angle += s.va * dt;
+        s.alpha = Math.max(0, s.alpha - dt * .65);
+      }
+    });
+  }
+
+  /* ─── DRAW SHARDS ─── */
+  function drawShards(globalAlpha) {
+    globalAlpha = globalAlpha === undefined ? 1 : globalAlpha;
+    shards.forEach(s => {
+      const a = s.alpha * globalAlpha;
+      if (a <= 0.005) return;
+      ctx.save();
+      ctx.globalAlpha = a;
+      ctx.translate(s.cx + s.ox, s.cy + s.oy);
+      ctx.rotate(s.angle);
+      // Draw triangle centred on origin
+      const p = s.pts;
+      ctx.beginPath();
+      ctx.moveTo(p[0][0] - s.cx, p[0][1] - s.cy);
+      ctx.lineTo(p[1][0] - s.cx, p[1][1] - s.cy);
+      ctx.lineTo(p[2][0] - s.cx, p[2][1] - s.cy);
+      ctx.closePath();
+      // Color based on centroid position within heart
+      const ny = (s.cy - CY) / R;
+      const nx = (s.cx - CX) / R;
+      const hue = 348;
+      const sat = Math.round(62 - ny * 8);
+      const lit = Math.round(44 + nx * 4 - ny * 6);
+      ctx.fillStyle = `hsl(${hue},${sat}%,${lit}%)`;
+      ctx.fill();
+      // Shard edge — gives glass-like feel
+      ctx.strokeStyle = 'rgba(255,180,180,.2)';
+      ctx.lineWidth = .5;
+      ctx.stroke();
+      // Small specular dot on each shard
+      if (a > .5) {
+        const sx = (p[0][0] - s.cx) * .6 + (p[1][0] - s.cx) * .2 + (p[2][0] - s.cx) * .2;
+        const sy = (p[0][1] - s.cy) * .6 + (p[1][1] - s.cy) * .2 + (p[2][1] - s.cy) * .2;
+        ctx.beginPath(); ctx.arc(sx, sy, 1.2, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,255,255,${a * .35})`; ctx.fill();
+      }
+      ctx.restore();
+    });
+  }
+
+  /* ─── DRAW WAVES ─── */
+  let waveTime = 0;
+  function drawWaves(dt) {
+    waveTime += dt;
+    waves = waves.filter(w => w.a > 0.01);
+    waves.forEach(w => {
+      if (w.delay) { w.delay -= dt; if (w.delay > 0) return; w.delay = 0; }
+      w.r += w.speed * dt;
+      w.a -= dt * 2.0;
+      if (w.a <= 0) return;
+      ctx.save();
+      ctx.globalAlpha = w.a * .7;
+      ctx.beginPath(); ctx.arc(CX, CY, w.r, 0, Math.PI * 2);
+      // Warm rose ring
+      ctx.strokeStyle = 'rgba(181,48,69,.85)';
+      ctx.lineWidth = 2.2;
+      ctx.stroke();
+      ctx.restore();
+    });
+  }
+
+  /* ─── REFORM SHARDS ─── */
+  function reformShards(progress) {
+    const e = eIO(Math.min(progress, 1));
+    shards.forEach((s, i) => {
+      const delay = (i / shards.length) * .28;
+      const local = Math.min(Math.max((progress - delay) / .72, 0), 1);
+      const le = eIO(local);
+      s.alpha = local;
+      s.ox    = lerp(s._startOX, 0, le);
+      s.oy    = lerp(s._startOY, 0, le);
+      s.angle = lerp(s._startA,  0, le);
+    });
+  }
+
+  /* ─── STATE MACHINE ─── */
+  let state = 'APPEAR', st = 0, prev = null, beats = 0;
+
+  function frame(ts) {
+    if (prev === null) prev = ts;
+    const dt = Math.min((ts - prev) / 1000, .05);
+    prev = ts; st += dt;
+
+    ctx.clearRect(0, 0, W, H);
+
+    switch (state) {
+
+      case 'APPEAR': {
+        const p = Math.min(st / 1.0, 1), e = eO(p);
+        ctx.save(); ctx.globalAlpha = e;
+        // Bloom glow
+        const ag = ctx.createRadialGradient(CX, CY, 0, CX, CY, R * 1.8);
+        ag.addColorStop(0, `rgba(181,48,69,${e * .1})`);
+        ag.addColorStop(1, 'rgba(181,48,69,0)');
+        ctx.fillStyle = ag; ctx.fillRect(0, 0, W, H);
+        paintHeart(ctx, CX, CY, R, 0);
+        ctx.restore();
+        if (p >= 1) { beats = 0; state = 'BEAT'; st = 0; }
+        break;
+      }
+
+      case 'BEAT': {
+        const BD = .88, ct = st % BD, nb = Math.floor(st / BD);
+        if (nb > beats) beats = nb;
+        let sc = 1;
+        if (ct < .08)       sc = 1 + .085 * (ct / .08);
+        else if (ct < .17)  sc = 1.085 - .085 * ((ct - .08) / .09);
+        else if (ct < .23)  sc = 1 + .045 * ((ct - .17) / .06);
+        else if (ct < .30)  sc = 1.045 - .045 * ((ct - .23) / .07);
+
+        const gA = (sc - 1) * 10;
+        if (gA > 0) {
+          const ag = ctx.createRadialGradient(CX, CY, R * .7, CX, CY, R * 2.0);
+          ag.addColorStop(0, `rgba(181,48,69,${gA * .18})`);
+          ag.addColorStop(1, 'rgba(181,48,69,0)');
+          ctx.fillStyle = ag; ctx.fillRect(0, 0, W, H);
+        }
+
+        ctx.save();
+        ctx.translate(CX, CY); ctx.scale(sc, sc); ctx.translate(-CX, -CY);
+        paintHeart(ctx, CX, CY, R, 0);
+        ctx.restore();
+
+        if (beats >= 3) { state = 'WINDUP'; st = 0; }
+        break;
+      }
+
+      case 'WINDUP': {
+        // Heart compresses slightly before impact
+        const p = Math.min(st / .22, 1), e = eO(p);
+        const scaleX = 1 - e * .06;
+        const scaleY = 1 + e * .08;
+        // Desaturate slightly
+        ctx.save();
+        ctx.translate(CX, CY); ctx.scale(scaleX, scaleY); ctx.translate(-CX, -CY);
+        paintHeart(ctx, CX, CY, R, e * .15);
+        ctx.restore();
+        drawWaves(dt);
+        // Build one pre-wave
+        if (st < .04 && waves.length === 0) {
+          waves.push({ r:0, a:.5, maxR: R*1.4, speed: R*2, delay:0 });
+        }
+        if (p >= 1) { impact(); state = 'FLY'; st = 0; }
+        break;
+      }
+
+      case 'FLY': {
+        tickShards(dt, false);
+        drawWaves(dt);
+        drawShards(1);
+        const allGone = shards.every(s => s.alpha <= 0);
+        if (allGone || st > 2.2) { state = 'PAUSE'; st = 0; }
+        break;
+      }
+
+      case 'PAUSE': {
+        drawWaves(dt);
+        // Faint ghost of heart outline
+        const ghostA = Math.min(st / .5, .25) * .4;
+        if (ghostA > 0) {
+          ctx.save(); ctx.globalAlpha = ghostA;
+          traceHeart(ctx, CX, CY, R);
+          ctx.strokeStyle = 'rgba(181,48,69,.6)'; ctx.lineWidth = 1.5; ctx.stroke();
+          ctx.restore();
+        }
+        if (st > .85) {
+          // Prepare reform positions
+          shards.forEach(s => { s.alpha = 0; });
+          state = 'REFORM'; st = 0;
+        }
+        break;
+      }
+
+      case 'REFORM': {
+        drawWaves(dt);
+        reformShards(st / 1.05);
+        drawShards(1);
+        if (st >= 1.05) { state = 'WHOLE'; st = 0; }
+        break;
+      }
+
+      case 'WHOLE': {
+        // Brief pause as whole heart, then reset
+        paintHeart(ctx, CX, CY, R, 0);
+        if (st > .55) { beats = 0; state = 'BEAT'; st = 0; }
+        break;
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(ts => { prev = ts; frame(ts); });
+})();
+
+
+/* ════════════════════════════════════════════════
+   FLOATING PETALS — warm blush/gold tones on light bg
+════════════════════════════════════════════════ */
+(function() {
+  const cv = document.getElementById('petal-canvas');
+  const ctx = cv.getContext('2d');
+  let W, H;
+  function resize() { W = cv.width = window.innerWidth; H = cv.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const COLS = [
+    'rgba(205,130,120,', 'rgba(220,158,120,', 'rgba(210,160,140,',
+    'rgba(215,178,160,', 'rgba(188,118,108,', 'rgba(230,188,168,'
+  ];
+  const petals = Array.from({length: 15}, () => mkP());
+  function mkP() {
+    return {
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight - window.innerHeight,
+      w: 4 + Math.random() * 10, h: 2 + Math.random() * 5,
+      rot: Math.random() * Math.PI * 2,
+      rSpd: (Math.random() - .5) * .025,
+      vx: (Math.random() - .5) * .4,
+      vy: .28 + Math.random() * .58,
+      a: .04 + Math.random() * .12,
+      col: COLS[Math.floor(Math.random() * COLS.length)]
+    };
+  }
+
+  (function tick() {
+    ctx.clearRect(0, 0, W, H);
+    petals.forEach((p, i) => {
+      p.x += p.vx; p.y += p.vy; p.rot += p.rSpd;
+      if (p.y > H + 18) { Object.assign(petals[i], mkP()); petals[i].y = -15; petals[i].x = Math.random() * W; }
+      ctx.save();
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.beginPath(); ctx.ellipse(0, 0, p.w, p.h, 0, 0, Math.PI * 2);
+      ctx.fillStyle = p.col + p.a + ')';
+      ctx.fill(); ctx.restore();
+    });
+    requestAnimationFrame(tick);
+  })();
+})();
+
+
+/* ════════════════════════════════════════════════
+   SCROLL REVEAL — IntersectionObserver
+════════════════════════════════════════════════ */
+function initReveal() {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: .1 });
+  document.querySelectorAll('.rv, .rv-l, .rv-r, .rv-s').forEach(el => io.observe(el));
+
+  const ioTl = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); ioTl.unobserve(e.target); } });
+  }, { threshold: .12 });
+  document.querySelectorAll('.tl-item').forEach(el => ioTl.observe(el));
+}
+
+
+/* ════════════════════════════════════════════════
+   LOADER DISMISS + PAGE ENTER
+════════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    if (window._ldStop) window._ldStop();
+    document.getElementById('loader').classList.add('out');
+    setTimeout(() => {
+      document.getElementById('page').classList.add('in');
+      initReveal();
+    }, 380);
+  }, 4100);
+});
+</script>
+</body>
+</html>
