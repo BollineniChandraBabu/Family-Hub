@@ -60,7 +60,11 @@ body{
   min-height:100vh;
   overflow-x:hidden;
   cursor:default;
+  opacity:0;
+  transform:translateY(10px) scale(.995);
+  transition:opacity .9s var(--ease), transform 1s var(--spring);
 }
+body.page-ready{opacity:1;transform:none;}
 img,svg{display:block;}
 a{color:inherit;text-decoration:none;}
 
@@ -71,9 +75,19 @@ a{color:inherit;text-decoration:none;}
   position:fixed;inset:0;z-index:9999;
   background:var(--ivory);
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
-  transition:opacity .9s var(--ease),visibility .9s var(--ease);
+  transition:opacity .9s var(--ease),visibility .9s var(--ease),transform .9s var(--ease);
+  overflow:hidden;
 }
-#loader.out{opacity:0;visibility:hidden;pointer-events:none;}
+#loader::before{
+  content:"";
+  position:absolute;
+  inset:-35% 0 auto -30%;
+  width:55%;height:170%;
+  background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.65), rgba(255,255,255,0));
+  transform:rotate(12deg) translateX(-260%);
+  animation:ldSweep 2.8s ease-in-out infinite;
+}
+#loader.out{opacity:0;visibility:hidden;pointer-events:none;transform:scale(1.02);}
 
 .ld-mark{
   opacity:0;animation:ldUp 1s var(--spring) forwards .1s;
@@ -108,8 +122,26 @@ a{color:inherit;text-decoration:none;}
   font-size:.65rem;font-weight:300;letter-spacing:.45em;text-transform:uppercase;
   color:var(--ink-4);opacity:0;animation:ldFade .5s ease forwards 1s;
 }
+.ld-veil{
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at center, rgba(251,248,242,0) 0%, rgba(251,248,242,.95) 65%, rgba(251,248,242,1) 100%);
+  opacity:0;
+  pointer-events:none;
+}
+#loader.out .ld-veil{
+  animation:ldVeil .9s var(--ease) forwards;
+}
 @keyframes ldUp{from{opacity:0;transform:translateY(16px) scale(.96);}to{opacity:1;transform:none;}}
 @keyframes ldFade{from{opacity:0;}to{opacity:1;}}
+@keyframes ldSweep{
+  0%{transform:rotate(12deg) translateX(-260%);}
+  45%,100%{transform:rotate(12deg) translateX(420%);}
+}
+@keyframes ldVeil{
+  from{opacity:0;}
+  to{opacity:1;}
+}
 
 /* ═══════════════════════════════════════════
    CANVAS + PARTICLES
@@ -976,6 +1008,7 @@ a{color:inherit;text-decoration:none;}
 
 <!-- ════════════ LOADER ════════════ -->
 <div id="loader">
+  <div class="ld-veil" aria-hidden="true"></div>
   <div class="ld-mark">
     <svg width="70" height="70" viewBox="0 0 70 70" fill="none">
       <circle cx="35" cy="35" r="32" stroke="#F0D8D4" stroke-width="1" opacity="0.6"/>
@@ -1997,7 +2030,11 @@ window.addEventListener('DOMContentLoaded',()=>{
   setInterval(tick, 1000);
   setInterval(rotateHeroQuote, 6000);
 
-  setTimeout(()=>document.getElementById('loader').classList.add('out'), 2200);
+  const loader = document.getElementById('loader');
+  setTimeout(()=>{
+    loader.classList.add('out');
+    document.body.classList.add('page-ready');
+  }, 2200);
 
   /* ── GA: track homepage view with next event info ── */
   gtag('event', 'homepage_view', {
