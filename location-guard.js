@@ -1,27 +1,30 @@
 async function checkLocation() {
-  const restrictAccess = (title, message = '') => {
-    const body = document.body || document.documentElement;
-    if (!body) {
-      return;
-    }
-
-    body.innerHTML = `<h1>${title}</h1>${message ? `<p>${message}</p>` : ''}`;
-  };
+  const restrictedPath = '/restricted-region.html';
+  const homePath = '/index.html';
+  const currentPath = window.location.pathname;
 
   try {
     const res = await fetch('https://ipinfo.io/json');
     const data = await res.json();
 
-    if (
+    const isAllowedRegion =
       data.country === 'IN' &&
-       (data.region === "Andhra Pradesh" || data.region === "Telangana")
-    ) {
-      console.log('Access allowed');
-    } else {
-      restrictAccess('Access Restricted', 'This site is only available in selected regions.');
+      (data.region === 'Andhra Pradesh' || data.region === 'Telangana');
+
+    if (isAllowedRegion) {
+      if (currentPath === restrictedPath) {
+        window.location.replace(homePath);
+      }
+      return;
+    }
+
+    if (currentPath !== restrictedPath) {
+      window.location.replace(restrictedPath);
     }
   } catch (e) {
-    restrictAccess('Location check failed');
+    if (currentPath !== restrictedPath) {
+      window.location.replace(restrictedPath);
+    }
   }
 }
 
