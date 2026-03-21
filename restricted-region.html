@@ -7,12 +7,15 @@
   <title>Access Restricted</title>
   <style>
     :root {
-      --bg: #fff8f3;
+      --bg: #f6f7ff;
       --card: #ffffff;
-      --text: #3b2a22;
-      --muted: #7e6558;
-      --accent: #c69a4d;
-      --accent-soft: #f8e2c3;
+      --text: #3e3f86;
+      --muted: #6d73a9;
+      --accent: #de4cb0;
+      --accent-2: #5e66d8;
+      --accent-soft: #f8dfff;
+      --warning: #9f7cf3;
+      --gold: #ffc75a;
     }
 
     * {
@@ -25,7 +28,10 @@
       min-height: 100vh;
       display: grid;
       place-items: center;
-      background: radial-gradient(circle at top, #ffe9d4, var(--bg) 45%);
+      background:
+        radial-gradient(circle at 8% 12%, #e8f4ff 0, transparent 25%),
+        radial-gradient(circle at 92% 88%, #f7e9ff 0, transparent 25%),
+        var(--bg);
       font-family: "Lato", Arial, sans-serif;
       color: var(--text);
       padding: 24px;
@@ -59,40 +65,53 @@
     }
 
     .card {
-      width: min(620px, 100%);
+      width: min(760px, 100%);
       background: var(--card);
-      border-radius: 18px;
-      padding: 34px 28px 20px;
-      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.08);
-      border: 1px solid #f0dfcf;
+      border-radius: 28px;
+      padding: 26px 24px 20px;
+      box-shadow: 0 20px 48px rgba(89, 98, 194, 0.14);
+      border: 1px solid #e6e8ff;
       text-align: center;
       position: relative;
       z-index: 1;
-      animation: cardIn 600ms ease-out;
+      animation: cardIn 700ms ease-out;
+      overflow: hidden;
     }
 
-    .icon-wrap {
-      width: 90px;
-      height: 90px;
-      margin: 0 auto 14px;
+    .pulse-lock {
+      width: 138px;
+      height: 138px;
+      margin: -6px auto 8px;
       border-radius: 50%;
-      background: var(--accent-soft);
+      background: radial-gradient(circle at 32% 26%, #ff74cf, #c9359a);
       display: grid;
       place-items: center;
-      animation: pulse 2.6s ease-in-out infinite;
+      position: relative;
+      animation: floatY 4s ease-in-out infinite;
+      box-shadow: 0 14px 36px rgba(201, 43, 162, 0.28);
     }
 
-    .travel-img {
-      width: 110px;
-      margin: 0 auto 18px;
-      display: block;
-      animation: floatY 2.8s ease-in-out infinite;
+    .pulse-lock::before,
+    .pulse-lock::after {
+      content: "";
+      position: absolute;
+      inset: -10px;
+      border-radius: inherit;
+      border: 2px dashed rgba(219, 68, 177, 0.5);
+      animation: spinRing 9s linear infinite;
+    }
+
+    .pulse-lock::after {
+      inset: -20px;
+      border-color: rgba(125, 120, 230, 0.36);
+      animation-duration: 13s;
+      animation-direction: reverse;
     }
 
     h1 {
       font-size: clamp(1.7rem, 4vw, 2.2rem);
-      margin-bottom: 12px;
-      color: var(--accent);
+      margin: 12px 0 12px;
+      color: var(--accent-2);
       letter-spacing: 0.2px;
     }
 
@@ -110,8 +129,8 @@
       padding: 9px 16px;
       display: inline-block;
       border-radius: 999px;
-      background: #fff4e5;
-      border: 1px solid #f4ddbc;
+      background: #f2efff;
+      border: 1px solid #d9d4ff;
     }
 
     .note {
@@ -125,9 +144,55 @@
     footer {
       margin-top: 18px;
       padding-top: 14px;
-      border-top: 1px dashed #ecd7c0;
+      border-top: 1px dashed #d9dcff;
       font-size: 0.84rem;
-      color: #9f8677;
+      color: #838ac4;
+    }
+
+    .hero-art {
+      width: min(660px, 100%);
+      margin-inline: auto;
+      filter: drop-shadow(0 12px 30px rgba(92, 101, 193, 0.18));
+    }
+
+    .lock-glow {
+      transform-origin: center;
+      animation: pulse 2.2s ease-in-out infinite;
+    }
+
+    .monitor-float {
+      animation: floatY 4.3s ease-in-out infinite;
+    }
+
+    .warning-bob {
+      transform-origin: center;
+      animation: bobWarn 2.5s ease-in-out infinite;
+    }
+
+    .plane-path {
+      stroke-dasharray: 8 10;
+      animation: pathDash 8s linear infinite;
+    }
+
+    .paper-plane {
+      animation: planeFly 6s ease-in-out infinite;
+    }
+
+    .person-worry {
+      animation: personShift 3.5s ease-in-out infinite;
+      transform-origin: 81% 78%;
+    }
+
+    .floating-bits circle {
+      animation: softPulse 3.8s ease-in-out infinite;
+    }
+
+    .floating-bits circle:nth-child(2n) {
+      animation-delay: .6s;
+    }
+
+    .floating-bits circle:nth-child(3n) {
+      animation-delay: 1s;
     }
 
     @keyframes floatY {
@@ -140,6 +205,10 @@
       0%,
       100% { transform: scale(1); }
       50% { transform: scale(1.08); }
+    }
+
+    @keyframes spinRing {
+      to { transform: rotate(360deg); }
     }
 
     @keyframes cardIn {
@@ -159,10 +228,42 @@
       50% { transform: translate(14px, 10px); }
     }
 
+    @keyframes bobWarn {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(-2deg); }
+    }
+
+    @keyframes pathDash {
+      to { stroke-dashoffset: -120; }
+    }
+
+    @keyframes planeFly {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(8px, -7px) rotate(4deg); }
+    }
+
+    @keyframes personShift {
+      0%, 100% { transform: translateX(0) rotate(0deg); }
+      50% { transform: translateX(3px) rotate(1deg); }
+    }
+
+    @keyframes softPulse {
+      0%, 100% { transform: scale(1); opacity: .7; }
+      50% { transform: scale(1.28); opacity: .3; }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .bg-orb,
-      .icon-wrap,
-      .travel-img,
+      .monitor-float,
+      .lock-glow,
+      .warning-bob,
+      .plane-path,
+      .paper-plane,
+      .person-worry,
+      .floating-bits circle,
+      .pulse-lock,
+      .pulse-lock::before,
+      .pulse-lock::after,
       .card {
         animation: none;
       }
@@ -174,21 +275,63 @@
   <div class="bg-orb orb-two" aria-hidden="true"></div>
 
   <main class="card" role="main" aria-labelledby="restricted-title">
-    <div class="icon-wrap" aria-hidden="true">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 13.5C14.0711 13.5 15.75 11.8211 15.75 9.75C15.75 7.67893 14.0711 6 12 6C9.92893 6 8.25 7.67893 8.25 9.75C8.25 11.8211 9.92893 13.5 12 13.5Z" stroke="#A8742C" stroke-width="1.5"/>
-        <path d="M4.5 9.75C4.5 15 12 21 12 21C12 21 19.5 15 19.5 9.75C19.5 5.60786 16.1421 2.25 12 2.25C7.85786 2.25 4.5 5.60786 4.5 9.75Z" stroke="#A8742C" stroke-width="1.5"/>
+    <svg class="hero-art" viewBox="0 0 760 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Access denied illustration with warning, lock and monitor">
+      <path class="plane-path" d="M80 72 C 240 10, 460 26, 640 90 C 680 105, 700 120, 715 146" fill="none" stroke="#7d79e6" stroke-width="2.5" stroke-linecap="round"/>
+      <g class="paper-plane">
+        <path d="M594 42 L625 52 L602 64 L609 52 Z" fill="#8ec5ff"/>
+      </g>
+      <g class="monitor-float">
+        <rect x="138" y="94" width="470" height="265" rx="16" fill="#eaf2ff" stroke="#9bc6f0" stroke-width="7"/>
+        <rect x="182" y="132" width="186" height="84" rx="8" fill="#dfe3f7"/>
+        <rect x="382" y="132" width="80" height="58" rx="8" fill="#dfe3f7"/>
+        <rect x="472" y="132" width="100" height="58" rx="8" fill="#dfe3f7"/>
+        <rect x="382" y="204" width="190" height="12" rx="6" fill="#d9e0f8"/>
+        <rect x="182" y="229" width="390" height="68" rx="10" fill="#dce4f8"/>
+        <rect x="330" y="358" width="90" height="22" rx="9" fill="#9bc6f0"/>
+        <path d="M294 380 H454 C 444 410, 304 410, 294 380 Z" fill="#8db9e8"/>
+      </g>
+      <g class="lock-glow">
+        <circle cx="372" cy="243" r="76" fill="url(#lockGrad)"/>
+        <path d="M344 249 H400 V287 H344 Z" fill="#fff" rx="8"/>
+        <path d="M353 247 V228 C353 216 362 208 372 208 C382 208 391 216 391 228 V247" stroke="#fff" stroke-width="9" stroke-linecap="round"/>
+        <circle cx="372" cy="268" r="8.5" fill="#b93e9c"/>
+      </g>
+      <g class="warning-bob">
+        <path d="M580 106 L638 206 H522 Z" fill="#ffffff" stroke="#d957bb" stroke-width="8" stroke-linejoin="round"/>
+        <rect x="575" y="141" width="10" height="36" rx="4" fill="#d957bb"/>
+        <circle cx="580" cy="189" r="6" fill="#d957bb"/>
+      </g>
+      <g class="person-worry">
+        <circle cx="655" cy="268" r="17" fill="#ffd6c4"/>
+        <path d="M636 296 C640 273 670 273 675 295 V351 H636 Z" fill="#ef4da8"/>
+        <path d="M648 285 L633 258 M664 284 L680 257" stroke="#ef4da8" stroke-width="10" stroke-linecap="round"/>
+        <path d="M638 351 L626 406 M671 351 L694 406" stroke="#4852b8" stroke-width="14" stroke-linecap="round"/>
+      </g>
+      <rect x="112" y="224" width="70" height="86" rx="20" fill="url(#goldGrad)"/>
+      <path d="M127 224 V208 C127 194 138 185 148 185 C160 185 170 194 170 208 V224" stroke="#5366d5" stroke-width="10" stroke-linecap="round"/>
+      <circle cx="147" cy="265" r="13" fill="none" stroke="#fff" stroke-width="4"/>
+      <g class="floating-bits" fill="#7184e9">
+        <circle cx="94" cy="115" r="4"/><circle cx="146" cy="70" r="3.5"/><circle cx="512" cy="63" r="3"/>
+        <circle cx="700" cy="228" r="4"/><circle cx="614" cy="320" r="3"/><circle cx="250" cy="318" r="3"/>
+      </g>
+      <defs>
+        <linearGradient id="lockGrad" x1="302" y1="178" x2="430" y2="305" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#ff5bc6"/><stop offset="1" stop-color="#9f34c9"/>
+        </linearGradient>
+        <linearGradient id="goldGrad" x1="112" y1="224" x2="182" y2="310" gradientUnits="userSpaceOnUse">
+          <stop stop-color="#ffd95b"/><stop offset="1" stop-color="#ffa14f"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="pulse-lock" aria-hidden="true">
+      <svg width="66" height="66" viewBox="0 0 66 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="16" y="30" width="34" height="24" rx="6" fill="#fff"/>
+        <path d="M22 30V22C22 15.4 27.4 10 34 10C40.6 10 46 15.4 46 22V30" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="33.5" cy="41" r="4.5" fill="#ca3ea4"/>
       </svg>
     </div>
 
-    <img
-      class="travel-img"
-      src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzJ4N3B3MmN4MW1kYWo0YnUwZW4wY2NuejJjNWVrYW4xM3F1ODN0YiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/YTbZzCkRQCEJa/giphy.gif"
-      alt="Animated travel sticker"
-      loading="lazy"
-    >
-
-    <h1 id="restricted-title">Thanks for visiting 💛</h1>
+    <h1 id="restricted-title">Access Denied · Regional Lock</h1>
     <p class="lead">
       This Family Hub is currently shared only within select regions for privacy and personal use.
     </p>
@@ -201,8 +344,11 @@
     </p>
 
     <footer>
-      Chandu &amp; Family Hub · Regional access experience updated with care.
+      © <span id="rr-year"></span> Chandu &amp; Family Hub · Regional access experience updated with care.
     </footer>
   </main>
+  <script>
+    document.getElementById('rr-year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
