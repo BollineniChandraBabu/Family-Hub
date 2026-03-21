@@ -35,7 +35,7 @@
       font-family: "Lato", Arial, sans-serif;
       color: var(--text);
       padding: 24px;
-      overflow: hidden;
+      overflow-x: hidden;
     }
 
     .bg-orb {
@@ -266,6 +266,70 @@
       .pulse-lock::after,
       .card {
         animation: none;
+      }
+    }
+
+    @media (max-width: 900px) {
+      body {
+        padding: 18px 14px;
+      }
+
+      .card {
+        border-radius: 22px;
+        padding: 20px 16px 16px;
+      }
+
+      .hero-art {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        display: block;
+        padding: 12px;
+      }
+
+      .card {
+        width: 100%;
+        margin: 12px auto;
+        border-radius: 18px;
+        padding: 16px 14px 14px;
+      }
+
+      .pulse-lock {
+        width: 102px;
+        height: 102px;
+        margin: 2px auto 8px;
+      }
+
+      .pulse-lock::before {
+        inset: -7px;
+      }
+
+      .pulse-lock::after {
+        inset: -13px;
+      }
+
+      .lead {
+        font-size: 0.95rem;
+        line-height: 1.55;
+      }
+
+      .region-list {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+      }
+
+      .note {
+        font-size: 0.88rem;
+        line-height: 1.5;
+      }
+
+      footer {
+        margin-top: 14px;
+        padding-top: 12px;
+        font-size: 0.8rem;
       }
     }
   </style>
