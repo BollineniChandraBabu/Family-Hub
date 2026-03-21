@@ -9,7 +9,7 @@ async function checkLocation() {
 
     const isAllowedRegion =
       data.country === 'IN' &&
-      (data.region === 'Andhra Pradesh' || data.region === 'Telangana');
+      (data.region === 'Andhra Pradesht');
 
     if (isAllowedRegion) {
       if (currentPath === restrictedPath) {
