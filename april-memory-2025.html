@@ -397,6 +397,25 @@ a { color:inherit; text-decoration:none; }
   border-radius:10px;
   background:var(--paper2);
   padding:14px 10px;
+  position:relative;
+  overflow:hidden;
+  transform:translateY(10px) scale(.98);
+  opacity:0;
+  animation:countCardIn .7s var(--ease) forwards;
+}
+.db-unit:nth-child(1) { animation-delay:.08s; }
+.db-unit:nth-child(2) { animation-delay:.16s; }
+.db-unit:nth-child(3) { animation-delay:.24s; }
+.db-unit::before {
+  content:'';
+  position:absolute;
+  top:0;
+  left:-140%;
+  width:80%;
+  height:100%;
+  background:linear-gradient(100deg, transparent, rgba(255,255,255,.38), transparent);
+  animation:countShimmer 3.2s ease-in-out infinite;
+  pointer-events:none;
 }
 .db-unit-value {
   display:block;
@@ -405,6 +424,10 @@ a { color:inherit; text-decoration:none; }
   font-size:clamp(1.5rem,4vw,2rem);
   line-height:1;
   color:var(--ink);
+  transform-origin:50% 70%;
+}
+.db-unit-value.bump {
+  animation:valueBump .55s var(--spring);
 }
 .db-unit-label {
   display:block;
@@ -421,9 +444,27 @@ a { color:inherit; text-decoration:none; }
   font-size:.78rem;
   color:var(--ink4);
   letter-spacing:.04em;
+  opacity:0;
+  animation:fadeInSoft .8s .35s var(--ease) forwards;
 }
 @media (max-width:560px) {
   .db-countdown { grid-template-columns:1fr; }
+}
+@keyframes countCardIn {
+  to { transform:none; opacity:1; }
+}
+@keyframes countShimmer {
+  0%, 55% { left:-140%; }
+  100% { left:160%; }
+}
+@keyframes valueBump {
+  0% { transform:translateY(8px) scale(.92); opacity:.45; }
+  60% { transform:translateY(-1px) scale(1.05); opacity:1; }
+  100% { transform:none; opacity:1; }
+}
+@keyframes fadeInSoft {
+  from { opacity:0; transform:translateY(5px); }
+  to { opacity:1; transform:none; }
 }
 
 /* ═══════════════════════════════════
@@ -1116,9 +1157,35 @@ function renderMemoryCountdown() {
 
   if (!yearsEl || !monthsEl || !daysEl || !asOfEl) return;
 
-  yearsEl.textContent = String(Math.max(0, elapsed.years));
-  monthsEl.textContent = String(Math.max(0, elapsed.months));
-  daysEl.textContent = String(Math.max(0, elapsed.days));
+  function animateCount(el, finalValue, delayMs) {
+    const value = Math.max(0, finalValue);
+    const durationMs = 1200;
+    const start = performance.now() + delayMs;
+
+    function tick(now) {
+      if (now < start) {
+        requestAnimationFrame(tick);
+        return;
+      }
+      const progress = Math.min((now - start) / durationMs, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+      const current = Math.round(value * eased);
+      el.textContent = String(current);
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        el.classList.remove('bump');
+        void el.offsetWidth; // restart animation
+        el.classList.add('bump');
+      }
+    }
+
+    requestAnimationFrame(tick);
+  }
+
+  animateCount(yearsEl, elapsed.years, 0);
+  animateCount(monthsEl, elapsed.months, 130);
+  animateCount(daysEl, elapsed.days, 260);
 
   const dateLabel = currentDate.toLocaleDateString('en-US', {
     year: 'numeric',
