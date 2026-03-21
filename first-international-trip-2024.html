@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <script src="location-guard.js"></script>
+  <title>Our First International Trip — Thailand 2024</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f2f6ff;
+      --card: rgba(255,255,255,.82);
+      --ink: #1a2846;
+      --muted: #5f6f8f;
+      --line: rgba(92,123,184,.2);
+      --blue: #2f79ff;
+      --teal: #00a98f;
+      --gold: #e0ae47;
+      --shadow: 0 18px 44px rgba(30, 50, 90, 0.14);
+      --ease: cubic-bezier(.4,0,.2,1);
+      --spring: cubic-bezier(.34,1.56,.64,1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse 70% 60% at 8% 2%, rgba(47, 121, 255, .2) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 45% at 92% 8%, rgba(0, 169, 143, .18) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 45% at 50% 100%, rgba(224, 174, 71, .12) 0%, transparent 60%),
+        var(--bg);
+      overflow-x: hidden;
+    }
+
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      background: linear-gradient(180deg, #f4f8ff 0%, #edf5ff 100%);
+      transition: opacity .9s var(--ease), visibility .9s var(--ease);
+    }
+    #loader.out { opacity: 0; visibility: hidden; pointer-events: none; }
+    .loader-inner { padding: 24px; }
+    .loader-plane {
+      font-size: 2rem;
+      display: inline-block;
+      animation: fly 1.2s var(--ease) infinite alternate;
+    }
+    .loader-title {
+      margin-top: 8px;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+    }
+    .loader-sub {
+      color: var(--muted);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-size: .72rem;
+      margin-top: 4px;
+    }
+    .loader-bar {
+      width: min(250px, 78vw);
+      margin: 16px auto 0;
+      height: 4px;
+      border-radius: 999px;
+      background: #dfe9ff;
+      overflow: hidden;
+    }
+    .loader-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--blue), var(--teal));
+      animation: load 2.1s var(--ease) forwards;
+    }
+
+    @keyframes fly { from { transform: translateX(-8px) translateY(4px) rotate(-8deg);} to { transform: translateX(10px) translateY(-4px) rotate(4deg);} }
+    @keyframes load { to { width: 100%; } }
+
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image: linear-gradient(rgba(72,105,170,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(72,105,170,.06) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(circle at center, rgba(0,0,0,.9), transparent 78%);
+      z-index: 0;
+    }
+
+    .page {
+      position: relative;
+      z-index: 2;
+      width: min(1080px, 100% - 28px);
+      margin: 0 auto;
+      padding: clamp(24px, 5vw, 42px) 0 26px;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .8s var(--ease), transform .8s var(--ease);
+    }
+    .page.in { opacity: 1; transform: none; }
+
+    .glass {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: clamp(22px, 4vw, 42px);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(47,121,255,.22), transparent 70%);
+      top: -80px;
+      right: -70px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #245fc6;
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin-top: 10px;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 5vw, 3rem);
+      line-height: 1.12;
+    }
+
+    .hero p { margin-top: 10px; max-width: 60ch; color: var(--muted); }
+
+    .hero-stats {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+      gap: 10px;
+    }
+    .hero-stat {
+      background: rgba(255,255,255,.75);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      transform: translateY(8px);
+      opacity: 0;
+      animation: up .7s var(--spring) forwards;
+    }
+    .hero-stat:nth-child(2) { animation-delay: .1s; }
+    .hero-stat:nth-child(3) { animation-delay: .2s; }
+    .hero-stat b { font-size: 1.08rem; display:block; margin-bottom: 2px; }
+    .hero-stat span { color: var(--muted); font-size: .86rem; }
+
+    .layout {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1.25fr .95fr;
+      gap: 14px;
+    }
+    @media (max-width: 840px) { .layout { grid-template-columns: 1fr; } }
+
+    .section { padding: clamp(18px,3vw,26px); }
+    .section h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.2rem, 2.8vw, 1.7rem); margin-bottom: 12px; }
+
+    .timeline { list-style:none; display:grid; gap:10px; }
+    .timeline li {
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.86);
+      border-radius: 14px;
+      padding: 12px;
+      border-left: 4px solid var(--blue);
+      transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+    }
+    .timeline li:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(47,121,255,.11); }
+    .timeline strong { display:block; margin-bottom: 3px; color:#1f4d9f; }
+    .timeline p { color: var(--muted); font-size: .95rem; }
+
+    .tags { display:flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .tag {
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: #edf4ff;
+      border: 1px solid #d7e6ff;
+      color:#2254a7;
+      font-size: .85rem;
+      font-weight: 600;
+    }
+
+    .story { color: var(--muted); font-size: .96rem; }
+
+    .photo-grid {
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px,1fr));
+      gap: 10px;
+    }
+    .photo {
+      min-height: 146px;
+      border-radius: 12px;
+      border: 1px dashed #b9cceb;
+      background: linear-gradient(140deg, #f5f9ff, #ecfffb);
+      display:grid;
+      place-items:center;
+      text-align:center;
+      color:#456080;
+      font-weight: 600;
+      padding: 12px;
+    }
+
+    .quote {
+      margin-top: 14px;
+      border-radius: 14px;
+      padding: 14px;
+      border: 1px solid #d8e7ff;
+      background: linear-gradient(120deg, rgba(47,121,255,.08), rgba(0,169,143,.1));
+      color:#214270;
+      font-style: italic;
+    }
+
+    footer {
+      margin-top: 16px;
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(20, 37, 70, .92);
+      color: #d9e5ff;
+      text-align: center;
+      border: 1px solid rgba(180, 200, 240, .25);
+    }
+    footer strong { color: #fff; }
+    footer a { color: #9fd2ff; text-decoration: none; }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: .65s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+    @keyframes up { to { transform: none; opacity: 1; } }
+  </style>
+</head>
+<body>
+  <div id="loader">
+    <div class="loader-inner">
+      <div class="loader-plane">✈️</div>
+      <div class="loader-title">Preparing Your Travel Memory</div>
+      <div class="loader-sub">Thailand · October 2024</div>
+      <div class="loader-bar"><div class="loader-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <main class="page" id="page">
+    <section class="hero glass reveal">
+      <p class="eyebrow">🌏 First International Trip</p>
+      <h1>Our Thailand Journey — 19 to 24 October 2024</h1>
+      <p>This page celebrates your first trip outside India together — a once-in-a-lifetime beginning filled with excitement, airports, beaches, temples, shopping streets, and unforgettable nights.</p>
+      <div class="hero-stats">
+        <div class="hero-stat"><b>6 days</b><span>Travel duration</span></div>
+        <div class="hero-stat"><b>Chennai ⇄ Bangkok</b><span>Flight route</span></div>
+        <div class="hero-stat"><b>Pattaya + Bangkok</b><span>Core destinations</span></div>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="section glass reveal">
+        <h2>Day-wise Memories</h2>
+        <ul class="timeline">
+          <li><strong>Day 0 · 19 Oct 2024</strong><p>Nellore to Chennai by road, reporting at bustand, and dinner before departure.</p></li>
+          <li><strong>Day 1 · 20 Oct 2024</strong><p>Flight to Bangkok, transfer to Pattaya hotel, lunch/check-in, and Alcazar Show.</p></li>
+          <li><strong>Day 2 · 21 Oct 2024</strong><p>Coral Island water activities, lunch by the sea, and evening Gems Gallery stop.</p></li>
+          <li><strong>Day 3 · 22 Oct 2024</strong><p>Noong Nooch Village, Thai cultural & elephant show, then Pattaya city and temple tour.</p></li>
+          <li><strong>Day 4 · 23 Oct 2024</strong><p>Travel to Bangkok, check-in, shopping time, and Chao Phraya river cruise dinner.</p></li>
+          <li><strong>Day 5 · 24 Oct 2024</strong><p>Bangkok city/temple visit, shopping, airport transfer, and return towards Nellore.</p></li>
+        </ul>
+      </section>
+
+      <section class="section glass reveal">
+        <h2>Highlights & Photo Spots</h2>
+        <div class="tags">
+          <span class="tag">🏝️ Coral Island</span>
+          <span class="tag">🎭 Alcazar</span>
+          <span class="tag">🐘 Noong Nooch</span>
+          <span class="tag">🛕 Temple Tour</span>
+          <span class="tag">🚢 River Cruise</span>
+        </div>
+        <p class="story">Your attached itinerary has been transformed into this memory page, with a richer visual style and dedicated places to add photos from each part of your journey.</p>
+
+        <div class="photo-grid">
+          <div class="photo">Add departure selfie<br>(Nellore/Chennai)</div>
+          <div class="photo">Add Pattaya fun moment<br>(Beach/Alcazar)</div>
+          <div class="photo">Add Bangkok city shot<br>(Temple/Cruise)</div>
+        </div>
+
+        <div class="quote">“Our first international trip wasn’t just about places — it was about us stepping into a bigger world together.”</div>
+      </section>
+    </div>
+
+    <footer class="reveal">
+      <p><strong>First International Trip Memory</strong> · Curated with love for your Thailand journey.</p>
+      <p style="margin-top:6px; font-size:.9rem;">Open from home page: <a href="index.html">Chandu &amp; Family</a> · Keep adding photos as your memory collection grows.</p>
+    </footer>
+  </main>
+
+  <script>
+    const loader = document.getElementById('loader');
+    const page = document.getElementById('page');
+    const reveals = [...document.querySelectorAll('.reveal')];
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        loader.classList.add('out');
+        page.classList.add('in');
+        reveals.forEach((el, i) => setTimeout(() => el.classList.add('in'), i * 110));
+      }, 1700);
+    });
+  </script>
+</body>
+</html>
