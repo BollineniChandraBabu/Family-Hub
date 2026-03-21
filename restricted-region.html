@@ -12,6 +12,7 @@
       --text: #3b2a22;
       --muted: #7e6558;
       --accent: #c69a4d;
+      --accent-soft: #f8e2c3;
     }
 
     * {
@@ -28,44 +29,180 @@
       font-family: "Lato", Arial, sans-serif;
       color: var(--text);
       padding: 24px;
+      overflow: hidden;
+    }
+
+    .bg-orb {
+      position: fixed;
+      border-radius: 999px;
+      filter: blur(6px);
+      opacity: 0.45;
+      pointer-events: none;
+      animation: drift 12s ease-in-out infinite;
+    }
+
+    .orb-one {
+      width: 240px;
+      height: 240px;
+      background: #ffdcb5;
+      top: -70px;
+      left: -50px;
+    }
+
+    .orb-two {
+      width: 190px;
+      height: 190px;
+      background: #ffeaca;
+      bottom: -50px;
+      right: -30px;
+      animation-delay: 1.5s;
     }
 
     .card {
-      width: min(560px, 100%);
+      width: min(620px, 100%);
       background: var(--card);
-      border-radius: 16px;
-      padding: 28px;
+      border-radius: 18px;
+      padding: 34px 28px 20px;
       box-shadow: 0 16px 35px rgba(0, 0, 0, 0.08);
       border: 1px solid #f0dfcf;
       text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: cardIn 600ms ease-out;
+    }
+
+    .icon-wrap {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      display: grid;
+      place-items: center;
+      animation: pulse 2.6s ease-in-out infinite;
+    }
+
+    .travel-img {
+      width: 110px;
+      margin: 0 auto 18px;
+      display: block;
+      animation: floatY 2.8s ease-in-out infinite;
     }
 
     h1 {
-      font-size: clamp(1.6rem, 4vw, 2.1rem);
+      font-size: clamp(1.7rem, 4vw, 2.2rem);
       margin-bottom: 12px;
       color: var(--accent);
+      letter-spacing: 0.2px;
     }
 
-    p {
-      font-size: 1rem;
-      line-height: 1.6;
+    .lead {
+      font-size: 1.03rem;
+      line-height: 1.65;
       color: var(--muted);
+      margin-bottom: 10px;
     }
 
     .region-list {
-      margin-top: 14px;
-      font-weight: 600;
+      margin: 14px auto 20px;
+      font-weight: 700;
       color: var(--text);
+      padding: 9px 16px;
+      display: inline-block;
+      border-radius: 999px;
+      background: #fff4e5;
+      border: 1px solid #f4ddbc;
+    }
+
+    .note {
+      font-size: 0.95rem;
+      color: #8f7668;
+      line-height: 1.6;
+      max-width: 48ch;
+      margin: 0 auto 8px;
+    }
+
+    footer {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px dashed #ecd7c0;
+      font-size: 0.84rem;
+      color: #9f8677;
+    }
+
+    @keyframes floatY {
+      0%,
+      100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes pulse {
+      0%,
+      100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes drift {
+      0%,
+      100% { transform: translate(0, 0); }
+      50% { transform: translate(14px, 10px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bg-orb,
+      .icon-wrap,
+      .travel-img,
+      .card {
+        animation: none;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="bg-orb orb-one" aria-hidden="true"></div>
+  <div class="bg-orb orb-two" aria-hidden="true"></div>
+
   <main class="card" role="main" aria-labelledby="restricted-title">
-    <h1 id="restricted-title">Access Restricted</h1>
-    <p>
-      This site is currently available only for visitors from the following regions:
+    <div class="icon-wrap" aria-hidden="true">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 13.5C14.0711 13.5 15.75 11.8211 15.75 9.75C15.75 7.67893 14.0711 6 12 6C9.92893 6 8.25 7.67893 8.25 9.75C8.25 11.8211 9.92893 13.5 12 13.5Z" stroke="#A8742C" stroke-width="1.5"/>
+        <path d="M4.5 9.75C4.5 15 12 21 12 21C12 21 19.5 15 19.5 9.75C19.5 5.60786 16.1421 2.25 12 2.25C7.85786 2.25 4.5 5.60786 4.5 9.75Z" stroke="#A8742C" stroke-width="1.5"/>
+      </svg>
+    </div>
+
+    <img
+      class="travel-img"
+      src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzJ4N3B3MmN4MW1kYWo0YnUwZW4wY2NuejJjNWVrYW4xM3F1ODN0YiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/YTbZzCkRQCEJa/giphy.gif"
+      alt="Animated travel sticker"
+      loading="lazy"
+    >
+
+    <h1 id="restricted-title">Thanks for visiting 💛</h1>
+    <p class="lead">
+      This Family Hub is currently shared only within select regions for privacy and personal use.
     </p>
-    <p class="region-list">Andhra Pradesh & Telangana</p>
+    <p class="lead">Please access from one of the permitted locations below.</p>
+
+    <p class="region-list">Andhra Pradesh · Telangana</p>
+
+    <p class="note">
+      If you believe this restriction is shown by mistake, please try again on a trusted network or check back later.
+    </p>
+
+    <footer>
+      Chandu &amp; Family Hub · Regional access experience updated with care.
+    </footer>
   </main>
 </body>
 </html>
