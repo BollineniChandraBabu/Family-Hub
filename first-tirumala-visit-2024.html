@@ -121,10 +121,11 @@
       content: '';
       position: absolute; inset: 0;
       background:
-        radial-gradient(ellipse 85% 60% at 50% 0%,   rgba(212,168,67,.24) 0%, transparent 70%),
-        radial-gradient(ellipse 70% 60% at 18% 80%,  rgba(139,26,46,.12) 0%, transparent 65%),
-        radial-gradient(ellipse 70% 60% at 82% 80%,  rgba(58,122,114,.08) 0%, transparent 65%),
-        linear-gradient(180deg, rgba(255,253,249,.72) 0%, rgba(243,231,212,.86) 100%);
+        linear-gradient(180deg, rgba(255,250,241,.78) 0%, rgba(240,226,201,.82) 100%),
+        url('https://th.bing.com/th/id/OIP.xi-VP1L5L6sZlRkH1n-PmwHaFO?w=318&h=182&c=7&r=0&o=7&dpr=1.5&pid=1.7&rm=3') center 24% / cover no-repeat,
+        url('https://th.bing.com/th/id/OIP.maRmWAtbtMMlYh6QKM_pIgHaE8?w=279&h=180&c=7&r=0&o=7&dpr=1.5&pid=1.7&rm=3') center 76% / cover no-repeat;
+      background-blend-mode: soft-light, multiply, normal;
+      filter: saturate(1.08) contrast(1.04);
     }
     .temple-silhouette {
       position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
@@ -200,11 +201,11 @@
 
     .hero-badge {
       display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(212,168,67,.12);
-      border: 1px solid rgba(212,168,67,.3);
+      background: rgba(255,243,220,.82);
+      border: 1px solid rgba(198,142,55,.34);
       border-radius: 999px;
       padding: 7px 16px;
-      color: var(--gold2);
+      color: #b57b24;
       font-size: .82rem;
       letter-spacing: .15em;
       text-transform: uppercase;
@@ -230,8 +231,8 @@
       font-size: clamp(2.1rem, 6vw, 4rem);
       font-weight: 700;
       line-height: 1.1;
-      background: linear-gradient(135deg, var(--cream2) 0%, var(--gold2) 40%, var(--cream) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      color: #b38223;
+      text-shadow: 0 1px 0 rgba(255,255,255,.5);
       margin-bottom: 8px;
     }
 
@@ -239,7 +240,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(1rem, 2.5vw, 1.35rem);
       font-style: italic;
-      color: var(--muted);
+      color: #6f4f30;
       margin-bottom: 16px;
     }
 
@@ -249,7 +250,7 @@
       border: 1px solid rgba(192,41,74,.4);
       border-radius: 999px;
       padding: 10px 20px;
-      color: var(--cream2);
+      color: #fff4dc;
       font-size: .95rem;
       font-weight: 600;
       letter-spacing: .04em;
@@ -261,7 +262,7 @@
       max-width: 66ch;
       font-size: clamp(1rem, 2.5vw, 1.15rem);
       line-height: 1.75;
-      color: var(--muted);
+      color: #6a4d34;
       font-style: italic;
     }
 
@@ -288,7 +289,7 @@
     .stat-val  {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.3rem; font-weight: 700;
-      color: var(--gold2); display: block; margin-bottom: 3px;
+      color: #9e6d1d; display: block; margin-bottom: 3px;
     }
     .stat-lbl  { font-size: .84rem; color: var(--muted); line-height: 1.4; }
 
@@ -307,7 +308,7 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(1.4rem, 3vw, 2rem);
       font-weight: 700;
-      color: var(--cream2);
+      color: #7f5125;
       margin-bottom: 4px;
     }
     .section-title-gold {
@@ -360,14 +361,14 @@
     }
 
     .tl-time {
-      font-size: .8rem; color: var(--gold);
+      font-size: .8rem; color: #b07620;
       letter-spacing: .1em; text-transform: uppercase;
       font-weight: 600; margin-bottom: 4px;
     }
     .tl-head {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.12rem; font-weight: 700;
-      color: var(--cream); margin-bottom: 6px;
+      color: #8a5a2b; margin-bottom: 6px;
     }
     .tl-text { font-size: 1rem; color: var(--muted); line-height: 1.65; }
 
@@ -378,7 +379,7 @@
       padding: 7px 14px;
       background: rgba(139,26,46,.3);
       border: 1px solid rgba(192,41,74,.3);
-      color: var(--cream2);
+      color: #fff7e8;
       font-size: .84rem; font-weight: 600;
       transition: background .3s var(--ease), transform .3s var(--spring);
     }
@@ -703,22 +704,22 @@
 
     <div class="stats-grid">
       <div class="stat-card">
-        <span class="stat-icon">🌅</span>
+        <span class="stat-icon">🚗</span>
         <span class="stat-val">5:30 PM</span>
         <span class="stat-lbl">Departed from Tirupati (Sindhu's Hostel)</span>
       </div>
       <div class="stat-card">
-        <span class="stat-icon">🏔️</span>
+        <span class="stat-icon">🛕</span>
         <span class="stat-val">7:00 PM</span>
         <span class="stat-lbl">Arrived at Sacred Tirumala Hills</span>
       </div>
       <div class="stat-card">
-        <span class="stat-icon">🏨</span>
+        <span class="stat-icon">🛌</span>
         <span class="stat-val">Ashiwini</span>
         <span class="stat-lbl">Stayed at Doctors' Quarters, Ashiwini Hospital</span>
       </div>
       <div class="stat-card">
-        <span class="stat-icon">🙏</span>
+        <span class="stat-icon">☀️</span>
         <span class="stat-val">Ratha Saptami</span>
         <span class="stat-lbl">Festival day of 7 divine vahanams</span>
       </div>
@@ -734,7 +735,7 @@
       <div class="divider"><span>✦</span></div>
       <ul class="timeline">
         <li class="tl-item">
-          <div class="tl-dot">🌆</div>
+          <div class="tl-dot">🚗</div>
           <div class="tl-body">
             <div class="tl-time">Thursday, 15 Feb 2024 · ~5:30 PM</div>
             <div class="tl-head">The Journey Begins</div>
@@ -742,7 +743,7 @@
           </div>
         </li>
         <li class="tl-item">
-          <div class="tl-dot">🌙</div>
+          <div class="tl-dot">🛕</div>
           <div class="tl-body">
             <div class="tl-time">Thursday Evening · ~7:00 PM</div>
             <div class="tl-head">Arrival at Sacred Tirumala</div>
@@ -750,7 +751,7 @@
           </div>
         </li>
         <li class="tl-item">
-          <div class="tl-dot">🌄</div>
+          <div class="tl-dot">☀️</div>
           <div class="tl-body">
             <div class="tl-time">Friday, 16 Feb 2024 · Ratha Saptami Dawn</div>
             <div class="tl-head">The Festival Morning</div>
@@ -758,7 +759,7 @@
           </div>
         </li>
         <li class="tl-item">
-          <div class="tl-dot">🛕</div>
+          <div class="tl-dot">🙏</div>
           <div class="tl-body">
             <div class="tl-time">After the Sevas · Final Darshan</div>
             <div class="tl-head">Srivari Darshan — Together</div>
