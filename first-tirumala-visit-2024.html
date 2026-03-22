@@ -4,486 +4,1018 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <script src="location-guard.js"></script>
-  <title>First Tirumala Temple Visit — Ratha Saptami 2024</title>
+  <title>First Tirumala — Chandu &amp; Sindhu · Ratha Saptami 2024</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Noto+Serif:wght@400;700&family=IM+Fell+English:ital@0;1&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #fff9ef;
-      --panel: rgba(255, 255, 255, .9);
-      --ink: #2a1f19;
-      --muted: #6f5a4f;
-      --gold: #c4923a;
-      --maroon: #9b2d3f;
-      --teal: #487971;
-      --line: rgba(164, 115, 52, .24);
-      --shadow: 0 16px 42px rgba(73, 44, 23, 0.16);
-      --ease: cubic-bezier(.4,0,.2,1);
-      --spring: cubic-bezier(.34,1.56,.64,1);
+      --bg:       #1a0a05;
+      --bg2:      #2c1208;
+      --panel:    rgba(38, 14, 6, 0.82);
+      --gold:     #d4a843;
+      --gold2:    #f0c96a;
+      --gold3:    #b8893a;
+      --maroon:   #8b1a2e;
+      --maroon2:  #c0294a;
+      --cream:    #f7ecd7;
+      --cream2:   #ffe8b8;
+      --teal:     #3a7a72;
+      --ink:      #f2e4c8;
+      --muted:    #c8a97a;
+      --line:     rgba(212,168,67,.22);
+      --line2:    rgba(212,168,67,.45);
+      --shadow:   0 24px 60px rgba(0,0,0,.6);
+      --ease:     cubic-bezier(.4,0,.2,1);
+      --spring:   cubic-bezier(.34,1.56,.64,1);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Crimson Pro', Georgia, serif;
       color: var(--ink);
+      background: var(--bg);
       min-height: 100vh;
-      background:
-        radial-gradient(ellipse 68% 56% at 2% 2%, rgba(196,146,58,.2) 0%, transparent 60%),
-        radial-gradient(ellipse 46% 40% at 96% 0%, rgba(155,45,63,.16) 0%, transparent 60%),
-        radial-gradient(ellipse 70% 44% at 50% 100%, rgba(72,121,113,.12) 0%, transparent 60%),
-        var(--bg);
       overflow-x: hidden;
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity .8s var(--ease), transform .8s var(--ease);
+      cursor: default;
     }
 
-    body.ready { opacity: 1; transform: none; }
-
-    .orb {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(70px);
-      pointer-events: none;
-      z-index: 0;
-      opacity: .5;
-    }
-
-    .orb.a { width: 260px; height: 260px; left: -70px; top: 130px; background: rgba(196,146,58,.35); animation: floatA 11s ease-in-out infinite alternate; }
-    .orb.b { width: 300px; height: 300px; right: -90px; top: 40px; background: rgba(155,45,63,.22); animation: floatB 13s ease-in-out infinite alternate; }
-    .orb.c { width: 240px; height: 240px; right: 28%; bottom: -80px; background: rgba(72,121,113,.24); animation: floatC 9s ease-in-out infinite alternate; }
-
-    @keyframes floatA { to { transform: translate(24px, -32px) scale(1.04); } }
-    @keyframes floatB { to { transform: translate(-20px, 28px) scale(1.08); } }
-    @keyframes floatC { to { transform: translate(18px, -20px) scale(1.05); } }
-
+    /* ── LOADER ───────────────────────────────────────── */
     #loader {
-      position: fixed;
-      inset: 0;
-      z-index: 999;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(180deg, #fff8ea 0%, #fffdf8 100%);
-      transition: opacity .8s var(--ease), visibility .8s var(--ease);
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: radial-gradient(ellipse at 50% 60%, #2c0e06 0%, #0d0300 100%);
+      transition: opacity 1.2s var(--ease), visibility 1.2s var(--ease);
     }
+    #loader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
 
-    #loader.out { opacity: 0; visibility: hidden; pointer-events: none; }
-
-    .loader-wrap { text-align: center; padding: 20px; }
-
-    .loader-icon {
-      font-size: 2.1rem;
-      display: inline-block;
-      animation: pulse 1.2s var(--ease) infinite alternate;
+    .loader-om {
+      font-size: 4.2rem;
+      background: linear-gradient(135deg, var(--gold2), var(--gold), #ff8c42);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: omPulse 1.6s ease-in-out infinite;
+      filter: drop-shadow(0 0 18px rgba(212,168,67,.6));
+      line-height: 1;
     }
-
-    @keyframes pulse { from { transform: scale(.92) rotate(-4deg);} to { transform: scale(1.08) rotate(3deg);} }
+    @keyframes omPulse {
+      0%,100% { transform: scale(1) rotate(-2deg); filter: drop-shadow(0 0 14px rgba(212,168,67,.5)); }
+      50%      { transform: scale(1.12) rotate(2deg); filter: drop-shadow(0 0 30px rgba(212,168,67,.9)); }
+    }
 
     .loader-title {
-      margin-top: 10px;
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.3rem, 3.8vw, 2rem);
-      color: var(--ink);
+      margin-top: 16px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 4vw, 2.4rem);
+      font-weight: 600;
+      color: var(--cream);
+      letter-spacing: .06em;
+      text-align: center;
     }
-
     .loader-sub {
       margin-top: 6px;
       color: var(--muted);
-      letter-spacing: .1em;
+      font-size: .88rem;
+      letter-spacing: .18em;
       text-transform: uppercase;
-      font-size: .72rem;
+      text-align: center;
+    }
+    .loader-ring {
+      margin-top: 28px;
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      border: 2px solid rgba(212,168,67,.15);
+      border-top-color: var(--gold);
+      border-right-color: var(--gold2);
+      animation: spin 1.1s linear infinite;
+    }
+    .loader-mantra {
+      margin-top: 18px;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      color: rgba(212,168,67,.6);
+      font-size: .95rem;
+      letter-spacing: .06em;
+      animation: mantrafade 2s ease-in-out infinite alternate;
+    }
+    @keyframes mantrafade { from { opacity: .4; } to { opacity: 1; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── CANVAS PETALS ────────────────────────────────── */
+    #petals-canvas {
+      position: fixed; inset: 0; z-index: 1;
+      pointer-events: none;
     }
 
-    .loader-bar {
-      width: min(250px, 80vw);
-      height: 4px;
-      margin: 16px auto 0;
-      border-radius: 999px;
-      background: #f2e4ca;
-      overflow: hidden;
+    /* ── TEMPLE BACKGROUND ────────────────────────────── */
+    .temple-bg {
+      position: fixed; inset: 0; z-index: 0;
+      overflow: hidden; pointer-events: none;
+    }
+    .temple-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 0%,   rgba(139,26,46,.35) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 20% 80%,  rgba(212,168,67,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 80%,  rgba(58,122,114,.1) 0%, transparent 60%),
+        radial-gradient(ellipse 100% 80% at 50% 50%, #1e0906 0%, #0d0300 100%);
+    }
+    .temple-silhouette {
+      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: min(900px,100vw); opacity: .09;
+      pointer-events: none; user-select: none;
     }
 
-    .loader-fill {
-      width: 0;
-      height: 100%;
-      background: linear-gradient(90deg, var(--gold), var(--maroon));
-      animation: load 1.8s var(--ease) forwards;
+    /* Stars */
+    .stars {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,230,180,.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 30%, rgba(255,220,150,.5) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 40% 10%, rgba(255,240,200,.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 20%, rgba(255,225,160,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 8%,  rgba(255,235,190,.5) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 85% 18%, rgba(255,230,180,.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 50%, rgba(255,220,150,.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 35%, rgba(255,225,170,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5%  40%, rgba(255,240,200,.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 45%, rgba(255,230,160,.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 78% 55%, rgba(255,215,140,.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 33% 60%, rgba(255,235,180,.3) 0%, transparent 100%);
+      animation: twinkle 4s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      0%   { opacity: .7; }
+      50%  { opacity: 1; }
+      100% { opacity: .6; }
     }
 
-    @keyframes load { to { width: 100%; } }
-
+    /* ── PAGE WRAPPER ────────────────────────────────── */
     .page {
-      width: min(1060px, 100% - 26px);
+      position: relative; z-index: 5;
+      width: min(1080px, 100% - 28px);
       margin: 0 auto;
-      padding: clamp(24px, 5vw, 44px) 0 28px;
-      position: relative;
-      z-index: 5;
+      padding: clamp(28px, 5vw, 50px) 0 40px;
+      opacity: 0; transform: translateY(20px);
+      transition: opacity 1s var(--ease), transform 1s var(--ease);
     }
+    .page.ready { opacity: 1; transform: none; }
 
+    /* ── GLASS PANEL ──────────────────────────────────── */
     .glass {
       background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid var(--line2);
+      border-radius: 20px;
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(212,168,67,.12);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
+    /* ── DECORATIVE DIVIDER ───────────────────────────── */
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 8px 0 20px;
+    }
+    .divider::before, .divider::after {
+      content: ''; flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold3), transparent);
+    }
+    .divider span { color: var(--gold); font-size: 1.1rem; }
+
+    /* ── HERO ──────────────────────────────────────────── */
     .hero {
-      padding: clamp(22px, 4vw, 38px);
-      position: relative;
-      overflow: hidden;
-      isolation: isolate;
+      padding: clamp(28px, 5vw, 48px) clamp(22px, 4vw, 42px);
+      text-align: center;
+      position: relative; overflow: hidden; isolation: isolate;
     }
-
     .hero::before {
       content: '';
-      position: absolute;
-      width: 260px;
-      height: 260px;
-      border-radius: 50%;
-      right: -80px;
-      top: -80px;
-      background: radial-gradient(circle, rgba(196,146,58,.26), transparent 70%);
-      z-index: -1;
+      position: absolute; inset: 0; z-index: -1;
+      background:
+        radial-gradient(ellipse 70% 55% at 50% -10%, rgba(139,26,46,.5) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 10% 100%, rgba(212,168,67,.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 90% 100%, rgba(212,168,67,.12) 0%, transparent 60%);
     }
 
-    .eyebrow {
-      display: inline-block;
-      color: var(--maroon);
-      font-size: .78rem;
-      letter-spacing: .14em;
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(212,168,67,.12);
+      border: 1px solid rgba(212,168,67,.3);
+      border-radius: 999px;
+      padding: 7px 16px;
+      color: var(--gold2);
+      font-size: .82rem;
+      letter-spacing: .15em;
       text-transform: uppercase;
-      font-weight: 700;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .hero-om {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      background: linear-gradient(135deg, var(--gold2) 0%, var(--gold) 50%, #e87c35 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      animation: glowGold 3s ease-in-out infinite alternate;
+      filter: drop-shadow(0 0 20px rgba(212,168,67,.3));
+      display: block; margin-bottom: 10px;
+    }
+    @keyframes glowGold {
+      from { filter: drop-shadow(0 0 12px rgba(212,168,67,.3)); }
+      to   { filter: drop-shadow(0 0 32px rgba(212,168,67,.7)); }
     }
 
     h1 {
-      margin-top: 10px;
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.92rem, 5vw, 3.15rem);
-      line-height: 1.13;
-    }
-
-    .date-pill {
-      margin-top: 12px;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border-radius: 999px;
-      padding: 9px 14px;
-      background: #fff3dd;
-      border: 1px solid #efcf9a;
-      color: #744413;
-      font-weight: 600;
-      font-size: .9rem;
-    }
-
-    .sub {
-      margin-top: 12px;
-      max-width: 68ch;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    .hero-stats {
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 10px;
-    }
-
-    .hero-stat {
-      background: rgba(255,255,255,.86);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      padding: 12px;
-      transform: translateY(10px);
-      opacity: 0;
-      animation: rise .8s var(--spring) forwards;
-    }
-
-    .hero-stat:nth-child(2) { animation-delay: .08s; }
-    .hero-stat:nth-child(3) { animation-delay: .16s; }
-    .hero-stat:nth-child(4) { animation-delay: .24s; }
-
-    .hero-stat b { display: block; margin-bottom: 3px; }
-    .hero-stat span { color: var(--muted); font-size: .87rem; }
-
-    .layout {
-      margin-top: 16px;
-      display: grid;
-      grid-template-columns: 1.18fr .95fr;
-      gap: 14px;
-    }
-
-    @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } }
-
-    .section { padding: clamp(18px, 2.8vw, 26px); }
-
-    .section h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.2rem, 2.8vw, 1.66rem);
-      margin-bottom: 12px;
-    }
-
-    .timeline { list-style: none; display: grid; gap: 10px; }
-
-    .timeline li {
-      border: 1px solid var(--line);
-      border-left: 4px solid var(--gold);
-      border-radius: 14px;
-      padding: 12px;
-      background: rgba(255,255,255,.86);
-    }
-
-    .timeline strong { display: block; color: #82420a; margin-bottom: 3px; }
-    .timeline p { color: var(--muted); line-height: 1.6; font-size: .95rem; }
-
-    .ratha-grid {
-      margin-top: 12px;
-      display: grid;
-      gap: 8px;
-    }
-
-    .ratha-item {
-      border: 1px solid #f0d4a3;
-      background: linear-gradient(130deg, rgba(255,245,229,.95), rgba(255,251,242,.95));
-      border-radius: 12px;
-      padding: 10px 12px;
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 8px;
-      align-items: start;
-    }
-
-    .ratha-time {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.1rem, 6vw, 4rem);
       font-weight: 700;
-      color: #7d4914;
-      font-size: .88rem;
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--cream2) 0%, var(--gold2) 40%, var(--cream) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 8px;
     }
 
-    .ratha-name {
-      font-weight: 700;
-      color: #5e2c37;
-      font-size: .93rem;
-    }
-
-    .ratha-note {
+    .hero-sub-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      font-style: italic;
       color: var(--muted);
-      font-size: .87rem;
-      margin-top: 2px;
-      line-height: 1.45;
+      margin-bottom: 16px;
     }
 
-    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-
-    .tag {
+    .date-ribbon {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: linear-gradient(135deg, rgba(139,26,46,.6), rgba(80,12,24,.6));
+      border: 1px solid rgba(192,41,74,.4);
       border-radius: 999px;
-      padding: 8px 12px;
-      background: #fff3dd;
-      border: 1px solid #efd19f;
-      color: #744413;
-      font-size: .84rem;
+      padding: 10px 20px;
+      color: var(--cream2);
+      font-size: .95rem;
       font-weight: 600;
+      letter-spacing: .04em;
+      box-shadow: 0 4px 20px rgba(139,26,46,.3), inset 0 1px 0 rgba(255,255,255,.08);
     }
 
-    .story { color: var(--muted); line-height: 1.68; }
-
-    .quote {
-      margin-top: 12px;
-      border-radius: 14px;
-      padding: 14px;
-      border: 1px solid #efd19f;
-      background: linear-gradient(120deg, rgba(196,146,58,.12), rgba(155,45,63,.08));
-      color: #663b1f;
+    .hero-desc {
+      margin: 18px auto 0;
+      max-width: 66ch;
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
+      line-height: 1.75;
+      color: var(--muted);
       font-style: italic;
     }
 
-    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
-    .reveal.in { opacity: 1; transform: none; }
-
-    footer {
-      margin-top: 16px;
-      border-radius: 16px;
-      padding: 18px;
+    /* ── STATS GRID ───────────────────────────────────── */
+    .stats-grid {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .stat-card {
+      background: rgba(212,168,67,.07);
+      border: 1px solid rgba(212,168,67,.2);
+      border-radius: 14px;
+      padding: 16px 14px;
       text-align: center;
-      background: rgba(48, 29, 19, .92);
-      color: #f7e7d7;
-      border: 1px solid rgba(240, 193, 132, .35);
+      transition: transform .4s var(--spring), box-shadow .4s var(--ease);
+    }
+    .stat-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 12px 32px rgba(139,26,46,.3);
+    }
+    .stat-icon { font-size: 1.6rem; display: block; margin-bottom: 6px; }
+    .stat-val  {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; font-weight: 700;
+      color: var(--gold2); display: block; margin-bottom: 3px;
+    }
+    .stat-lbl  { font-size: .84rem; color: var(--muted); line-height: 1.4; }
+
+    /* ── LAYOUT ───────────────────────────────────────── */
+    .two-col {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } }
+
+    .section { padding: clamp(20px, 3vw, 32px); }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 700;
+      color: var(--cream2);
+      margin-bottom: 4px;
+    }
+    .section-title-gold {
+      background: linear-gradient(135deg, var(--gold2), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
-    footer a { color: #ffd08c; text-decoration: none; }
+    /* ── TIMELINE ─────────────────────────────────────── */
+    .timeline { list-style: none; display: grid; gap: 14px; margin-top: 6px; }
 
-    @keyframes rise { to { transform: none; opacity: 1; } }
+    .tl-item {
+      display: grid; grid-template-columns: 44px 1fr; gap: 0;
+      position: relative;
+    }
+    .tl-item::before {
+      content: ''; position: absolute;
+      left: 21px; top: 44px; bottom: -14px;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(212,168,67,.4), transparent);
+    }
+    .tl-item:last-child::before { display: none; }
+
+    .tl-dot {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, rgba(139,26,46,.6), rgba(80,12,24,.4));
+      border: 2px solid rgba(212,168,67,.35);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      box-shadow: 0 0 18px rgba(212,168,67,.2);
+      transition: box-shadow .3s var(--ease), transform .3s var(--spring);
+    }
+    .tl-item:hover .tl-dot {
+      box-shadow: 0 0 30px rgba(212,168,67,.5);
+      transform: scale(1.08);
+    }
+
+    .tl-body {
+      background: rgba(212,168,67,.05);
+      border: 1px solid rgba(212,168,67,.15);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-left: 10px;
+      transition: background .3s var(--ease), border-color .3s var(--ease);
+    }
+    .tl-item:hover .tl-body {
+      background: rgba(212,168,67,.1);
+      border-color: rgba(212,168,67,.3);
+    }
+
+    .tl-time {
+      font-size: .8rem; color: var(--gold);
+      letter-spacing: .1em; text-transform: uppercase;
+      font-weight: 600; margin-bottom: 4px;
+    }
+    .tl-head {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.12rem; font-weight: 700;
+      color: var(--cream); margin-bottom: 6px;
+    }
+    .tl-text { font-size: 1rem; color: var(--muted); line-height: 1.65; }
+
+    /* ── MEMORY HIGHLIGHTS ────────────────────────────── */
+    .memory-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .tag {
+      border-radius: 999px;
+      padding: 7px 14px;
+      background: rgba(139,26,46,.3);
+      border: 1px solid rgba(192,41,74,.3);
+      color: var(--cream2);
+      font-size: .84rem; font-weight: 600;
+      transition: background .3s var(--ease), transform .3s var(--spring);
+    }
+    .tag:hover { background: rgba(139,26,46,.5); transform: scale(1.04); }
+
+    .story-text {
+      font-size: 1.05rem;
+      line-height: 1.78;
+      color: var(--muted);
+    }
+
+    .quote-block {
+      margin-top: 16px;
+      border-radius: 16px;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, rgba(212,168,67,.1), rgba(139,26,46,.1));
+      border: 1px solid rgba(212,168,67,.25);
+      border-left: 4px solid var(--gold);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 1.18rem;
+      color: var(--cream2);
+      line-height: 1.65;
+      position: relative;
+    }
+    .quote-block::before {
+      content: '\201C';
+      position: absolute; top: -6px; left: 14px;
+      font-size: 4rem; color: var(--gold); opacity: .3;
+      font-family: Georgia, serif; line-height: 1;
+    }
+
+    /* ── DIYA DIVIDER ──────────────────────────────────── */
+    .diya-row {
+      display: flex; justify-content: center; gap: 12px;
+      margin: 8px 0 4px;
+      font-size: 1.3rem;
+    }
+    .diya-row span { animation: diyadance 1.8s ease-in-out infinite alternate; }
+    .diya-row span:nth-child(2) { animation-delay: .3s; }
+    .diya-row span:nth-child(3) { animation-delay: .6s; }
+    .diya-row span:nth-child(4) { animation-delay: .9s; }
+    .diya-row span:nth-child(5) { animation-delay: 1.2s; }
+    @keyframes diyadance {
+      from { transform: translateY(0) rotate(-4deg); filter: brightness(1); }
+      to   { transform: translateY(-4px) rotate(3deg); filter: brightness(1.3) drop-shadow(0 0 6px rgba(255,180,50,.6)); }
+    }
+
+    /* ── VAHANAM SCHEDULE ─────────────────────────────── */
+    .vahanam-grid { display: grid; gap: 10px; margin-top: 6px; }
+    .vahanam-card {
+      display: grid;
+      grid-template-columns: 90px 1fr;
+      gap: 0;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(212,168,67,.18);
+      transition: transform .35s var(--spring), box-shadow .35s var(--ease), border-color .35s var(--ease);
+    }
+    .vahanam-card:hover {
+      transform: translateX(6px) scale(1.01);
+      box-shadow: 0 8px 28px rgba(0,0,0,.4), 0 0 0 1px rgba(212,168,67,.3);
+      border-color: rgba(212,168,67,.4);
+    }
+    .vahanam-time {
+      background: linear-gradient(180deg, rgba(139,26,46,.7), rgba(80,12,24,.7));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--gold2);
+      text-align: center; padding: 12px 8px;
+      line-height: 1.3;
+    }
+    .vahanam-body {
+      background: rgba(212,168,67,.05);
+      padding: 12px 14px;
+      border-left: 3px solid rgba(212,168,67,.25);
+    }
+    .vahanam-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.08rem; font-weight: 700;
+      color: var(--cream); margin-bottom: 4px;
+    }
+    .vahanam-desc { font-size: .9rem; color: var(--muted); line-height: 1.5; }
+    .vahanam-icon { float: right; font-size: 1.2rem; margin-left: 6px; }
+
+    /* ── BLESSING SECTION ─────────────────────────────── */
+    .blessing {
+      margin-top: 16px;
+      padding: clamp(28px, 4vw, 42px);
+      text-align: center;
+      position: relative; isolation: isolate; overflow: hidden;
+    }
+    .blessing::before {
+      content: '';
+      position: absolute; inset: 0; z-index: -1;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(139,26,46,.3) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 20% 80%, rgba(212,168,67,.1) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 20%, rgba(212,168,67,.1) 0%, transparent 60%);
+    }
+    .blessing-mantra {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.5rem, 4vw, 2.6rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gold2) 0%, var(--gold) 50%, var(--cream2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 10px;
+      letter-spacing: .04em;
+      animation: glowGold 3s ease-in-out infinite alternate;
+    }
+    .blessing-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: var(--muted);
+      max-width: 58ch; margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* ── MUSIC PLAYER ──────────────────────────────────── */
+    #music-player {
+      position: fixed; bottom: 24px; right: 24px; z-index: 100;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .music-toggle {
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--maroon), #5a1020);
+      border: 2px solid rgba(212,168,67,.45);
+      color: var(--gold2);
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 24px rgba(0,0,0,.4), 0 0 0 0 rgba(212,168,67,.3);
+      transition: transform .3s var(--spring), box-shadow .3s var(--ease);
+      animation: musicPulse 2.4s ease-in-out infinite;
+    }
+    .music-toggle:hover { transform: scale(1.12); }
+    @keyframes musicPulse {
+      0%,100% { box-shadow: 0 6px 24px rgba(0,0,0,.4), 0 0 0 0 rgba(212,168,67,.5); }
+      50%      { box-shadow: 0 6px 24px rgba(0,0,0,.4), 0 0 0 12px rgba(212,168,67,.0); }
+    }
+    .music-label {
+      background: rgba(26,10,5,.9);
+      border: 1px solid var(--line2);
+      border-radius: 10px;
+      padding: 8px 14px;
+      font-size: .84rem;
+      color: var(--muted);
+      max-width: 200px;
+      line-height: 1.4;
+    }
+    .music-label b { color: var(--gold2); font-family: 'Cormorant Garamond', serif; font-size: .95rem; }
+    .music-note { animation: noteFly 1.2s ease-in-out infinite alternate; display: inline-block; }
+    @keyframes noteFly { from { transform: translateY(0); } to { transform: translateY(-3px); } }
+    .sc-frame {
+      position: fixed; bottom: 90px; right: 24px; z-index: 99;
+      width: 340px; border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--line2);
+      box-shadow: 0 20px 50px rgba(0,0,0,.6);
+      display: none;
+    }
+    .sc-frame.open { display: block; animation: slideUp .4s var(--spring); }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+    /* ── FOOTER ───────────────────────────────────────── */
+    footer {
+      margin-top: 16px;
+      border-radius: 18px;
+      padding: 22px 28px;
+      text-align: center;
+      background: rgba(14,5,3,.85);
+      border: 1px solid rgba(212,168,67,.2);
+    }
+    .footer-mantra {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--gold);
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+    }
+    .footer-text { font-size: .9rem; color: var(--muted); line-height: 1.6; }
+    .footer-text a { color: var(--gold2); text-decoration: none; }
+    .footer-text a:hover { color: var(--cream2); }
+    .footer-credits {
+      margin-top: 10px;
+      font-size: .8rem;
+      color: rgba(200,169,122,.45);
+      letter-spacing: .1em;
+    }
+
+    /* ── REVEAL ANIMATION ─────────────────────────────── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+    .reveal-left  { opacity: 0; transform: translateX(-28px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+    .reveal-left.in { opacity: 1; transform: none; }
+    .reveal-right { opacity: 0; transform: translateX(28px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+    .reveal-right.in { opacity: 1; transform: none; }
+
+    /* ── SCROLL TOP ───────────────────────────────────── */
+    #scroll-top {
+      position: fixed; bottom: 90px; left: 24px; z-index: 100;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(212,168,67,.15);
+      border: 1px solid rgba(212,168,67,.3);
+      color: var(--gold);
+      font-size: 1.2rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      opacity: 0; transition: opacity .4s var(--ease), transform .3s var(--spring);
+    }
+    #scroll-top.show { opacity: 1; }
+    #scroll-top:hover { transform: scale(1.12); }
+
+    /* ── UTILITIES ────────────────────────────────────── */
+    .mt-sm { margin-top: 8px; }
+    .mt-md { margin-top: 16px; }
+    .mt-lg { margin-top: 24px; }
+    .full-width { grid-column: 1 / -1; }
   </style>
 </head>
 <body>
-  <div id="loader">
-    <div class="loader-wrap">
-      <div class="loader-icon">🛕</div>
-      <div class="loader-title">First Tirumala Memory</div>
-      <div class="loader-sub">Chandu &amp; Sindhu · Ratha Saptami</div>
-      <div class="loader-bar"><div class="loader-fill"></div></div>
-    </div>
+
+<!-- ── LOADER ──────────────────────────────────────────── -->
+<div id="loader">
+  <div class="loader-om">ॐ</div>
+  <div class="loader-title">First Tirumala Memory</div>
+  <div class="loader-sub">Chandu &amp; Sindhu · Ratha Saptami 2024</div>
+  <div class="loader-ring"></div>
+  <div class="loader-mantra">ॐ నమో వేంకటేశాయ</div>
+</div>
+
+<!-- ── BACKGROUND ──────────────────────────────────────── -->
+<div class="temple-bg" aria-hidden="true">
+  <!-- Temple Silhouette SVG -->
+  <svg class="temple-silhouette" viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg" fill="var(--cream)">
+    <!-- Main Gopuram -->
+    <rect x="370" y="50" width="160" height="350" />
+    <polygon points="450,0 330,60 570,60" />
+    <!-- Stepped tiers -->
+    <rect x="355" y="80" width="190" height="20" />
+    <rect x="340" y="110" width="220" height="20" />
+    <rect x="325" y="140" width="250" height="20" />
+    <rect x="310" y="170" width="280" height="20" />
+    <!-- Side shrines -->
+    <rect x="200" y="160" width="100" height="240" />
+    <polygon points="250,130 190,170 310,170" />
+    <rect x="600" y="160" width="100" height="240" />
+    <polygon points="650,130 590,170 710,170" />
+    <!-- Small towers -->
+    <rect x="100" y="240" width="70" height="160" />
+    <polygon points="135,215 95,245 175,245" />
+    <rect x="730" y="240" width="70" height="160" />
+    <polygon points="765,215 725,245 805,245" />
+    <!-- Base platform -->
+    <rect x="50" y="390" width="800" height="10" />
+    <rect x="0" y="395" width="900" height="5" />
+    <!-- Decorative elements -->
+    <circle cx="450" cy="25" r="12" />
+    <circle cx="250" cy="145" r="8" />
+    <circle cx="650" cy="145" r="8" />
+  </svg>
+</div>
+<div class="stars" aria-hidden="true"></div>
+<canvas id="petals-canvas" aria-hidden="true"></canvas>
+
+<!-- ── MUSIC PLAYER ──────────────────────────────────────── -->
+<div id="music-player">
+  <div class="music-label" id="music-label" style="display:none">
+    <b><span class="music-note">♪</span> Om Namo Venkatesaya</b><br>
+    TTD Sacred Chanting
   </div>
+  <button class="music-toggle" id="music-btn" title="Toggle Sacred Music" aria-label="Toggle Background Music">🎵</button>
+</div>
+<div class="sc-frame" id="sc-frame">
+  <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/rakesh-palakurthi/om-namo-venkatesaya-chanting-ttd&color=%23d4a843&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false">
+  </iframe>
+</div>
 
-  <div class="orb a" aria-hidden="true"></div>
-  <div class="orb b" aria-hidden="true"></div>
-  <div class="orb c" aria-hidden="true"></div>
+<!-- ── SCROLL TOP ────────────────────────────────────────── -->
+<button id="scroll-top" title="Back to top" aria-label="Scroll to top">↑</button>
 
-  <main class="page">
-    <section class="hero glass reveal">
-      <div class="eyebrow">🛕 Devotional Memory</div>
-      <h1>First Tirumala Temple Visit Together</h1>
-      <div class="date-pill">📅 Friday, February 16, 2024 · Ratha Saptami</div>
-      <p class="sub">This page preserves your first Tirumala visit as a couple — starting the previous evening from Tirupati, reaching Tirumala by 7:00 PM, staying at Ashiwini Hospital doctors' quarters, witnessing the Ratha Saptami vahanams, and taking darshan together.</p>
+<!-- ── PAGE ──────────────────────────────────────────────── -->
+<main class="page" id="main-page">
 
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <b>5:30 PM Start</b>
-          <span>From old maternity hospital, Tirupati (Sindhu hostel)</span>
-        </div>
-        <div class="hero-stat">
-          <b>7:00 PM Arrival</b>
-          <span>Reached Tirumala and settled at Ashiwini Hospital doctors' quarters</span>
-        </div>
-        <div class="hero-stat">
-          <b>Festival Day</b>
-          <span>Ratha Saptami (Sapta Vahanam day)</span>
-        </div>
-        <div class="hero-stat">
-          <b>Sacred Ending</b>
-          <span>Ratha darshan followed by Srivari darshan</span>
+  <!-- HERO -->
+  <section class="hero glass reveal" id="hero">
+    <div class="hero-badge">🛕 &nbsp; Sacred Memory &nbsp; · &nbsp; Tirumala</div>
+    <span class="hero-om">ॐ</span>
+    <h1>Our First Tirumala<br>Temple Journey</h1>
+    <p class="hero-sub-title">Chandu &amp; Sindhu — Together for the First Time at the Abode of Srinivasa</p>
+    <div class="date-ribbon">📅 &nbsp; Friday, 16th February 2024 &nbsp;·&nbsp; Ratha Saptami</div>
+    <p class="hero-desc">
+      A journey that began with devotion and became a memory etched forever — climbing the sacred hills of Tirumala together on the blessed occasion of Ratha Saptami, witnessing the grand vahanams, and receiving the divine darshan of Lord Venkateswara side by side.
+    </p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-icon">🌅</span>
+        <span class="stat-val">5:30 PM</span>
+        <span class="stat-lbl">Departed from Tirupati (Sindhu's Hostel)</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🏔️</span>
+        <span class="stat-val">7:00 PM</span>
+        <span class="stat-lbl">Arrived at Sacred Tirumala Hills</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🏨</span>
+        <span class="stat-val">Ashiwini</span>
+        <span class="stat-lbl">Stayed at Doctors' Quarters, Ashiwini Hospital</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🙏</span>
+        <span class="stat-val">Ratha Saptami</span>
+        <span class="stat-lbl">Festival day of 7 divine vahanams</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TWO COLUMN -->
+  <div class="two-col">
+
+    <!-- TIMELINE -->
+    <article class="section glass reveal-left">
+      <div class="section-title">Journey <span class="section-title-gold">Timeline</span></div>
+      <div class="divider"><span>✦</span></div>
+      <ul class="timeline">
+        <li class="tl-item">
+          <div class="tl-dot">🌆</div>
+          <div class="tl-body">
+            <div class="tl-time">Thursday, 15 Feb 2024 · ~5:30 PM</div>
+            <div class="tl-head">The Journey Begins</div>
+            <div class="tl-text">You both set out from the old maternity hospital premises in Tirupati — Sindhu's hostel — hearts full of anticipation, beginning the uphill journey to Lord Venkateswara's abode. This single step marked the start of a lifelong shared memory.</div>
+          </div>
+        </li>
+        <li class="tl-item">
+          <div class="tl-dot">🌙</div>
+          <div class="tl-body">
+            <div class="tl-time">Thursday Evening · ~7:00 PM</div>
+            <div class="tl-head">Arrival at Sacred Tirumala</div>
+            <div class="tl-text">You reached the seven sacred hills as the evening lights of Tirumala glowed in the distance. Checking in to the Ashiwini Hospital doctors' quarters, you rested and prepared your souls for the auspicious Ratha Saptami dawn ahead.</div>
+          </div>
+        </li>
+        <li class="tl-item">
+          <div class="tl-dot">🌄</div>
+          <div class="tl-body">
+            <div class="tl-time">Friday, 16 Feb 2024 · Ratha Saptami Dawn</div>
+            <div class="tl-head">The Festival Morning</div>
+            <div class="tl-text">The sacred air of Ratha Saptami filled Tirumala with the sound of Suprabhatam and the fragrance of flowers. Dressed in devotion, you joined thousands of pilgrims to witness the grand divine processions — vahanam after vahanam through the day.</div>
+          </div>
+        </li>
+        <li class="tl-item">
+          <div class="tl-dot">🛕</div>
+          <div class="tl-body">
+            <div class="tl-time">After the Sevas · Final Darshan</div>
+            <div class="tl-head">Srivari Darshan — Together</div>
+            <div class="tl-text">After witnessing the breathtaking rathas and vahanams, you stood before the sanctum of Lord Srinivasa for darshan — your first together. In that holy moment, with the sound of bells and the scent of camphor, a promise was silently made to return.</div>
+          </div>
+        </li>
+      </ul>
+    </article>
+
+    <!-- MEMORY CARD -->
+    <aside class="section glass reveal-right">
+      <div class="section-title">Memory <span class="section-title-gold">Highlights</span></div>
+      <div class="divider"><span>🪔</span></div>
+      <div class="memory-tags">
+        <span class="tag">🛕 First Visit Together</span>
+        <span class="tag">💑 Chandu &amp; Sindhu</span>
+        <span class="tag">📅 16 Feb 2024</span>
+        <span class="tag">🌸 Ratha Saptami</span>
+        <span class="tag">🏔️ Tirupati → Tirumala</span>
+        <span class="tag">🏨 Ashiwini Quarters</span>
+      </div>
+
+      <p class="story-text">
+        Among all the places one can visit together for the first time, Tirumala holds a unique reverence. The seven hills, the golden gopuram, the sound of the suprabhatam at dawn — all of it witnessed together for the very first time on the most blessed occasion of Ratha Saptami.
+      </p>
+
+      <p class="story-text mt-md">
+        The Ratha Saptami vahanams — seven sacred processions from dawn to night — represent the seven sacred horses of the sun god's chariot. To witness all seven together, as a couple, is considered among the most auspicious blessings one can receive in a lifetime.
+      </p>
+
+      <div class="quote-block">
+        "On Ratha Saptami, Lord Venkateswara rides seven vahanas — but the greatest darshan is the one you witness with someone who matters. This was yours."
+      </div>
+
+      <div class="diya-row mt-md">
+        <span>🪔</span><span>🌸</span><span>🛕</span><span>🌸</span><span>🪔</span>
+      </div>
+    </aside>
+
+  </div><!-- /two-col -->
+
+  <!-- VAHANAM SCHEDULE -->
+  <section class="section glass reveal mt-lg">
+    <div class="section-title" style="text-align:center">Ratha Saptami <span class="section-title-gold">Vahanam Sequence</span></div>
+    <p style="text-align:center; color:var(--muted); font-style:italic; margin-bottom:4px; font-size:1rem;">The seven divine processions you witnessed on 16 February 2024 at Tirumala</p>
+    <div class="divider"><span>🌸</span></div>
+    <div class="vahanam-grid">
+      <div class="vahanam-card">
+        <div class="vahanam-time">5:30<br><small>AM</small></div>
+        <div class="vahanam-body">
+          <span class="vahanam-icon">☀️</span>
+          <div class="vahanam-name">Surya Prabha Vahanam</div>
+          <div class="vahanam-desc">The golden chariot of the Sun — the festival opens with the brilliance of the solar vahana as the first light breaks over the hills, marking the most sacred dawn of the solar calendar.</div>
         </div>
       </div>
-    </section>
-
-    <section class="layout">
-      <article class="section glass reveal">
-        <h2>Your Journey Timeline</h2>
-        <ul class="timeline">
-          <li>
-            <strong>Thursday, February 15, 2024 · Around 5:30 PM</strong>
-            <p>You both started from old maternity hospital in Tirupati (Sindhu hostel), beginning this special uphill journey with excitement and devotion.</p>
-          </li>
-          <li>
-            <strong>Around 7:00 PM · Tirumala Arrival</strong>
-            <p>You reached Tirumala and stayed at Ashiwini Hospital doctors' quarters, preparing for the next day's Ratha Saptami celebrations.</p>
-          </li>
-          <li>
-            <strong>Friday, February 16, 2024 · Ratha Saptami</strong>
-            <p>You went to see the rathas/vahanams across the day, watching the divine procession with thousands of devotees.</p>
-          </li>
-          <li>
-            <strong>After Ratha Sevas · Darshan</strong>
-            <p>After witnessing the vahanams, you completed darshan — making this your first Tirumala temple memory together.</p>
-          </li>
-        </ul>
-      </article>
-
-      <aside class="section glass reveal">
-        <h2>Memory Highlights</h2>
-        <div class="tags">
-          <span class="tag">First Tirumala Visit</span>
-          <span class="tag">Chandu &amp; Sindhu</span>
-          <span class="tag">Feb 16, 2024</span>
-          <span class="tag">Ratha Saptami</span>
-          <span class="tag">Tirupati → Tirumala</span>
-        </div>
-        <p class="story">This memory now carries full context: exact day, date, month and year, your departure and arrival timings, stay location, and the festival vahanam sequence you witnessed before darshan.</p>
-
-        <div class="quote">“A first visit, a festival dawn, and a darshan together — some memories become blessings.”</div>
-      </aside>
-    </section>
-
-    <section class="section glass reveal" style="margin-top:14px;">
-      <h2>Ratha Saptami Vahanam Start Times Seen in Tirumala</h2>
-      <p class="story" style="margin-bottom:12px;">Festival-day procession schedule (traditional Tirumala one-day Brahmotsavam sequence) that you remembered while attending the rathas:</p>
-      <div class="ratha-grid">
-        <div class="ratha-item">
-          <div class="ratha-time">5:30 AM</div>
-          <div>
-            <div class="ratha-name">Surya Prabha Vahanam</div>
-            <div class="ratha-note">Dawn beginning of Ratha Saptami processions.</div>
-          </div>
-        </div>
-        <div class="ratha-item">
-          <div class="ratha-time">9:00 AM</div>
-          <div>
-            <div class="ratha-name">Chinna Sesha Vahanam</div>
-            <div class="ratha-note">Morning procession on the serpent vahanam.</div>
-          </div>
-        </div>
-        <div class="ratha-item">
-          <div class="ratha-time">11:00 AM</div>
-          <div>
-            <div class="ratha-name">Garuda Vahanam</div>
-            <div class="ratha-note">One of the most crowded and revered sevas.</div>
-          </div>
-        </div>
-        <div class="ratha-item">
-          <div class="ratha-time">1:00 PM</div>
-          <div>
-            <div class="ratha-name">Hanumantha Vahanam</div>
-            <div class="ratha-note">Midday vahanam, known for energetic devotional ambience.</div>
-          </div>
-        </div>
-        <div class="ratha-item">
-          <div class="ratha-time">4:00 PM</div>
-          <div>
-            <div class="ratha-name">Kalpavriksha Vahanam</div>
-            <div class="ratha-note">Evening procession symbolizing divine abundance.</div>
-          </div>
-        </div>
-        <div class="ratha-item">
-          <div class="ratha-time">6:00 PM</div>
-          <div>
-            <div class="ratha-name">Sarvabhoopala Vahanam</div>
-            <div class="ratha-note">Procession representing universal guardianship.</div>
-          </div>
-        </div>
-        <div class="ratha-item">
-          <div class="ratha-time">8:00 PM</div>
-          <div>
-            <div class="ratha-name">Chandra Prabha Vahanam</div>
-            <div class="ratha-note">The calm moonlit concluding vahanam of the day.</div>
-          </div>
+      <div class="vahanam-card">
+        <div class="vahanam-time">9:00<br><small>AM</small></div>
+        <div class="vahanam-body">
+          <span class="vahanam-icon">🐍</span>
+          <div class="vahanam-name">Chinna Sesha Vahanam</div>
+          <div class="vahanam-desc">The Lord rides atop the small serpent Adi Sesha — the cosmic protector and eternal companion of Vishnu — in this peaceful morning procession beloved by all devotees.</div>
         </div>
       </div>
-    </section>
+      <div class="vahanam-card">
+        <div class="vahanam-time">11:00<br><small>AM</small></div>
+        <div class="vahanam-body">
+          <span class="vahanam-icon">🦅</span>
+          <div class="vahanam-name">Garuda Vahanam</div>
+          <div class="vahanam-desc">The most revered and most crowded seva of the day. Garuda — the divine eagle and vehicle of Vishnu — carries the Lord through devotees in a moment of extraordinary spiritual electricity.</div>
+        </div>
+      </div>
+      <div class="vahanam-card">
+        <div class="vahanam-time">1:00<br><small>PM</small></div>
+        <div class="vahanam-body">
+          <span class="vahanam-icon">🐒</span>
+          <div class="vahanam-name">Hanumantha Vahanam</div>
+          <div class="vahanam-desc">The midday procession where Lord Venkateswara is carried by Hanuman — the epitome of devotion and strength — filling the atmosphere with powerful bhakti energy and devotional chants.</div>
+        </div>
+      </div>
+      <div class="vahanam-card">
+        <div class="vahanam-time">4:00<br><small>PM</small></div>
+        <div class="vahanam-body">
+          <span class="vahanam-icon">🌳</span>
+          <div class="vahanam-name">Kalpavriksha Vahanam</div>
+          <div class="vahanam-desc">The divine wish-fulfilling tree carries the Lord in the golden afternoon light — a symbol of divine abundance and the fulfillment of all righteous desires of His devotees.</div>
+        </div>
+      </div>
+      <div class="vahanam-card">
+        <div class="vahanam-time">6:00<br><small>PM</small></div>
+        <div class="vahanam-body">
+          <span class="vahanam-icon">👑</span>
+          <div class="vahanam-name">Sarvabhoopala Vahanam</div>
+          <div class="vahanam-desc">As dusk settles, the Lord is proclaimed the King of all kings — the universal sovereign — in a majestic evening procession of grandeur and royal devotion.</div>
+        </div>
+      </div>
+      <div class="vahanam-card">
+        <div class="vahanam-time">8:00<br><small>PM</small></div>
+        <div class="vahanam-body">
+          <span class="vahanam-icon">🌙</span>
+          <div class="vahanam-name">Chandra Prabha Vahanam</div>
+          <div class="vahanam-desc">The concluding procession — bathed in moonlight, serene and magnificent. The Lord glides through the night on the lunar chariot, bringing the sacred day of Ratha Saptami to a gentle, blessed close.</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <footer class="reveal">
-      Created as a keepsake memory page for Chandu &amp; Sindhu’s first Tirumala temple visit.<br>
-      © <span id="year"></span> Family Hub · <a href="index.html">← Back to Family Hub</a>
-    </footer>
-  </main>
+  <!-- BLESSING SECTION -->
+  <section class="blessing glass reveal mt-lg">
+    <div class="diya-row"><span>🪔</span><span>🌸</span><span>🛕</span><span>🌸</span><span>🪔</span></div>
+    <div class="blessing-mantra mt-md">ॐ నమో వేంకటేశాయ</div>
+    <p class="blessing-text">
+      "Yad drishtvā na punar janma śocanti na kāṅkṣanti — Having seen Him, they no longer grieve, they no longer desire. In the first darshan of Srinivasa together, may every prayer you carried up those sacred hills be answered, and may you return together, always."
+    </p>
+    <div class="diya-row mt-md"><span>✦</span><span>🌺</span><span>✦</span><span>🌺</span><span>✦</span></div>
+  </section>
 
-  <script>
-    const loader = document.getElementById('loader');
-    const revealEls = document.querySelectorAll('.reveal');
+  <!-- FOOTER -->
+  <footer class="reveal mt-lg">
+    <div class="footer-mantra">🛕 &nbsp; ॐ నమో వేంకటేశాయ &nbsp; 🛕</div>
+    <div class="footer-text">
+      A sacred keepsake — preserved with love for <strong>Chandu &amp; Sindhu</strong> — their first pilgrimage to Tirumala together.<br>
+      May Lord Venkateswara's blessings always walk beside you on every journey ahead.
+    </div>
+    <div class="footer-credits">
+      &copy; <span id="year"></span> &nbsp;·&nbsp; Family Memories &nbsp;·&nbsp;
+      <a href="index.html">← Back to Family Hub</a>
+    </div>
+  </footer>
 
-    function revealOnScroll() {
-      const trigger = window.innerHeight * 0.9;
-      revealEls.forEach((el, i) => {
-        const top = el.getBoundingClientRect().top;
-        if (top < trigger) {
-          setTimeout(() => el.classList.add('in'), i * 70);
-        }
-      });
+</main><!-- /page -->
+
+<script>
+/* ─── LOADER ────────────────────────────────────────── */
+const loader = document.getElementById('loader');
+const mainPage = document.getElementById('main-page');
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    loader.classList.add('fade-out');
+    mainPage.classList.add('ready');
+    revealCheck();
+  }, 2200);
+});
+
+/* ─── SCROLL REVEAL ──────────────────────────────────── */
+const revealEls = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
+function revealCheck() {
+  const vh = window.innerHeight * 0.92;
+  revealEls.forEach((el, i) => {
+    if (el.getBoundingClientRect().top < vh) {
+      setTimeout(() => el.classList.add('in'), i * 60);
     }
+  });
+}
+window.addEventListener('scroll', revealCheck, { passive: true });
 
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        loader.classList.add('out');
-        document.body.classList.add('ready');
-        revealOnScroll();
-      }, 900);
-    });
+/* ─── SCROLL TOP ─────────────────────────────────────── */
+const scrollBtn = document.getElementById('scroll-top');
+window.addEventListener('scroll', () => {
+  scrollBtn.classList.toggle('show', window.scrollY > 300);
+}, { passive: true });
+scrollBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    window.addEventListener('scroll', revealOnScroll, { passive: true });
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+/* ─── COPYRIGHT YEAR ─────────────────────────────────── */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ─── MUSIC PLAYER ───────────────────────────────────── */
+const musicBtn  = document.getElementById('music-btn');
+const scFrame   = document.getElementById('sc-frame');
+const musicLabel = document.getElementById('music-label');
+let musicOpen = false;
+
+musicBtn.addEventListener('click', () => {
+  musicOpen = !musicOpen;
+  scFrame.classList.toggle('open', musicOpen);
+  musicLabel.style.display = musicOpen ? 'block' : 'none';
+  musicBtn.textContent = musicOpen ? '🔇' : '🎵';
+});
+
+/* ─── FALLING PETALS ─────────────────────────────────── */
+const canvas = document.getElementById('petals-canvas');
+const ctx    = canvas.getContext('2d');
+
+function resize() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize, { passive: true });
+
+/* Petal types: lotus petals, marigold-ish, flower dots */
+const PETAL_TYPES = [
+  { emoji: '🌸', size: [14, 22] },
+  { emoji: '🌺', size: [12, 20] },
+  { emoji: '🪷', size: [14, 24] },
+  { emoji: '✿',  size: [10, 18] },
+  { emoji: '❋',  size: [10, 16] },
+];
+
+const GOLD_GLITTER = ['rgba(212,168,67,', 'rgba(240,201,106,', 'rgba(255,215,80,'];
+
+class Petal {
+  constructor() { this.reset(true); }
+  reset(initial = false) {
+    const t = PETAL_TYPES[Math.floor(Math.random() * PETAL_TYPES.length)];
+    this.emoji   = t.emoji;
+    this.size    = t.size[0] + Math.random() * (t.size[1] - t.size[0]);
+    this.x       = Math.random() * canvas.width;
+    this.y       = initial ? Math.random() * -canvas.height : -this.size - 10;
+    this.vx      = (Math.random() - 0.5) * 0.8;
+    this.vy      = 0.6 + Math.random() * 1.2;
+    this.rot     = Math.random() * Math.PI * 2;
+    this.vrot    = (Math.random() - 0.5) * 0.04;
+    this.opacity = 0.55 + Math.random() * 0.4;
+    this.wobble  = Math.random() * Math.PI * 2;
+    this.wobbleSpeed = 0.02 + Math.random() * 0.02;
+  }
+  update() {
+    this.wobble += this.wobbleSpeed;
+    this.x  += this.vx + Math.sin(this.wobble) * 0.5;
+    this.y  += this.vy;
+    this.rot += this.vrot;
+    if (this.y > canvas.height + 20) this.reset();
+  }
+  draw() {
+    ctx.save();
+    ctx.globalAlpha = this.opacity;
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.rot);
+    ctx.font = `${this.size}px serif`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(this.emoji, 0, 0);
+    ctx.restore();
+  }
+}
+
+/* Gold sparkles */
+class Sparkle {
+  constructor() { this.reset(true); }
+  reset(initial = false) {
+    this.x  = Math.random() * canvas.width;
+    this.y  = initial ? Math.random() * canvas.height : -10;
+    this.r  = 1 + Math.random() * 2.5;
+    this.vy = 0.3 + Math.random() * 0.7;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.life = 0;
+    this.maxLife = 120 + Math.random() * 100;
+    this.color = GOLD_GLITTER[Math.floor(Math.random() * GOLD_GLITTER.length)];
+  }
+  update() {
+    this.y   += this.vy;
+    this.x   += this.vx;
+    this.life++;
+    if (this.life > this.maxLife || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    const progress = this.life / this.maxLife;
+    const alpha = Math.sin(progress * Math.PI) * 0.8;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = this.color + alpha + ')';
+    ctx.fill();
+  }
+}
+
+const PETAL_COUNT   = 28;
+const SPARKLE_COUNT = 40;
+const petals   = Array.from({ length: PETAL_COUNT },   () => new Petal());
+const sparkles = Array.from({ length: SPARKLE_COUNT }, () => new Sparkle());
+
+function animFrame() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  sparkles.forEach(s => { s.update(); s.draw(); });
+  petals.forEach(p   => { p.update();   p.draw(); });
+  requestAnimationFrame(animFrame);
+}
+animFrame();
+</script>
 </body>
 </html>
