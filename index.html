@@ -1301,6 +1301,7 @@ a{color:inherit;text-decoration:none;}
       <a href="https://chandusindhu.web.app/" class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'wedding_site'})">💍 Wedding Invitation</a>
       <a href="april-memory-2025.html" class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'april_memory'})">💔 April 3rd Memory</a>
       <a href="first-international-trip-2024.html" class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'first_international_trip_2024'})">✈️ First International Trip</a>
+      <a href="first-tirumala-visit-2024.html" class="ft-link" onclick="gtag('event','footer_nav_click',{destination:'first_tirumala_visit_2024'})">🛕 First Tirumala Visit</a>
     </div>
     <div class="ft-copy">
       © <strong id="ft-year"></strong> All Rights Reserved<br>
@@ -1767,7 +1768,46 @@ function buildCards(){
   </div>`;
   grid.appendChild(fit);
   setTimeout(()=>fit.classList.add('in'), 100 + FAMILY.length*140 + 360);
-  
+
+/* ── First Tirumala Visit Card ── */
+  const ftv = document.createElement('a');
+  ftv.href = 'first-tirumala-visit-2024.html';
+  ftv.className = 'wedding-card card-annaprasan';
+  ftv.addEventListener('click', () => {
+    gtag('event', 'first_tirumala_visit_card_click', {
+      destination: 'first-tirumala-visit-2024.html'
+    });
+  });
+  ftv.innerHTML = `
+  <div class="wc-header">
+    <div class="wc-header-stripe"></div>
+    <div class="wc-rings" style="display:flex;align-items:center;justify-content:center;">
+      <svg viewBox="0 0 80 80" fill="none" width="100%" height="100%" aria-hidden="true">
+        <circle cx="40" cy="40" r="27" fill="#f6ecd9" stroke="#c4923a" stroke-width="2"/>
+        <path d="M22 52H58L54 33H26L22 52Z" fill="#c4923a" opacity=".18"/>
+        <path d="M26 33H54L50.5 22H29.5L26 33Z" fill="#c4923a" opacity=".28"/>
+        <path d="M32 22H48V18H32V22Z" fill="#9b2d3f"/>
+        <circle cx="40" cy="41" r="5" fill="#9b2d3f" opacity=".75"/>
+      </svg>
+    </div>
+    <div class="wc-identity">
+      <div class="wc-eyebrow">🛕 Devotional Memory</div>
+      <div class="wc-title">First Tirumala Visit</div>
+      <div class="wc-subtitle">Chandu &amp; Sindhu · February 16, 2024 · Ratha Saptami</div>
+    </div>
+    <div class="wc-date-badge">
+      <div class="wc-date-day">2024</div>
+      <div class="wc-date-month">Ratha</div>
+      <div class="wc-date-year">Saptami</div>
+    </div>
+  </div>
+  <div class="wc-body">
+    <p class="wc-desc">A rich keepsake of your first Tirumala journey together with timeline, vahanam start times, and the darshan memory from Ratha Saptami 2024.</p>
+    <div class="wc-cta">Open Memory <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M2 6.5h9M8 3l3.5 3.5L8 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+  </div>`;
+  grid.appendChild(ftv);
+  setTimeout(()=>ftv.classList.add('in'), 100 + FAMILY.length*140 + 440);
+
 
   /* Add member card */
   const add = document.createElement('div');

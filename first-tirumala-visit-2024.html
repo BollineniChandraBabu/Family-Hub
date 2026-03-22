@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <script src="location-guard.js"></script>
+  <title>First Tirumala Temple Visit — Ratha Saptami 2024</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fff9ef;
+      --panel: rgba(255, 255, 255, .9);
+      --ink: #2a1f19;
+      --muted: #6f5a4f;
+      --gold: #c4923a;
+      --maroon: #9b2d3f;
+      --teal: #487971;
+      --line: rgba(164, 115, 52, .24);
+      --shadow: 0 16px 42px rgba(73, 44, 23, 0.16);
+      --ease: cubic-bezier(.4,0,.2,1);
+      --spring: cubic-bezier(.34,1.56,.64,1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--ink);
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse 68% 56% at 2% 2%, rgba(196,146,58,.2) 0%, transparent 60%),
+        radial-gradient(ellipse 46% 40% at 96% 0%, rgba(155,45,63,.16) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 44% at 50% 100%, rgba(72,121,113,.12) 0%, transparent 60%),
+        var(--bg);
+      overflow-x: hidden;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .8s var(--ease), transform .8s var(--ease);
+    }
+
+    body.ready { opacity: 1; transform: none; }
+
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(70px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: .5;
+    }
+
+    .orb.a { width: 260px; height: 260px; left: -70px; top: 130px; background: rgba(196,146,58,.35); animation: floatA 11s ease-in-out infinite alternate; }
+    .orb.b { width: 300px; height: 300px; right: -90px; top: 40px; background: rgba(155,45,63,.22); animation: floatB 13s ease-in-out infinite alternate; }
+    .orb.c { width: 240px; height: 240px; right: 28%; bottom: -80px; background: rgba(72,121,113,.24); animation: floatC 9s ease-in-out infinite alternate; }
+
+    @keyframes floatA { to { transform: translate(24px, -32px) scale(1.04); } }
+    @keyframes floatB { to { transform: translate(-20px, 28px) scale(1.08); } }
+    @keyframes floatC { to { transform: translate(18px, -20px) scale(1.05); } }
+
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(180deg, #fff8ea 0%, #fffdf8 100%);
+      transition: opacity .8s var(--ease), visibility .8s var(--ease);
+    }
+
+    #loader.out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .loader-wrap { text-align: center; padding: 20px; }
+
+    .loader-icon {
+      font-size: 2.1rem;
+      display: inline-block;
+      animation: pulse 1.2s var(--ease) infinite alternate;
+    }
+
+    @keyframes pulse { from { transform: scale(.92) rotate(-4deg);} to { transform: scale(1.08) rotate(3deg);} }
+
+    .loader-title {
+      margin-top: 10px;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.3rem, 3.8vw, 2rem);
+      color: var(--ink);
+    }
+
+    .loader-sub {
+      margin-top: 6px;
+      color: var(--muted);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      font-size: .72rem;
+    }
+
+    .loader-bar {
+      width: min(250px, 80vw);
+      height: 4px;
+      margin: 16px auto 0;
+      border-radius: 999px;
+      background: #f2e4ca;
+      overflow: hidden;
+    }
+
+    .loader-fill {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), var(--maroon));
+      animation: load 1.8s var(--ease) forwards;
+    }
+
+    @keyframes load { to { width: 100%; } }
+
+    .page {
+      width: min(1060px, 100% - 26px);
+      margin: 0 auto;
+      padding: clamp(24px, 5vw, 44px) 0 28px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .glass {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .hero {
+      padding: clamp(22px, 4vw, 38px);
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      right: -80px;
+      top: -80px;
+      background: radial-gradient(circle, rgba(196,146,58,.26), transparent 70%);
+      z-index: -1;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: var(--maroon);
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    h1 {
+      margin-top: 10px;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.92rem, 5vw, 3.15rem);
+      line-height: 1.13;
+    }
+
+    .date-pill {
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 9px 14px;
+      background: #fff3dd;
+      border: 1px solid #efcf9a;
+      color: #744413;
+      font-weight: 600;
+      font-size: .9rem;
+    }
+
+    .sub {
+      margin-top: 12px;
+      max-width: 68ch;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .hero-stats {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+    }
+
+    .hero-stat {
+      background: rgba(255,255,255,.86);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px;
+      transform: translateY(10px);
+      opacity: 0;
+      animation: rise .8s var(--spring) forwards;
+    }
+
+    .hero-stat:nth-child(2) { animation-delay: .08s; }
+    .hero-stat:nth-child(3) { animation-delay: .16s; }
+    .hero-stat:nth-child(4) { animation-delay: .24s; }
+
+    .hero-stat b { display: block; margin-bottom: 3px; }
+    .hero-stat span { color: var(--muted); font-size: .87rem; }
+
+    .layout {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1.18fr .95fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 920px) { .layout { grid-template-columns: 1fr; } }
+
+    .section { padding: clamp(18px, 2.8vw, 26px); }
+
+    .section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 2.8vw, 1.66rem);
+      margin-bottom: 12px;
+    }
+
+    .timeline { list-style: none; display: grid; gap: 10px; }
+
+    .timeline li {
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--gold);
+      border-radius: 14px;
+      padding: 12px;
+      background: rgba(255,255,255,.86);
+    }
+
+    .timeline strong { display: block; color: #82420a; margin-bottom: 3px; }
+    .timeline p { color: var(--muted); line-height: 1.6; font-size: .95rem; }
+
+    .ratha-grid {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .ratha-item {
+      border: 1px solid #f0d4a3;
+      background: linear-gradient(130deg, rgba(255,245,229,.95), rgba(255,251,242,.95));
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 8px;
+      align-items: start;
+    }
+
+    .ratha-time {
+      font-weight: 700;
+      color: #7d4914;
+      font-size: .88rem;
+    }
+
+    .ratha-name {
+      font-weight: 700;
+      color: #5e2c37;
+      font-size: .93rem;
+    }
+
+    .ratha-note {
+      color: var(--muted);
+      font-size: .87rem;
+      margin-top: 2px;
+      line-height: 1.45;
+    }
+
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+
+    .tag {
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: #fff3dd;
+      border: 1px solid #efd19f;
+      color: #744413;
+      font-size: .84rem;
+      font-weight: 600;
+    }
+
+    .story { color: var(--muted); line-height: 1.68; }
+
+    .quote {
+      margin-top: 12px;
+      border-radius: 14px;
+      padding: 14px;
+      border: 1px solid #efd19f;
+      background: linear-gradient(120deg, rgba(196,146,58,.12), rgba(155,45,63,.08));
+      color: #663b1f;
+      font-style: italic;
+    }
+
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+    .reveal.in { opacity: 1; transform: none; }
+
+    footer {
+      margin-top: 16px;
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      background: rgba(48, 29, 19, .92);
+      color: #f7e7d7;
+      border: 1px solid rgba(240, 193, 132, .35);
+    }
+
+    footer a { color: #ffd08c; text-decoration: none; }
+
+    @keyframes rise { to { transform: none; opacity: 1; } }
+  </style>
+</head>
+<body>
+  <div id="loader">
+    <div class="loader-wrap">
+      <div class="loader-icon">🛕</div>
+      <div class="loader-title">First Tirumala Memory</div>
+      <div class="loader-sub">Chandu &amp; Sindhu · Ratha Saptami</div>
+      <div class="loader-bar"><div class="loader-fill"></div></div>
+    </div>
+  </div>
+
+  <div class="orb a" aria-hidden="true"></div>
+  <div class="orb b" aria-hidden="true"></div>
+  <div class="orb c" aria-hidden="true"></div>
+
+  <main class="page">
+    <section class="hero glass reveal">
+      <div class="eyebrow">🛕 Devotional Memory</div>
+      <h1>First Tirumala Temple Visit Together</h1>
+      <div class="date-pill">📅 Friday, February 16, 2024 · Ratha Saptami</div>
+      <p class="sub">This page preserves your first Tirumala visit as a couple — starting the previous evening from Tirupati, reaching Tirumala by 7:00 PM, staying at Ashiwini Hospital doctors' quarters, witnessing the Ratha Saptami vahanams, and taking darshan together.</p>
+
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <b>5:30 PM Start</b>
+          <span>From old maternity hospital, Tirupati (Sindhu hostel)</span>
+        </div>
+        <div class="hero-stat">
+          <b>7:00 PM Arrival</b>
+          <span>Reached Tirumala and settled at Ashiwini Hospital doctors' quarters</span>
+        </div>
+        <div class="hero-stat">
+          <b>Festival Day</b>
+          <span>Ratha Saptami (Sapta Vahanam day)</span>
+        </div>
+        <div class="hero-stat">
+          <b>Sacred Ending</b>
+          <span>Ratha darshan followed by Srivari darshan</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <article class="section glass reveal">
+        <h2>Your Journey Timeline</h2>
+        <ul class="timeline">
+          <li>
+            <strong>Thursday, February 15, 2024 · Around 5:30 PM</strong>
+            <p>You both started from old maternity hospital in Tirupati (Sindhu hostel), beginning this special uphill journey with excitement and devotion.</p>
+          </li>
+          <li>
+            <strong>Around 7:00 PM · Tirumala Arrival</strong>
+            <p>You reached Tirumala and stayed at Ashiwini Hospital doctors' quarters, preparing for the next day's Ratha Saptami celebrations.</p>
+          </li>
+          <li>
+            <strong>Friday, February 16, 2024 · Ratha Saptami</strong>
+            <p>You went to see the rathas/vahanams across the day, watching the divine procession with thousands of devotees.</p>
+          </li>
+          <li>
+            <strong>After Ratha Sevas · Darshan</strong>
+            <p>After witnessing the vahanams, you completed darshan — making this your first Tirumala temple memory together.</p>
+          </li>
+        </ul>
+      </article>
+
+      <aside class="section glass reveal">
+        <h2>Memory Highlights</h2>
+        <div class="tags">
+          <span class="tag">First Tirumala Visit</span>
+          <span class="tag">Chandu &amp; Sindhu</span>
+          <span class="tag">Feb 16, 2024</span>
+          <span class="tag">Ratha Saptami</span>
+          <span class="tag">Tirupati → Tirumala</span>
+        </div>
+        <p class="story">This memory now carries full context: exact day, date, month and year, your departure and arrival timings, stay location, and the festival vahanam sequence you witnessed before darshan.</p>
+
+        <div class="quote">“A first visit, a festival dawn, and a darshan together — some memories become blessings.”</div>
+      </aside>
+    </section>
+
+    <section class="section glass reveal" style="margin-top:14px;">
+      <h2>Ratha Saptami Vahanam Start Times Seen in Tirumala</h2>
+      <p class="story" style="margin-bottom:12px;">Festival-day procession schedule (traditional Tirumala one-day Brahmotsavam sequence) that you remembered while attending the rathas:</p>
+      <div class="ratha-grid">
+        <div class="ratha-item">
+          <div class="ratha-time">5:30 AM</div>
+          <div>
+            <div class="ratha-name">Surya Prabha Vahanam</div>
+            <div class="ratha-note">Dawn beginning of Ratha Saptami processions.</div>
+          </div>
+        </div>
+        <div class="ratha-item">
+          <div class="ratha-time">9:00 AM</div>
+          <div>
+            <div class="ratha-name">Chinna Sesha Vahanam</div>
+            <div class="ratha-note">Morning procession on the serpent vahanam.</div>
+          </div>
+        </div>
+        <div class="ratha-item">
+          <div class="ratha-time">11:00 AM</div>
+          <div>
+            <div class="ratha-name">Garuda Vahanam</div>
+            <div class="ratha-note">One of the most crowded and revered sevas.</div>
+          </div>
+        </div>
+        <div class="ratha-item">
+          <div class="ratha-time">1:00 PM</div>
+          <div>
+            <div class="ratha-name">Hanumantha Vahanam</div>
+            <div class="ratha-note">Midday vahanam, known for energetic devotional ambience.</div>
+          </div>
+        </div>
+        <div class="ratha-item">
+          <div class="ratha-time">4:00 PM</div>
+          <div>
+            <div class="ratha-name">Kalpavriksha Vahanam</div>
+            <div class="ratha-note">Evening procession symbolizing divine abundance.</div>
+          </div>
+        </div>
+        <div class="ratha-item">
+          <div class="ratha-time">6:00 PM</div>
+          <div>
+            <div class="ratha-name">Sarvabhoopala Vahanam</div>
+            <div class="ratha-note">Procession representing universal guardianship.</div>
+          </div>
+        </div>
+        <div class="ratha-item">
+          <div class="ratha-time">8:00 PM</div>
+          <div>
+            <div class="ratha-name">Chandra Prabha Vahanam</div>
+            <div class="ratha-note">The calm moonlit concluding vahanam of the day.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="reveal">
+      Created as a keepsake memory page for Chandu &amp; Sindhu’s first Tirumala temple visit.<br>
+      © <span id="year"></span> Family Hub · <a href="index.html">← Back to Family Hub</a>
+    </footer>
+  </main>
+
+  <script>
+    const loader = document.getElementById('loader');
+    const revealEls = document.querySelectorAll('.reveal');
+
+    function revealOnScroll() {
+      const trigger = window.innerHeight * 0.9;
+      revealEls.forEach((el, i) => {
+        const top = el.getBoundingClientRect().top;
+        if (top < trigger) {
+          setTimeout(() => el.classList.add('in'), i * 70);
+        }
+      });
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        loader.classList.add('out');
+        document.body.classList.add('ready');
+        revealOnScroll();
+      }, 900);
+    });
+
+    window.addEventListener('scroll', revealOnScroll, { passive: true });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
