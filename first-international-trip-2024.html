@@ -482,6 +482,13 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--bg);over
 
 /* Buddha SVG thumb */
 .hl-thumb.buddha{background:linear-gradient(135deg,#2a1400,#5a3000)}
+.hl-thumb.buddha::after{
+  background:linear-gradient(to bottom,rgba(0,0,0,.05),rgba(16,7,24,.3));
+}
+.hl-thumb.buddha svg{
+  width:88px;height:auto;position:relative;z-index:1;
+  filter:drop-shadow(0 4px 18px rgba(247,210,112,.25));
+}
 
 /* ══════════════════════════════════════════
    STATS
@@ -990,55 +997,36 @@ footer::before{
       <!-- Day 5 — Golden Buddha with SVG -->
       <div class="hl-card">
         <div class="hl-thumb buddha" style="position:relative">
-          <svg width="76" height="106" viewBox="0 0 76 106" fill="none" xmlns="http://www.w3.org/2000/svg" style="position:relative;z-index:1;margin:auto">
+          <svg viewBox="0 0 96 128" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Golden Buddha icon">
             <defs>
-              <linearGradient id="bg" x1="8" y1="0" x2="68" y2="106" gradientUnits="userSpaceOnUse">
-                <stop stop-color="#f7d270"/>
-                <stop offset=".5" stop-color="#dea020"/>
-                <stop offset="1" stop-color="#c07818"/>
+              <linearGradient id="buddha-gold" x1="18" y1="8" x2="78" y2="112" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#ffe7a5"/>
+                <stop offset=".45" stop-color="#f2be4f"/>
+                <stop offset="1" stop-color="#cb7d1e"/>
               </linearGradient>
-              <radialGradient id="halo-rg" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stop-color="#f7d270" stop-opacity=".9"/>
-                <stop offset="100%" stop-color="#c07818" stop-opacity=".3"/>
+              <radialGradient id="buddha-halo" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffeab3" stop-opacity=".95"/>
+                <stop offset="100%" stop-color="#cb7d1e" stop-opacity=".2"/>
               </radialGradient>
-              <radialGradient id="sheen" cx="38%" cy="30%" r="55%">
-                <stop offset="0%" stop-color="#fff8d0" stop-opacity=".28"/>
+              <radialGradient id="buddha-sheen" cx="35%" cy="22%" r="62%">
+                <stop offset="0%" stop-color="#fff8d8" stop-opacity=".42"/>
                 <stop offset="100%" stop-color="#f7d270" stop-opacity="0"/>
               </radialGradient>
             </defs>
-            <!-- Halo rings -->
-            <circle cx="38" cy="26" r="21" stroke="url(#halo-rg)" stroke-width="2.2" fill="none" opacity=".8"/>
-            <circle cx="38" cy="26" r="25.5" stroke="url(#halo-rg)" stroke-width=".9" fill="none" opacity=".35"/>
-            <!-- Ushnisha (topknot) -->
-            <ellipse cx="38" cy="8" rx="5.5" ry="5" fill="url(#bg)"/>
-            <!-- Head -->
-            <ellipse cx="38" cy="22" rx="13" ry="15" fill="url(#bg)"/>
-            <!-- Ears -->
-            <ellipse cx="25.5" cy="23" rx="2.3" ry="4.2" fill="url(#bg)"/>
-            <ellipse cx="50.5" cy="23" rx="2.3" ry="4.2" fill="url(#bg)"/>
-            <!-- Eyes (closed, serene) -->
-            <path d="M32 21 Q34 19.5 36 21" stroke="#6a3800" stroke-width="1.1" stroke-linecap="round" fill="none"/>
-            <path d="M40 21 Q42 19.5 44 21" stroke="#6a3800" stroke-width="1.1" stroke-linecap="round" fill="none"/>
-            <!-- Smile -->
-            <path d="M34.5 26 Q38 29 41.5 26" stroke="#6a3800" stroke-width="1" stroke-linecap="round" fill="none"/>
-            <!-- Bindi -->
-            <circle cx="38" cy="17.5" r="1.5" fill="#c07818" opacity=".6"/>
-            <!-- Neck -->
-            <rect x="34" y="36" width="8" height="6" rx="2" fill="url(#bg)"/>
-            <!-- Robe / body -->
-            <path d="M12 57 Q16 40 26 41 L38 42 L50 41 Q60 40 64 57 Q68 74 65 90 L11 90 Q8 74 12 57Z" fill="url(#bg)"/>
-            <!-- Robe fold lines -->
-            <path d="M24 42 Q30 60 27 90" stroke="#c07818" stroke-width=".8" stroke-dasharray="3 4" opacity=".3"/>
-            <path d="M52 42 Q46 60 49 90" stroke="#c07818" stroke-width=".8" stroke-dasharray="3 4" opacity=".3"/>
-            <!-- Hands in dhyana mudra -->
-            <ellipse cx="30" cy="83" rx="9" ry="4.5" fill="#e8b020" opacity=".85"/>
-            <ellipse cx="46" cy="83" rx="9" ry="4.5" fill="#f0c030" opacity=".85"/>
-            <ellipse cx="38" cy="83" rx="5" ry="3" fill="#f7d270" opacity=".5"/>
-            <!-- Lotus petals -->
-            <path d="M18 94 Q28 88 38 91 Q48 88 58 94 Q62 99 38 102 Q14 99 18 94Z" fill="#c07818" opacity=".5"/>
-            <path d="M22 94 Q32 89 38 92 Q44 89 54 94 Q56 97 38 99 Q20 97 22 94Z" fill="#f7d270" opacity=".3"/>
-            <!-- Light sheen overlay -->
-            <ellipse cx="38" cy="58" rx="22" ry="30" fill="url(#sheen)"/>
+            <circle cx="48" cy="36" r="25" stroke="url(#buddha-halo)" stroke-width="2.4" opacity=".85"/>
+            <circle cx="48" cy="36" r="31" stroke="url(#buddha-halo)" stroke-width="1" opacity=".35"/>
+            <ellipse cx="48" cy="16" rx="7" ry="6" fill="url(#buddha-gold)"/>
+            <ellipse cx="48" cy="33" rx="17" ry="19" fill="url(#buddha-gold)"/>
+            <ellipse cx="31.6" cy="34.5" rx="3" ry="5.2" fill="url(#buddha-gold)"/>
+            <ellipse cx="64.4" cy="34.5" rx="3" ry="5.2" fill="url(#buddha-gold)"/>
+            <path d="M40 32 Q44 29.8 47 32" stroke="#7a440f" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M49 32 Q52 29.8 56 32" stroke="#7a440f" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M43 40.2 Q48 44 53 40.2" stroke="#7a440f" stroke-width="1.25" stroke-linecap="round"/>
+            <rect x="43.5" y="50" width="9" height="7" rx="2.2" fill="url(#buddha-gold)"/>
+            <path d="M20 76 Q23 54 38 57 H58 Q73 54 76 76 Q78 92 74 106 H22 Q18 92 20 76Z" fill="url(#buddha-gold)"/>
+            <path d="M24 108 Q35 95 48 100 Q61 95 72 108 Q74 114 48 118 Q22 114 24 108Z" fill="#b96c16" opacity=".55"/>
+            <path d="M29 108 Q39 99.5 48 103 Q57 99.5 67 108 Q66 111.5 48 113.5 Q30 111.5 29 108Z" fill="#ffe7a5" opacity=".4"/>
+            <ellipse cx="48" cy="72" rx="24" ry="28" fill="url(#buddha-sheen)"/>
           </svg>
         </div>
         <div class="hl-body">
