@@ -3,10 +3,14 @@
   --motion-b: 192, 220, 255;
   --motion-c: 255, 230, 180;
   --motion-speed: 18s;
+  --mx: 0;
+  --my: 0;
 }
 
 body.motion-enhanced {
   position: relative;
+  perspective: 1200px;
+  transform-style: preserve-3d;
 }
 
 .motion-scrollbar {
@@ -28,6 +32,7 @@ body.motion-enhanced {
   pointer-events: none;
   z-index: 2;
   overflow: hidden;
+  transform-style: preserve-3d;
 }
 
 .motion-stage::before,
@@ -71,6 +76,36 @@ body.motion-enhanced {
   background-size: 4px 4px;
 }
 
+.motion-depth {
+  position: absolute;
+  inset: -14%;
+  transform-style: preserve-3d;
+}
+
+.motion-depth-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  filter: blur(14px);
+  opacity: 0.12;
+  background: radial-gradient(circle, rgba(var(--motion-c), 0.55), rgba(var(--motion-c), 0));
+  animation: motionLayerFloat calc(var(--motion-speed) * 1.3) ease-in-out infinite alternate;
+}
+
+.motion-depth-layer.layer-1 {
+  transform: translate3d(calc(var(--mx) * 14px), calc(var(--my) * 10px), -180px) scale(0.95);
+}
+
+.motion-depth-layer.layer-2 {
+  transform: translate3d(calc(var(--mx) * -20px), calc(var(--my) * 14px), -320px) scale(1.12);
+  animation-duration: calc(var(--motion-speed) * 1.6);
+}
+
+.motion-depth-layer.layer-3 {
+  transform: translate3d(calc(var(--mx) * 26px), calc(var(--my) * -16px), -430px) scale(1.24);
+  animation-duration: calc(var(--motion-speed) * 2);
+}
+
 .motion-enhanced main,
 .motion-enhanced .page,
 .motion-enhanced .container,
@@ -82,6 +117,23 @@ body.motion-enhanced {
 .motion-enhanced .wrapper {
   position: relative;
   z-index: 3;
+}
+
+.motion-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.25s ease;
+}
+
+.motion-3d[data-depth="near"] {
+  transform: translate3d(calc(var(--mx) * 10px), calc(var(--my) * 8px), 42px) rotateX(calc(var(--my) * -3deg)) rotateY(calc(var(--mx) * 3deg));
+}
+
+.motion-3d[data-depth="mid"] {
+  transform: translate3d(calc(var(--mx) * 6px), calc(var(--my) * 5px), 22px) rotateX(calc(var(--my) * -2deg)) rotateY(calc(var(--mx) * 2deg));
+}
+
+.motion-3d[data-depth="far"] {
+  transform: translate3d(calc(var(--mx) * 3px), calc(var(--my) * 2px), 8px) rotateX(calc(var(--my) * -1deg)) rotateY(calc(var(--mx) * 1deg));
 }
 
 .motion-reveal {
@@ -151,6 +203,11 @@ body.motion-mode-orbit .motion-stage::after { animation-name: motionOrbitReverse
   100% { transform: rotate(0deg) translateX(40px) rotate(0deg) scale(0.98); }
 }
 
+@keyframes motionLayerFloat {
+  0% { transform: translate3d(0, 0, -200px) scale(1); }
+  100% { transform: translate3d(5%, -6%, -260px) scale(1.08); }
+}
+
 @keyframes motionSpin {
   to { transform: rotate(360deg) scale(1.08); }
 }
@@ -176,6 +233,7 @@ body.motion-mode-orbit .motion-stage::after { animation-name: motionOrbitReverse
   .motion-glow,
   .motion-float,
   .motion-tilt,
+  .motion-3d,
   .motion-tilt.active {
     opacity: 1;
     transform: none;

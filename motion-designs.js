@@ -25,7 +25,15 @@
   const stage = document.createElement('div');
   stage.className = 'motion-stage';
   stage.setAttribute('aria-hidden', 'true');
-  stage.innerHTML = '<div class="motion-ribbon"></div><div class="motion-grain"></div>';
+  stage.innerHTML = `
+    <div class="motion-ribbon"></div>
+    <div class="motion-grain"></div>
+    <div class="motion-depth">
+      <div class="motion-depth-layer layer-1"></div>
+      <div class="motion-depth-layer layer-2"></div>
+      <div class="motion-depth-layer layer-3"></div>
+    </div>
+  `;
   document.body.prepend(stage);
 
   const scrollBar = document.createElement('div');
@@ -46,19 +54,32 @@
     }
   });
 
+  const depthTargets = document.querySelectorAll('.hero, .hero h1, .hero h2, .hero .subtitle, .card, .panel, .tile, .memory-card, article');
+  depthTargets.forEach((el, i) => {
+    if (i > 20) return;
+    el.classList.add('motion-3d');
+    if (i % 3 === 0) {
+      el.dataset.depth = 'near';
+    } else if (i % 3 === 1) {
+      el.dataset.depth = 'mid';
+    } else {
+      el.dataset.depth = 'far';
+    }
+  });
+
   const floatTargets = document.querySelectorAll('.hero img, .hero svg, .hero .badge, .hero .chip, .hero .tag, .hero .pill');
   floatTargets.forEach((el, i) => {
-    if (i < 6) el.classList.add('motion-float');
+    if (i < 8) el.classList.add('motion-float');
   });
 
   const glowTargets = document.querySelectorAll('button, .btn, .button, .cta, a[class*="btn"], .hero h1, .hero h2');
   glowTargets.forEach((el, i) => {
-    if (i < 10) el.classList.add('motion-glow');
+    if (i < 12) el.classList.add('motion-glow');
   });
 
   const tiltTargets = document.querySelectorAll('.card, .panel, .tile, .memory-card, article');
   tiltTargets.forEach((el, i) => {
-    if (i > 14) return;
+    if (i > 16) return;
     el.classList.add('motion-tilt');
 
     el.addEventListener('mousemove', (event) => {
@@ -76,6 +97,14 @@
       el.classList.remove('active');
     });
   });
+
+  const updateMouseDepth = (event) => {
+    const x = (event.clientX / window.innerWidth) * 2 - 1;
+    const y = (event.clientY / window.innerHeight) * 2 - 1;
+    root.style.setProperty('--mx', x.toFixed(4));
+    root.style.setProperty('--my', y.toFixed(4));
+  };
+  window.addEventListener('mousemove', updateMouseDepth, { passive: true });
 
   const updateScrollBar = () => {
     const max = document.documentElement.scrollHeight - window.innerHeight;
