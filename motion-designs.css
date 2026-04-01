@@ -2,10 +2,24 @@
   --motion-a: 255, 192, 203;
   --motion-b: 192, 220, 255;
   --motion-c: 255, 230, 180;
+  --motion-speed: 18s;
 }
 
 body.motion-enhanced {
   position: relative;
+}
+
+.motion-scrollbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  z-index: 9998;
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  background: linear-gradient(90deg, rgba(var(--motion-a), 1), rgba(var(--motion-b), 1), rgba(var(--motion-c), 1));
+  box-shadow: 0 0 14px rgba(var(--motion-a), 0.65);
 }
 
 .motion-stage {
@@ -20,33 +34,41 @@ body.motion-enhanced {
 .motion-stage::after {
   content: "";
   position: absolute;
-  width: min(55vw, 680px);
-  height: min(55vw, 680px);
+  width: min(58vw, 760px);
+  height: min(58vw, 760px);
   border-radius: 999px;
-  filter: blur(70px);
-  opacity: 0.2;
+  filter: blur(65px);
+  opacity: 0.24;
   mix-blend-mode: screen;
-  animation: motionDrift 18s ease-in-out infinite alternate;
 }
 
 .motion-stage::before {
-  top: -18%;
-  left: -12%;
-  background: radial-gradient(circle at 30% 30%, rgba(var(--motion-a), 0.65), rgba(var(--motion-a), 0));
+  top: -20%;
+  left: -16%;
+  background: radial-gradient(circle at 32% 30%, rgba(var(--motion-a), 0.7), rgba(var(--motion-a), 0));
+  animation: motionWave var(--motion-speed) ease-in-out infinite alternate;
 }
 
 .motion-stage::after {
-  bottom: -22%;
-  right: -10%;
-  background: radial-gradient(circle at 65% 35%, rgba(var(--motion-b), 0.6), rgba(var(--motion-b), 0));
-  animation-duration: 24s;
+  right: -16%;
+  bottom: -25%;
+  background: radial-gradient(circle at 66% 35%, rgba(var(--motion-b), 0.65), rgba(var(--motion-b), 0));
+  animation: motionDrift calc(var(--motion-speed) * 1.2) ease-in-out infinite alternate;
 }
 
 .motion-ribbon {
   position: absolute;
+  inset: -10%;
+  background: conic-gradient(from 120deg at 50% 50%, rgba(var(--motion-c), 0.06), transparent 28%, rgba(var(--motion-a), 0.08), transparent 62%, rgba(var(--motion-b), 0.06));
+  animation: motionSpin calc(var(--motion-speed) * 2) linear infinite;
+}
+
+.motion-grain {
+  position: absolute;
   inset: 0;
-  background: conic-gradient(from 180deg at 50% 50%, rgba(var(--motion-c), 0.05), transparent 26%, rgba(var(--motion-a), 0.08), transparent 70%);
-  animation: motionSpin 32s linear infinite;
+  opacity: 0.04;
+  background-image: radial-gradient(rgba(var(--motion-c), 0.9) 0.6px, transparent 0.6px);
+  background-size: 4px 4px;
 }
 
 .motion-enhanced main,
@@ -55,15 +77,17 @@ body.motion-enhanced {
 .motion-enhanced section,
 .motion-enhanced .hero,
 .motion-enhanced .content,
-.motion-enhanced .announcement {
+.motion-enhanced .announcement,
+.motion-enhanced .timeline,
+.motion-enhanced .wrapper {
   position: relative;
   z-index: 3;
 }
 
 .motion-reveal {
   opacity: 0;
-  transform: translateY(24px) scale(0.985);
-  transition: opacity 0.85s ease, transform 0.85s cubic-bezier(.2, .7, .2, 1);
+  transform: translateY(32px) scale(0.985);
+  transition: opacity 0.9s ease, transform 0.9s cubic-bezier(.2, .7, .2, 1);
 }
 
 .motion-reveal.motion-in {
@@ -71,38 +95,92 @@ body.motion-enhanced {
   transform: translateY(0) scale(1);
 }
 
+.motion-float {
+  animation: motionFloat 5.2s ease-in-out infinite;
+  will-change: transform;
+}
+
 .motion-glow {
-  animation: motionPulse 6s ease-in-out infinite;
+  animation: motionPulse 5.8s ease-in-out infinite;
   will-change: transform, filter;
+}
+
+.motion-tilt {
+  transition: transform .22s ease, box-shadow .22s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.motion-tilt.active {
+  box-shadow: 0 20px 40px rgba(var(--motion-a), 0.22), 0 2px 14px rgba(var(--motion-b), 0.2);
+}
+
+body.motion-mode-cascade .motion-stage::before { animation-name: motionCascade; }
+body.motion-mode-cascade .motion-stage::after { animation-name: motionFloatLarge; }
+body.motion-mode-orbit .motion-stage::before { animation-name: motionOrbit; }
+body.motion-mode-orbit .motion-stage::after { animation-name: motionOrbitReverse; }
+
+@keyframes motionWave {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(8%, -5%, 0) scale(1.06); }
+  100% { transform: translate3d(-3%, 8%, 0) scale(0.95); }
 }
 
 @keyframes motionDrift {
   0% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(6%, -4%, 0) scale(1.05); }
-  100% { transform: translate3d(-4%, 6%, 0) scale(0.96); }
+  100% { transform: translate3d(-8%, -10%, 0) scale(1.07); }
+}
+
+@keyframes motionCascade {
+  0% { transform: translate3d(0, -4%, 0) scale(0.98); }
+  100% { transform: translate3d(10%, 8%, 0) scale(1.08); }
+}
+
+@keyframes motionFloatLarge {
+  0% { transform: translate3d(0, 8%, 0) scale(1.02); }
+  100% { transform: translate3d(-8%, -6%, 0) scale(0.96); }
+}
+
+@keyframes motionOrbit {
+  0% { transform: rotate(0deg) translateX(35px) rotate(0deg) scale(1); }
+  100% { transform: rotate(360deg) translateX(35px) rotate(-360deg) scale(1.04); }
+}
+
+@keyframes motionOrbitReverse {
+  0% { transform: rotate(360deg) translateX(40px) rotate(-360deg) scale(1.03); }
+  100% { transform: rotate(0deg) translateX(40px) rotate(0deg) scale(0.98); }
 }
 
 @keyframes motionSpin {
-  to { transform: rotate(360deg) scale(1.12); }
+  to { transform: rotate(360deg) scale(1.08); }
+}
+
+@keyframes motionFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
 }
 
 @keyframes motionPulse {
   0%, 100% { transform: translateY(0); filter: saturate(1); }
-  50% { transform: translateY(-3px); filter: saturate(1.12); }
+  50% { transform: translateY(-2px); filter: saturate(1.15); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .motion-stage,
-  .motion-ribbon {
+  .motion-scrollbar {
     display: none;
   }
 
   .motion-reveal,
   .motion-reveal.motion-in,
-  .motion-glow {
+  .motion-glow,
+  .motion-float,
+  .motion-tilt,
+  .motion-tilt.active {
     opacity: 1;
     transform: none;
     transition: none;
     animation: none;
+    box-shadow: none;
   }
 }
