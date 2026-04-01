@@ -1,0 +1,108 @@
+:root {
+  --motion-a: 255, 192, 203;
+  --motion-b: 192, 220, 255;
+  --motion-c: 255, 230, 180;
+}
+
+body.motion-enhanced {
+  position: relative;
+}
+
+.motion-stage {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.motion-stage::before,
+.motion-stage::after {
+  content: "";
+  position: absolute;
+  width: min(55vw, 680px);
+  height: min(55vw, 680px);
+  border-radius: 999px;
+  filter: blur(70px);
+  opacity: 0.2;
+  mix-blend-mode: screen;
+  animation: motionDrift 18s ease-in-out infinite alternate;
+}
+
+.motion-stage::before {
+  top: -18%;
+  left: -12%;
+  background: radial-gradient(circle at 30% 30%, rgba(var(--motion-a), 0.65), rgba(var(--motion-a), 0));
+}
+
+.motion-stage::after {
+  bottom: -22%;
+  right: -10%;
+  background: radial-gradient(circle at 65% 35%, rgba(var(--motion-b), 0.6), rgba(var(--motion-b), 0));
+  animation-duration: 24s;
+}
+
+.motion-ribbon {
+  position: absolute;
+  inset: 0;
+  background: conic-gradient(from 180deg at 50% 50%, rgba(var(--motion-c), 0.05), transparent 26%, rgba(var(--motion-a), 0.08), transparent 70%);
+  animation: motionSpin 32s linear infinite;
+}
+
+.motion-enhanced main,
+.motion-enhanced .page,
+.motion-enhanced .container,
+.motion-enhanced section,
+.motion-enhanced .hero,
+.motion-enhanced .content,
+.motion-enhanced .announcement {
+  position: relative;
+  z-index: 3;
+}
+
+.motion-reveal {
+  opacity: 0;
+  transform: translateY(24px) scale(0.985);
+  transition: opacity 0.85s ease, transform 0.85s cubic-bezier(.2, .7, .2, 1);
+}
+
+.motion-reveal.motion-in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.motion-glow {
+  animation: motionPulse 6s ease-in-out infinite;
+  will-change: transform, filter;
+}
+
+@keyframes motionDrift {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(6%, -4%, 0) scale(1.05); }
+  100% { transform: translate3d(-4%, 6%, 0) scale(0.96); }
+}
+
+@keyframes motionSpin {
+  to { transform: rotate(360deg) scale(1.12); }
+}
+
+@keyframes motionPulse {
+  0%, 100% { transform: translateY(0); filter: saturate(1); }
+  50% { transform: translateY(-3px); filter: saturate(1.12); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-stage,
+  .motion-ribbon {
+    display: none;
+  }
+
+  .motion-reveal,
+  .motion-reveal.motion-in,
+  .motion-glow {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    animation: none;
+  }
+}
