@@ -3,352 +3,210 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>With Love — Cinematic Title Card</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <title>With Love Title Card (Revised)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Great+Vibes&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --night: #06070c;
-      --midnight: #0f1424;
-      --deep-blue: #17223e;
-      --gold-light: #f7e2a5;
-      --gold: #d4b06b;
-      --gold-dark: #8b672f;
-      --rose: #d8a9b5;
-      --mist: rgba(255, 255, 255, 0.08);
-      --white: #f4f7ff;
+      --bg-0: #030407;
+      --bg-1: #0b1020;
+      --ink: #e9edf8;
+      --gold-0: #fff2cc;
+      --gold-1: #e3c07f;
+      --gold-2: #ae7d3c;
+      --rose: #d7a2af;
     }
 
     * { box-sizing: border-box; }
 
-    body {
+    html, body {
+      width: 100%;
+      height: 100%;
       margin: 0;
-      min-height: 100vh;
       overflow: hidden;
-      display: grid;
-      place-items: center;
-      background:
-        radial-gradient(1200px 650px at 25% 20%, rgba(216, 169, 181, 0.16), transparent 62%),
-        radial-gradient(1400px 700px at 78% 86%, rgba(212, 176, 107, 0.14), transparent 58%),
-        linear-gradient(168deg, var(--night) 0%, var(--midnight) 56%, var(--deep-blue) 100%);
-      color: var(--white);
-      perspective: 1600px;
-      font-family: "Cormorant Garamond", serif;
+      background: radial-gradient(120% 90% at 50% 70%, var(--bg-1) 0%, var(--bg-0) 60%);
+      color: var(--ink);
+      font-family: "Cinzel", serif;
     }
 
+    .card {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+      perspective: 1200px;
+    }
+
+    .fog,
     .vignette,
-    .grain,
-    .beam,
-    canvas {
-      position: fixed;
+    .film-burn,
+    .scan,
+    .grain {
+      position: absolute;
       inset: 0;
       pointer-events: none;
     }
 
-    .vignette {
-      background: radial-gradient(circle at center, transparent 38%, rgba(0, 0, 0, 0.55) 100%);
+    .fog {
+      background:
+        radial-gradient(650px 320px at 50% 48%, rgba(255,255,255,0.07), transparent 70%),
+        radial-gradient(900px 420px at 50% 55%, rgba(227,192,127,0.08), transparent 65%);
+      filter: blur(14px);
+      animation: fogPulse 5s ease-in-out infinite;
+      z-index: 1;
+    }
+
+    .film-burn {
+      background:
+        radial-gradient(220px 220px at 10% 15%, rgba(215, 162, 175, 0.14), transparent 70%),
+        radial-gradient(280px 280px at 90% 82%, rgba(227,192,127,0.14), transparent 72%);
+      mix-blend-mode: screen;
+      opacity: 0;
+      animation: burnIn 2s ease forwards;
       z-index: 2;
     }
 
+    .vignette {
+      background: radial-gradient(circle at center, transparent 45%, rgba(0, 0, 0, 0.62) 100%);
+      z-index: 4;
+    }
+
     .grain {
-      z-index: 3;
-      opacity: 0.2;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.08' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.34'/%3E%3C/svg%3E");
+      opacity: 0.18;
+      z-index: 5;
       mix-blend-mode: soft-light;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
       animation: grainShift 2.4s steps(2) infinite;
     }
 
-    canvas { z-index: 1; }
-
-    .beam {
-      z-index: 4;
-      background: linear-gradient(110deg,
-        transparent 34%,
-        rgba(255,255,255,0.22) 45%,
-        rgba(247,226,165,0.2) 47%,
-        rgba(255,255,255,0.08) 53%,
-        transparent 62%);
-      transform: translateX(-150%);
-      animation: beamPass 7.2s ease-in-out infinite 1.2s;
-      mix-blend-mode: screen;
-      opacity: 0.75;
-    }
-
-    .stage {
+    .title-wrap {
       position: relative;
-      width: min(92vw, 1080px);
-      height: min(56vw, 590px);
-      transform-style: preserve-3d;
-      transform: rotateX(13deg) rotateY(-9deg) scale(0.96);
-      animation: cameraPush 2.2s cubic-bezier(.15,.85,.24,1) forwards,
-                 cameraDrift 8.8s ease-in-out infinite alternate 2.3s;
-      z-index: 6;
-    }
-
-    .frame,
-    .halo,
-    .plate,
-    .title-cluster {
-      position: absolute;
-      inset: 0;
-      border-radius: 30px;
-      transform-style: preserve-3d;
-    }
-
-    .frame {
-      border: 1px solid rgba(247, 226, 165, 0.42);
-      box-shadow:
-        0 40px 90px rgba(0, 0, 0, 0.5),
-        inset 0 0 80px rgba(247, 226, 165, 0.1);
-      background: linear-gradient(155deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
-      transform: translateZ(-40px) scale(1.04);
-      opacity: 0;
-      animation: fadeIn 1.3s ease forwards 0.25s;
-    }
-
-    .halo {
-      inset: 7%;
-      border-radius: 50%;
-      border: 1px solid rgba(247, 226, 165, 0.26);
-      filter: blur(0.3px);
-      transform: translateZ(-8px) rotateX(66deg);
-      opacity: 0;
-      animation: ringGrow 2s ease forwards 0.9s;
-    }
-
-    .plate {
-      background:
-        radial-gradient(circle at 50% 35%, rgba(255,255,255,0.09), transparent 53%),
-        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
-      border: 1px solid rgba(255,255,255,0.16);
-      backdrop-filter: blur(2.2px);
-      transform: translateZ(24px);
-      box-shadow: inset 0 0 100px rgba(247, 226, 165, 0.06);
-      overflow: hidden;
-      opacity: 0;
-      animation: fadeIn 1s ease forwards 0.65s;
-    }
-
-    .plate::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: radial-gradient(circle at 35% 25%, rgba(247,226,165,0.16), transparent 42%);
-      transform: translateZ(30px);
-      animation: breathe 4.8s ease-in-out infinite;
-    }
-
-    .ornament {
-      position: absolute;
-      left: 50%;
-      width: min(58vw, 640px);
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(247,226,165,0.65), transparent);
-      transform: translateX(-50%) translateZ(60px);
-      opacity: 0;
-      animation: fadeIn 1.1s ease forwards 1.35s;
-    }
-
-    .ornament.top { top: 26%; }
-    .ornament.bottom { bottom: 24%; }
-
-    .title-cluster {
-      display: grid;
-      place-items: center;
+      z-index: 3;
       text-align: center;
-      padding: 1.5rem;
-      transform: translateZ(84px);
-      animation: clusterFloat 6.2s ease-in-out infinite 2.4s;
+      transform-style: preserve-3d;
+      animation: cameraFloat 6.8s ease-in-out infinite 2.2s;
+      padding: 1rem;
     }
 
-    .script,
-    .title,
-    .subtitle {
+    .with {
       margin: 0;
-      opacity: 0;
-    }
-
-    .script {
       font-family: "Great Vibes", cursive;
+      font-size: clamp(2rem, 6vw, 4.8rem);
       color: var(--rose);
-      font-size: clamp(2rem, 6.2vw, 5.2rem);
-      letter-spacing: 0.015em;
-      transform: translateY(16px) translateZ(100px);
-      text-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-      animation: scriptIn 1.2s cubic-bezier(.2,.8,.24,1) forwards 1.2s;
+      opacity: 0;
+      transform: translateY(20px) translateZ(40px) scale(0.98);
+      text-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+      animation: withIn 1.1s cubic-bezier(.2,.78,.21,1) forwards 0.6s;
     }
 
-    .title {
+    .love {
+      margin: 0.1em 0 0;
+      font-size: clamp(2.7rem, 10.8vw, 8.8rem);
+      letter-spacing: clamp(0.14em, 0.6vw, 0.36em);
       text-transform: uppercase;
-      font-weight: 700;
-      letter-spacing: clamp(0.18em, 0.42vw, 0.36em);
-      font-size: clamp(2.3rem, 7.2vw, 7.6rem);
-      line-height: 0.92;
-      color: var(--gold-light);
+      line-height: 0.9;
+      opacity: 0;
+      transform: translateY(38px) translateZ(120px) scale(1.1);
+      color: var(--gold-0);
       text-shadow:
-        0 1px 0 #fff2ce,
-        0 2px 0 #e0c186,
-        0 3px 0 #c79d5b,
-        0 4px 0 #ab7e44,
-        0 20px 36px rgba(0, 0, 0, 0.58);
-      transform: translateY(34px) translateZ(170px) scale(1.12);
-      animation: titleHit 1.7s cubic-bezier(.14,1,.29,1) forwards 1.72s;
+        0 1px 0 #fff6dc,
+        0 2px 0 #f4dca5,
+        0 3px 0 #e8c584,
+        0 4px 0 #c59658,
+        0 18px 36px rgba(0,0,0,0.6);
+      animation: loveIn 1.55s cubic-bezier(.14,1,.3,1) forwards 1.2s;
     }
 
-    .subtitle {
-      margin-top: 1.1rem;
+    .tagline {
+      margin-top: 1.05rem;
+      font-size: clamp(0.64rem, 1.45vw, 1rem);
+      letter-spacing: clamp(0.24em, 0.4vw, 0.42em);
       text-transform: uppercase;
-      letter-spacing: clamp(0.2em, 0.33vw, 0.35em);
-      font-weight: 500;
-      font-size: clamp(0.74rem, 1.5vw, 1.14rem);
-      color: rgba(244, 247, 255, 0.82);
-      transform: translateY(14px) translateZ(96px);
-      animation: subtitleIn 1s ease forwards 2.6s;
+      color: rgba(233, 237, 248, 0.82);
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.9s ease forwards 2.15s;
     }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
+    .scan {
+      z-index: 6;
+      background: linear-gradient(100deg,
+        transparent 34%,
+        rgba(255,255,255,0.20) 46%,
+        rgba(255,242,204,0.14) 49%,
+        rgba(255,255,255,0.04) 54%,
+        transparent 64%);
+      transform: translateX(-150%);
+      animation: scanPass 5.6s ease-in-out infinite 2.4s;
+      mix-blend-mode: screen;
+      opacity: 0.8;
     }
 
-    @keyframes ringGrow {
-      from { opacity: 0; transform: translateZ(-8px) rotateX(66deg) scale(0.78); }
-      to { opacity: 1; transform: translateZ(-8px) rotateX(66deg) scale(1); }
+    @keyframes withIn {
+      to { opacity: 1; transform: translateY(0) translateZ(44px) scale(1); }
     }
 
-    @keyframes scriptIn {
-      to { opacity: 1; transform: translateY(0) translateZ(112px); }
+    @keyframes loveIn {
+      0% { opacity: 0; transform: translateY(38px) translateZ(220px) scale(1.16); }
+      56% { opacity: 1; transform: translateY(-4px) translateZ(120px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) translateZ(120px) scale(1); }
     }
 
-    @keyframes titleHit {
-      0% { opacity: 0; transform: translateY(34px) translateZ(250px) scale(1.22); }
-      58% { opacity: 1; transform: translateY(-3px) translateZ(168px) scale(0.98); }
-      100% { opacity: 1; transform: translateY(0) translateZ(170px) scale(1); }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes subtitleIn {
-      to { opacity: 1; transform: translateY(0) translateZ(96px); }
+    @keyframes cameraFloat {
+      0%, 100% { transform: translateY(0) rotateZ(0deg); }
+      50% { transform: translateY(-5px) rotateZ(0.35deg); }
     }
 
-    @keyframes cameraPush {
-      0% { transform: rotateX(18deg) rotateY(-13deg) scale(0.9); }
-      100% { transform: rotateX(13deg) rotateY(-9deg) scale(0.96); }
+    @keyframes scanPass {
+      0%, 28% { transform: translateX(-150%); }
+      50%, 100% { transform: translateX(150%); }
     }
 
-    @keyframes cameraDrift {
-      0% { transform: rotateX(13deg) rotateY(-9deg) translateY(0) scale(0.96); }
-      100% { transform: rotateX(16deg) rotateY(-6deg) translateY(-8px) scale(0.98); }
-    }
-
-    @keyframes clusterFloat {
-      0%, 100% { transform: translateZ(84px) translateY(0); }
-      50% { transform: translateZ(94px) translateY(-6px); }
-    }
-
-    @keyframes beamPass {
-      0%, 30% { transform: translateX(-150%); }
-      56%, 100% { transform: translateX(150%); }
-    }
-
-    @keyframes breathe {
-      0%, 100% { opacity: 0.5; }
+    @keyframes fogPulse {
+      0%, 100% { opacity: 0.65; }
       50% { opacity: 1; }
     }
 
-    @keyframes grainShift {
-      0% { transform: translate(0, 0); }
-      30% { transform: translate(-1.5%, 1%); }
-      60% { transform: translate(1%, -1.2%); }
-      100% { transform: translate(-1%, 0.8%); }
+    @keyframes burnIn {
+      0% { opacity: 0; }
+      25% { opacity: 0.38; }
+      100% { opacity: 0.14; }
     }
 
-    @media (max-width: 760px) {
-      .stage {
-        width: min(96vw, 680px);
-        height: min(72vw, 510px);
-      }
+    @keyframes grainShift {
+      0% { transform: translate(0,0); }
+      33% { transform: translate(-1.5%, 1%); }
+      66% { transform: translate(1.2%, -1.1%); }
+      100% { transform: translate(-1.1%, 0.8%); }
+    }
 
-      .ornament.top { top: 24%; }
-      .ornament.bottom { bottom: 22%; }
-      .subtitle { margin-top: 0.8rem; }
+    @media (max-width: 680px) {
+      .love { letter-spacing: 0.18em; }
+      .tagline { margin-top: 0.75rem; letter-spacing: 0.28em; }
     }
   </style>
 </head>
 <body>
-  <canvas id="dust" aria-hidden="true"></canvas>
-  <div class="vignette" aria-hidden="true"></div>
-  <div class="grain" aria-hidden="true"></div>
-  <div class="beam" aria-hidden="true"></div>
+  <main class="card" aria-label="Movie style title card inspired by the With Love title design">
+    <div class="fog" aria-hidden="true"></div>
+    <div class="film-burn" aria-hidden="true"></div>
 
-  <main class="stage" aria-label="Cinematic title card inspired by With Love movie title animation">
-    <section class="frame" aria-hidden="true"></section>
-    <section class="halo" aria-hidden="true"></section>
+    <div class="title-wrap">
+      <p class="with">with</p>
+      <h1 class="love">LOVE</h1>
+      <p class="tagline">Cinematic 3D Motion Title Card</p>
+    </div>
 
-    <section class="plate">
-      <span class="ornament top" aria-hidden="true"></span>
-      <div class="title-cluster">
-        <p class="script">Inspired by</p>
-        <h1 class="title">With Love</h1>
-        <p class="subtitle">3D Motion Design Title Card</p>
-      </div>
-      <span class="ornament bottom" aria-hidden="true"></span>
-    </section>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="scan" aria-hidden="true"></div>
   </main>
-
-  <script>
-    const canvas = document.getElementById('dust');
-    const ctx = canvas.getContext('2d');
-    const particles = [];
-    const amount = 90;
-
-    function fit() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    function spawn() {
-      particles.length = 0;
-      for (let i = 0; i < amount; i += 1) {
-        particles.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          r: Math.random() * 1.8 + 0.3,
-          vx: (Math.random() - 0.5) * 0.18,
-          vy: Math.random() * -0.24 - 0.05,
-          a: Math.random() * 0.55 + 0.2
-        });
-      }
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-
-        if (p.y < -5) {
-          p.y = canvas.height + 5;
-          p.x = Math.random() * canvas.width;
-        }
-        if (p.x < -5) p.x = canvas.width + 5;
-        if (p.x > canvas.width + 5) p.x = -5;
-
-        ctx.beginPath();
-        ctx.fillStyle = `rgba(247, 226, 165, ${p.a})`;
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      requestAnimationFrame(draw);
-    }
-
-    fit();
-    spawn();
-    draw();
-
-    window.addEventListener('resize', () => {
-      fit();
-      spawn();
-    });
-  </script>
 </body>
 </html>
