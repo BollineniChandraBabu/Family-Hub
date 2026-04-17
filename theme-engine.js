@@ -10,6 +10,9 @@
   const REFRESH_INTERVAL_MS = 10 * 60 * 1000;
   const HOLIDAY_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
   const WEATHER_CACHE_TTL_MS = 20 * 60 * 1000;
+  const CALENDARIFIC_API_URL = "https://calendarific.com/api/v2/holidays";
+  const ENCRYPTED_CALENDARIFIC_API_KEY = "BBEmZwoRIS1qSHFBYjA6MzZ/IC8kZn5pBEADJRUFAHY=";
+  const KEY_MASK_PARTS = ["FH_", "THEME", "_2026"];
   const INDIA_HOLIDAY_ICS_URL =
     "https://calendar.google.com/calendar/ical/en.indian%23holiday%40group.v.calendar.google.com/public/basic.ics";
   const TEXT_PROXY_PREFIX = "https://r.jina.ai/http://";
@@ -232,6 +235,12 @@
       const cached = this.getCached(cacheKey, HOLIDAY_CACHE_TTL_MS);
       if (cached) return cached;
 
+      const calendarific = await this.getCalendarificHolidays(countryCode, year);
+      if (calendarific.length > 0) {
+        this.setCached(cacheKey, calendarific);
+        return calendarific;
+      }
+
       if (countryCode === "IN") {
         const indiaHolidays = await this.getIndiaHolidaysFromIcs(year);
         if (indiaHolidays.length > 0) {
@@ -249,6 +258,53 @@
         return holidays;
       } catch {
         return [];
+      }
+    },
+
+    async getCalendarificHolidays(countryCode, year) {
+      try {
+        const apiKey = this.decryptCalendarificKey();
+        if (!apiKey) return [];
+
+        const params = new URLSearchParams({
+          api_key: apiKey,
+          country: countryCode,
+          year: String(year)
+        });
+
+        const res = await fetch(`${CALENDARIFIC_API_URL}?${params.toString()}`);
+        if (!res.ok) return [];
+
+        const data = await res.json();
+        const holidays = data?.response?.holidays;
+        if (!Array.isArray(holidays)) return [];
+
+        return holidays
+          .map((h) => ({
+            date: h?.date?.iso ? String(h.date.iso).slice(0, 10) : null,
+            localName: h?.name || h?.description || "",
+            name: h?.name || h?.description || ""
+          }))
+          .filter((h) => Boolean(h.date && h.name));
+      } catch {
+        return [];
+      }
+    },
+
+    decryptCalendarificKey() {
+      try {
+        const mask = KEY_MASK_PARTS.join("");
+        const bytes = atob(ENCRYPTED_CALENDARIFIC_API_KEY);
+        let result = "";
+
+        for (let i = 0; i < bytes.length; i++) {
+          const decodedCode = bytes.charCodeAt(i) ^ mask.charCodeAt(i % mask.length);
+          result += String.fromCharCode(decodedCode);
+        }
+
+        return result;
+      } catch {
+        return "";
       }
     },
 
