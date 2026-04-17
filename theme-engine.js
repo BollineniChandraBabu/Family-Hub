@@ -10,6 +10,9 @@
   const REFRESH_INTERVAL_MS = 10 * 60 * 1000;
   const HOLIDAY_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
   const WEATHER_CACHE_TTL_MS = 20 * 60 * 1000;
+  const INDIA_HOLIDAY_ICS_URL =
+    "https://calendar.google.com/calendar/ical/en.indian%23holiday%40group.v.calendar.google.com/public/basic.ics";
+  const TEXT_PROXY_PREFIX = "https://r.jina.ai/http://";
 
   const FESTIVAL_PATTERNS = [
     { test: /(diwali|deepavali)/i, theme: "diwali" },
@@ -229,6 +232,14 @@
       const cached = this.getCached(cacheKey, HOLIDAY_CACHE_TTL_MS);
       if (cached) return cached;
 
+      if (countryCode === "IN") {
+        const indiaHolidays = await this.getIndiaHolidaysFromIcs(year);
+        if (indiaHolidays.length > 0) {
+          this.setCached(cacheKey, indiaHolidays);
+          return indiaHolidays;
+        }
+      }
+
       try {
         const res = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
         if (!res.ok) return [];
@@ -239,6 +250,54 @@
       } catch {
         return [];
       }
+    },
+
+    async getIndiaHolidaysFromIcs(year) {
+      try {
+        const proxiedUrl = `${TEXT_PROXY_PREFIX}${INDIA_HOLIDAY_ICS_URL.replace(/^https?:\/\//, "")}`;
+        const res = await fetch(proxiedUrl);
+        if (!res.ok) return [];
+
+        const text = await res.text();
+        return this.parseIcsHolidayEvents(text, year);
+      } catch {
+        return [];
+      }
+    },
+
+    parseIcsHolidayEvents(rawText, year) {
+      if (!rawText) return [];
+
+      const calendarStart = rawText.indexOf("BEGIN:VCALENDAR");
+      const icsText = calendarStart >= 0 ? rawText.slice(calendarStart) : rawText;
+      const events = [];
+
+      const blocks = icsText.split("BEGIN:VEVENT").slice(1);
+      for (const block of blocks) {
+        const endIndex = block.indexOf("END:VEVENT");
+        const eventBlock = endIndex >= 0 ? block.slice(0, endIndex) : block;
+
+        const dateMatch = eventBlock.match(/DTSTART(?:;VALUE=DATE)?:([0-9]{8})/);
+        const summaryMatch = eventBlock.match(/SUMMARY:(.+)/);
+
+        if (!dateMatch || !summaryMatch) continue;
+
+        const isoDate = this.compactDateToIso(dateMatch[1]);
+        if (!isoDate || !isoDate.startsWith(`${year}-`)) continue;
+
+        const name = summaryMatch[1].replace(/\\,/g, ",").trim();
+        events.push({ date: isoDate, localName: name, name });
+      }
+
+      return events;
+    },
+
+    compactDateToIso(dateValue) {
+      if (!/^[0-9]{8}$/.test(dateValue)) return null;
+      const year = dateValue.slice(0, 4);
+      const month = dateValue.slice(4, 6);
+      const day = dateValue.slice(6, 8);
+      return `${year}-${month}-${day}`;
     },
 
     applyEffects(theme) {
