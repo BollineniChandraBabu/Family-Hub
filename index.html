@@ -766,6 +766,57 @@ a{color:inherit;text-decoration:none;}
 }
 
 /* ═══════════════════════════════════════════
+   ASTROLOGY SPOTLIGHT
+═══════════════════════════════════════════ */
+.astro-section{
+  padding:clamp(60px,8vw,95px) clamp(20px,6vw,80px);
+  max-width:960px;
+  margin:0 auto;
+}
+.astro-card{
+  display:flex;align-items:center;gap:18px;
+  border-radius:20px;
+  border:1px solid rgba(192,154,82,.28);
+  background:linear-gradient(135deg,#fff,#fcf5ff 55%,#f5f9ff);
+  box-shadow:var(--shadow-md);
+  padding:clamp(18px,3vw,30px);
+  text-decoration:none;color:inherit;
+  transition:transform .38s var(--spring),box-shadow .35s var(--ease);
+}
+.astro-card:hover{transform:translateY(-6px) scale(1.01);box-shadow:var(--shadow-lg);}
+.astro-icon{
+  width:58px;height:58px;border-radius:16px;
+  background:linear-gradient(135deg,#f5d7e8,#f0e2ff);
+  display:grid;place-items:center;
+  font-size:1.8rem;
+  flex-shrink:0;
+}
+.astro-meta{flex:1;min-width:0;}
+.astro-eyebrow{
+  font-size:.62rem;font-weight:400;letter-spacing:.34em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:4px;
+}
+.astro-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.4rem,3.4vw,2rem);
+  font-weight:700;
+  color:var(--ink);
+  margin-bottom:5px;
+}
+.astro-desc{font-size:.9rem;color:var(--ink-2);line-height:1.6;}
+.astro-cta{
+  font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;
+  color:var(--white);padding:10px 16px;border-radius:999px;
+  background:linear-gradient(135deg,#b96d87,#9d6adf);
+  box-shadow:0 6px 16px rgba(121,73,144,.24);
+  white-space:nowrap;flex-shrink:0;
+}
+@media(max-width:700px){
+  .astro-card{align-items:flex-start;flex-direction:column;}
+  .astro-cta{align-self:flex-start;}
+}
+
+/* ═══════════════════════════════════════════
    LOVE NOTE SECTION
 ═══════════════════════════════════════════ */
 .love-note{
@@ -1260,6 +1311,24 @@ a{color:inherit;text-decoration:none;}
     <div class="sl-line sl-line-r"></div>
   </div>
   <div class="up-list" id="up-list"></div>
+</section>
+
+<!-- ── ASTROLOGY ── -->
+<section class="astro-section">
+  <div class="section-label reveal">
+    <div class="sl-line sl-line-l"></div>
+    <span class="sl-text">Astrology</span>
+    <div class="sl-line sl-line-r"></div>
+  </div>
+  <a href="astrology-predictions.html" class="astro-card reveal" onclick="gtag('event','astrology_section_click',{destination:'astrology_predictions'})">
+    <div class="astro-icon">🔮</div>
+    <div class="astro-meta">
+      <div class="astro-eyebrow">Predictions · Family Profile</div>
+      <div class="astro-title">Astrology Predictions</div>
+      <div class="astro-desc">Open personalized prediction files for Yokshith, Chandu, and Sindhu in a dedicated read-only viewer.</div>
+    </div>
+    <div class="astro-cta">Open Page</div>
+  </a>
 </section>
 
 <!-- ── LOVE NOTE ── -->

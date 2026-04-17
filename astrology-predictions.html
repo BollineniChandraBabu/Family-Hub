@@ -12,9 +12,9 @@
     :root {
       --bg: #fff7f6;
       --bg-2: #fffdf8;
-      --bg-3: #f8f5ff;
-      --card: rgba(255, 255, 255, 0.86);
-      --card-border: rgba(197, 147, 185, 0.36);
+      --bg-3: #f6f3ff;
+      --card: rgba(255, 255, 255, 0.88);
+      --card-border: rgba(197, 147, 185, 0.34);
       --text: #332536;
       --muted: #83697f;
       --accent-1: #d66ba0;
@@ -49,39 +49,56 @@
       transition: opacity .75s var(--ease), visibility .75s var(--ease);
     }
     #loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-
     .loader-box {
-      width: min(340px, 90vw);
-      border-radius: 20px;
-      padding: 24px;
+      width: min(360px, 92vw);
+      border-radius: 22px;
+      padding: 26px;
       text-align: center;
-      background: rgba(255,255,255,.86);
-      border: 1px solid rgba(214, 107, 160, .25);
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(214, 107, 160, .26);
       box-shadow: var(--shadow);
       backdrop-filter: blur(8px);
       animation: riseIn .75s var(--spring) both;
+      position: relative;
+      overflow: hidden;
     }
-    .loader-icon { font-size: 2rem; margin-bottom: 10px; animation: pulseGlow 1.6s ease-in-out infinite; }
+    .loader-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,.7) 50%, transparent 70%);
+      transform: translateX(-140%);
+      animation: sheen 2s ease-in-out infinite;
+    }
+    .loader-icon { font-size: 2rem; margin-bottom: 8px; animation: pulseGlow 1.6s ease-in-out infinite; }
     .loader-title {
       font-family: 'Cinzel', serif;
       letter-spacing: .05em;
-      margin-bottom: 14px;
+      margin-bottom: 6px;
       color: #573a5b;
       font-size: .95rem;
+      position: relative;
+    }
+    .loader-sub {
+      color: #8e6f86;
+      font-size: .8rem;
+      margin-bottom: 14px;
+      position: relative;
     }
     .loader-track {
       width: 100%;
       height: 6px;
       border-radius: 999px;
       overflow: hidden;
-      background: rgba(214, 107, 160, .15);
+      background: rgba(214, 107, 160, .14);
+      position: relative;
     }
     .loader-fill {
       width: 0;
       height: 100%;
       border-radius: 999px;
       background: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3));
-      animation: fillTrack 1.25s var(--ease) forwards;
+      animation: fillTrack 1.35s var(--ease) forwards;
     }
 
     #emoji-rain {
@@ -94,7 +111,7 @@
     .emoji-drop {
       position: absolute;
       top: -40px;
-      font-size: clamp(1rem, 1.6vw, 1.3rem);
+      font-size: clamp(1rem, 1.7vw, 1.3rem);
       opacity: 0;
       animation: loveFall linear forwards;
       filter: drop-shadow(0 2px 6px rgba(208, 93, 128, .24));
@@ -106,9 +123,9 @@
       z-index: 1;
       min-height: 100vh;
       opacity: 0;
-      transform: translateY(18px);
+      transform: translateY(16px);
       transition: opacity .75s var(--ease), transform .75s var(--spring);
-      padding: clamp(20px, 5vw, 40px);
+      padding: clamp(14px, 4vw, 34px);
     }
     #app.ready { opacity: 1; transform: translateY(0); }
 
@@ -125,8 +142,8 @@
     }
 
     .head {
-      padding: clamp(22px, 4vw, 34px);
-      border-bottom: 1px solid rgba(197, 147, 185, .28);
+      padding: clamp(18px, 4vw, 34px);
+      border-bottom: 1px solid rgba(197, 147, 185, .26);
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -135,70 +152,123 @@
     }
     .title {
       font-family: 'Cinzel', serif;
-      font-size: clamp(1.2rem, 2.6vw, 2rem);
+      font-size: clamp(1.1rem, 2.5vw, 1.9rem);
       letter-spacing: .02em;
       color: #4a2c4f;
       margin-bottom: 4px;
     }
-    .subtitle { color: var(--muted); font-size: .94rem; }
+    .subtitle { color: var(--muted); font-size: .92rem; }
 
     .picker {
-      min-width: min(370px, 100%);
+      min-width: min(360px, 100%);
       display: grid;
-      gap: 6px;
+      gap: 7px;
+      position: relative;
     }
     .picker-label {
       color: #7f5a77;
-      font-size: .78rem;
+      font-size: .77rem;
       text-transform: uppercase;
       letter-spacing: .11em;
       font-weight: 700;
     }
-    .picker-wrap {
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-btn {
+      width: 100%;
+      border: 1px solid rgba(179, 139, 250, .36);
+      border-radius: 14px;
+      background: linear-gradient(135deg, #fff 0%, #fbf1ff 100%);
+      box-shadow: 0 6px 20px rgba(179, 139, 250, .14);
+      color: #4c3558;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
-      border-radius: 14px;
-      padding: 0 14px;
-      border: 1px solid rgba(179, 139, 250, .34);
-      background: linear-gradient(135deg, #fff 0%, #fbf1ff 100%);
-      box-shadow: 0 6px 20px rgba(179, 139, 250, .16);
-      transition: transform .25s var(--spring), box-shadow .25s var(--ease), border-color .25s var(--ease);
-    }
-    .picker-wrap:hover { transform: translateY(-2px); }
-    .picker-wrap:focus-within {
-      border-color: rgba(214, 107, 160, .56);
-      box-shadow: 0 10px 26px rgba(214, 107, 160, .25);
-      transform: translateY(-3px) scale(1.005);
-    }
-    .picker-icon {
-      color: #b35f8d;
-      margin-right: 10px;
-      font-size: 1.02rem;
-    }
-    select {
-      appearance: none;
-      width: 100%;
-      background: transparent;
-      border: none;
-      color: #4c3558;
-      font: inherit;
+      justify-content: space-between;
+      gap: 10px;
       font-weight: 700;
-      outline: none;
+      font-size: .96rem;
       cursor: pointer;
-      padding: 12px 0;
+      transition: transform .22s var(--spring), box-shadow .22s var(--ease), border-color .22s var(--ease);
     }
-    .picker-arrow {
+    .dropdown-btn:hover { transform: translateY(-2px); }
+    .dropdown.open .dropdown-btn,
+    .dropdown-btn:focus-visible {
+      outline: none;
+      border-color: rgba(214, 107, 160, .56);
+      box-shadow: 0 10px 26px rgba(214, 107, 160, .24);
+      transform: translateY(-2px);
+    }
+    .dropdown-btn .left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .dropdown-btn .icon { color: #b35f8d; font-size: 1rem; }
+    .dropdown-btn .text {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .dropdown-btn .arrow {
       color: #9f74c6;
-      font-size: .8rem;
-      margin-left: 8px;
-      pointer-events: none;
-      transition: transform .2s var(--ease);
+      font-size: .82rem;
+      transition: transform .18s var(--ease);
     }
-    .picker-wrap:focus-within .picker-arrow { transform: rotate(180deg); }
-    option { color: #2f2448; }
+    .dropdown.open .dropdown-btn .arrow { transform: rotate(180deg); }
+
+    .dropdown-menu {
+      list-style: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(100% + 8px);
+      z-index: 30;
+      border-radius: 14px;
+      border: 1px solid rgba(197, 147, 185, .38);
+      background: rgba(255,255,255,.96);
+      box-shadow: 0 16px 34px rgba(140, 88, 134, .24);
+      backdrop-filter: blur(8px);
+      padding: 8px;
+      opacity: 0;
+      transform: translateY(-6px) scale(.98);
+      pointer-events: none;
+      transition: opacity .2s var(--ease), transform .2s var(--spring);
+    }
+    .dropdown.open .dropdown-menu {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .dropdown-option {
+      width: 100%;
+      border: 0;
+      background: transparent;
+      border-radius: 10px;
+      text-align: left;
+      padding: 10px 12px;
+      font-size: .95rem;
+      color: #4a3556;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .18s var(--ease), color .18s var(--ease), transform .18s var(--ease);
+    }
+    .dropdown-option:hover,
+    .dropdown-option:focus-visible {
+      outline: none;
+      background: #f8ecff;
+      color: #7b3f66;
+      transform: translateX(2px);
+    }
+    .dropdown-option.active {
+      background: linear-gradient(90deg, rgba(214,107,160,.16), rgba(179,139,250,.17));
+      color: #7c3f67;
+    }
 
     .toolbar {
-      padding: 14px clamp(14px, 2.5vw, 24px) 0;
+      padding: 12px clamp(12px, 2.5vw, 24px) 0;
       display: flex;
       justify-content: flex-end;
     }
@@ -215,31 +285,22 @@
       text-decoration: none;
       font-size: .84rem;
       font-weight: 700;
-      letter-spacing: .02em;
       transition: transform .22s var(--spring), box-shadow .22s var(--ease), background .22s var(--ease);
     }
-    .back-btn:hover {
-      transform: translateY(-2px);
-      background: #fff;
-      box-shadow: 0 8px 20px rgba(214, 107, 160, .2);
-    }
+    .back-btn:hover { transform: translateY(-2px); background: #fff; box-shadow: 0 8px 20px rgba(214, 107, 160, .2); }
 
-    .viewer-wrap { padding: clamp(14px, 2.5vw, 24px); }
+    .viewer-wrap { padding: clamp(10px, 2.4vw, 22px); }
     .viewer-card {
       background: var(--card);
       border: 1px solid rgba(197, 147, 185, .3);
       border-radius: 18px;
       overflow: hidden;
-      min-height: 72vh;
+      min-height: min(72vh, 760px);
       position: relative;
       box-shadow: 0 10px 30px rgba(140, 88, 134, .11);
       transition: transform .35s var(--spring), box-shadow .35s var(--ease), opacity .25s var(--ease);
     }
-    .viewer-card.loading {
-      transform: scale(.997);
-      box-shadow: inset 0 0 0 1px rgba(214, 107, 160, .12);
-      opacity: .95;
-    }
+    .viewer-card.loading { transform: scale(.997); box-shadow: inset 0 0 0 1px rgba(214, 107, 160, .12); opacity: .95; }
 
     .pdf-loader {
       position: absolute;
@@ -254,70 +315,59 @@
     }
     .viewer-card.loading .pdf-loader { opacity: 1; visibility: visible; }
     .spinner {
-      width: 52px;
+      width: 50px;
       aspect-ratio: 1;
       border-radius: 50%;
       border: 4px solid rgba(214, 107, 160, .18);
       border-top-color: #c46acc;
-      animation: spin .95s linear infinite;
+      animation: spin .9s linear infinite;
       margin-inline: auto;
       margin-bottom: 12px;
     }
-    .pdf-loader p {
-      color: #7f5a77;
-      font-size: .92rem;
-      font-weight: 600;
-      letter-spacing: .02em;
-      text-align: center;
-    }
+    .pdf-loader p { color: #7f5a77; font-size: .92rem; font-weight: 600; }
 
     iframe {
       width: 100%;
-      height: 72vh;
+      height: min(72vh, 760px);
       border: none;
       display: block;
       background: #fff;
       animation: frameIn .45s var(--ease);
+      transition: opacity .25s var(--ease);
     }
 
     .foot {
-      padding: 18px 22px 22px;
+      padding: 18px 18px 22px;
       text-align: center;
       color: #85657d;
-      font-size: .85rem;
+      font-size: .83rem;
       border-top: 1px solid rgba(197, 147, 185, .28);
       background: linear-gradient(180deg, rgba(255,255,255,.6), rgba(253,246,255,.85));
-      letter-spacing: .01em;
       line-height: 1.55;
     }
 
-    @keyframes riseIn {
-      from { opacity: 0; transform: translateY(16px) scale(.98); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    @keyframes frameIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes riseIn { from { opacity: 0; transform: translateY(16px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes frameIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes fillTrack { to { width: 100%; } }
-    @keyframes pulseGlow {
-      0%,100% { transform: scale(1); filter: drop-shadow(0 0 4px rgba(214,107,160,.25)); }
-      50% { transform: scale(1.08); filter: drop-shadow(0 0 12px rgba(179,139,250,.4)); }
-    }
+    @keyframes pulseGlow { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+    @keyframes sheen { 0% { transform: translateX(-140%); } 55%,100% { transform: translateX(140%); } }
     @keyframes loveFall {
       0% { transform: translateY(-40px) translateX(0) rotate(0deg); opacity: 0; }
       10% { opacity: .9; }
-      80% { opacity: .85; }
+      80% { opacity: .82; }
       100% { transform: translateY(106vh) translateX(var(--drift, 12px)) rotate(300deg); opacity: 0; }
     }
 
     @media (max-width: 760px) {
-      .head { align-items: flex-start; }
+      .head { align-items: flex-start; gap: 12px; }
       .picker { width: 100%; min-width: 100%; }
       .toolbar { justify-content: center; }
-      iframe, .viewer-card { min-height: 64vh; }
+      .viewer-card { min-height: 64vh; }
       iframe { height: 64vh; }
+      .dropdown-menu { max-height: 240px; overflow: auto; }
+      .loader-title { font-size: .86rem; }
+      .loader-sub { font-size: .75rem; }
     }
   </style>
 </head>
@@ -326,6 +376,7 @@
     <div class="loader-box">
       <div class="loader-icon">🔮</div>
       <div class="loader-title">Preparing Astrology Experience</div>
+      <div class="loader-sub">Blessings, stars, and predictions are loading…</div>
       <div class="loader-track"><div class="loader-fill"></div></div>
     </div>
   </div>
@@ -342,14 +393,12 @@
 
         <div class="picker">
           <span class="picker-label">Choose Profile</span>
-          <div class="picker-wrap">
-            <span class="picker-icon">✨</span>
-            <select id="profileSelect" aria-label="Select astrology file">
-              <option value="yokshith">Yokshith</option>
-              <option value="chandu">Chandu</option>
-              <option value="sindhu">Sindhu</option>
-            </select>
-            <span class="picker-arrow">▼</span>
+          <div class="dropdown" id="profileDropdown">
+            <button class="dropdown-btn" id="profileBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="profileMenu" type="button">
+              <span class="left"><span class="icon">✨</span><span class="text" id="selectedLabel">Yokshith</span></span>
+              <span class="arrow">▼</span>
+            </button>
+            <ul class="dropdown-menu" id="profileMenu" role="listbox" aria-label="Select profile"></ul>
           </div>
         </div>
       </header>
@@ -371,49 +420,98 @@
       </div>
 
       <footer class="foot">
-        Crafted with love for family memories and blessings. <br />
+        Crafted with love for family memories and blessings.<br />
         © <span id="year"></span> Family Hub · Astrology Predictions · All rights reserved.
       </footer>
     </section>
   </main>
 
   <script>
-    const FILES = {
-      yokshith: 'assets/astro/yokshith.pdf',
-      chandu: 'assets/astro/chandu.pdf',
-      sindhu: 'assets/astro/sindhu.pdf'
-    };
+    const FILES = [
+      { key: 'yokshith', label: 'Yokshith', file: 'assets/astro/yokshith.pdf' },
+      { key: 'chandu', label: 'Chandu', file: 'assets/astro/chandu.pdf' },
+      { key: 'sindhu', label: 'Sindhu', file: 'assets/astro/sindhu.pdf' }
+    ];
 
-    const SELECT = document.getElementById('profileSelect');
+    let selectedKey = 'yokshith';
+
     const FRAME = document.getElementById('pdfFrame');
     const VIEWER_CARD = document.getElementById('viewerCard');
     const PAGE_LOADER = document.getElementById('loader');
     const APP = document.getElementById('app');
     const EMOJI_RAIN = document.getElementById('emoji-rain');
+    const DROPDOWN = document.getElementById('profileDropdown');
+    const PROFILE_BTN = document.getElementById('profileBtn');
+    const PROFILE_MENU = document.getElementById('profileMenu');
+    const SELECTED_LABEL = document.getElementById('selectedLabel');
 
-    const getPdfUrl = (key) => `${FILES[key]}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`;
+    const getPdfUrl = (key) => {
+      const item = FILES.find((entry) => entry.key === key);
+      if (!item) return '';
+      return `${item.file}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`;
+    };
+
     const showPdfLoader = () => VIEWER_CARD.classList.add('loading');
     const hidePdfLoader = () => VIEWER_CARD.classList.remove('loading');
 
+    function renderOptions() {
+      PROFILE_MENU.innerHTML = '';
+      FILES.forEach((entry) => {
+        const li = document.createElement('li');
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.role = 'option';
+        btn.className = `dropdown-option ${entry.key === selectedKey ? 'active' : ''}`;
+        btn.dataset.key = entry.key;
+        btn.textContent = entry.label;
+        btn.setAttribute('aria-selected', entry.key === selectedKey ? 'true' : 'false');
+        btn.addEventListener('click', () => selectProfile(entry.key));
+        li.appendChild(btn);
+        PROFILE_MENU.appendChild(li);
+      });
+    }
+
+    function openDropdown() {
+      DROPDOWN.classList.add('open');
+      PROFILE_BTN.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeDropdown() {
+      DROPDOWN.classList.remove('open');
+      PROFILE_BTN.setAttribute('aria-expanded', 'false');
+    }
+
+    function selectProfile(key) {
+      if (!FILES.find((entry) => entry.key === key)) return;
+      selectedKey = key;
+      SELECTED_LABEL.textContent = FILES.find((entry) => entry.key === key).label;
+      renderOptions();
+      closeDropdown();
+      loadPrediction(key);
+    }
+
     const loadPrediction = (key) => {
-      if (!FILES[key]) return;
+      const url = getPdfUrl(key);
+      if (!url) return;
       showPdfLoader();
-      FRAME.style.opacity = '0.3';
-      FRAME.src = getPdfUrl(key);
+      FRAME.style.opacity = '0.32';
+      FRAME.src = url;
     };
+
+    PROFILE_BTN.addEventListener('click', () => {
+      if (DROPDOWN.classList.contains('open')) closeDropdown();
+      else openDropdown();
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!DROPDOWN.contains(event.target)) closeDropdown();
+    });
 
     FRAME.addEventListener('load', () => {
       setTimeout(() => {
         hidePdfLoader();
         FRAME.style.opacity = '1';
       }, 220);
-    });
-
-    SELECT.addEventListener('change', (event) => {
-      SELECT.style.transition = 'transform .28s ease';
-      SELECT.style.transform = 'scale(0.99)';
-      setTimeout(() => (SELECT.style.transform = 'scale(1)'), 120);
-      loadPrediction(event.target.value);
     });
 
     function spawnLoveEmoji() {
@@ -431,15 +529,16 @@
 
     window.addEventListener('load', () => {
       document.getElementById('year').textContent = new Date().getFullYear();
-      loadPrediction(SELECT.value);
+      renderOptions();
+      selectProfile(selectedKey);
 
-      for (let i = 0; i < 10; i += 1) setTimeout(spawnLoveEmoji, i * 300);
+      for (let i = 0; i < 10; i += 1) setTimeout(spawnLoveEmoji, i * 260);
       setInterval(spawnLoveEmoji, 700);
 
       setTimeout(() => {
         PAGE_LOADER.classList.add('hidden');
         APP.classList.add('ready');
-      }, 900);
+      }, 1000);
     });
   </script>
 </body>
