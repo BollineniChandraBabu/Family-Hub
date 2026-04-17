@@ -55,18 +55,86 @@
 html{font-size:16px;scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
 body{
   font-family:'Lato',sans-serif;
-  background:var(--ivory);
-  color:var(--ink);
+  background:var(--theme-bg,var(--ivory));
+  color:var(--theme-fg,var(--ink));
   min-height:100vh;
   overflow-x:hidden;
   cursor:default;
   opacity:0;
   transform:translateY(10px) scale(.995);
-  transition:opacity .9s var(--ease), transform 1s var(--spring);
+  transition:opacity .9s var(--ease), transform 1s var(--spring), background .5s ease, color .5s ease;
 }
 body.page-ready{opacity:1;transform:none;}
 img,svg{display:block;}
 a{color:inherit;text-decoration:none;}
+
+/* ═══════════════════════════════════════════
+   DYNAMIC THEME ENGINE
+═══════════════════════════════════════════ */
+body[data-theme="morning"] { --theme-bg:#FFF3CD; }
+body[data-theme="afternoon"] { --theme-bg:#FFE0B2; }
+body[data-theme="evening"] { --theme-bg:#F4C28A; }
+body[data-theme="night"] { --theme-bg:#1E1E2F; --theme-fg:#FFFFFF; }
+
+body[data-theme="sunny"] { --theme-bg:#FFE57F; }
+body[data-theme="cloudy"] { --theme-bg:#CFD8DC; }
+body[data-theme="rainy"] { --theme-bg:#546E7A; --theme-fg:#FFFFFF; }
+
+body[data-theme="diwali"] { --theme-bg:#1a0033; --theme-fg:gold; }
+body[data-theme="newyear"] { --theme-bg:#101522; --theme-fg:#FFFFFF; }
+body[data-theme="festival"] { --theme-bg:#2F0F3A; --theme-fg:#FFE8A3; }
+
+#greeting{
+  margin-top:14px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.2rem,2.6vw,1.7rem);
+  letter-spacing:.03em;
+  opacity:.92;
+}
+
+#weatherEffects{position:fixed;inset:0;pointer-events:none;z-index:2;}
+.rain-drop {
+  position: absolute;
+  top:-10px;
+  width:2px;
+  height:15px;
+  background:rgba(255,255,255,.85);
+  animation: rain linear infinite;
+}
+@keyframes rain { to { transform: translateY(110vh); } }
+
+#lightning {
+  position: fixed;
+  inset: 0;
+  background: white;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.sun {
+  position:absolute;
+  top:50px;
+  right:50px;
+  width:80px;
+  height:80px;
+  background:yellow;
+  border-radius:50%;
+  box-shadow:0 0 50px yellow;
+}
+
+.fog {
+  position:absolute;
+  left:-50%;
+  width:200%;
+  height:100%;
+  background:rgba(255,255,255,0.18);
+  animation:fogMove 20s linear infinite;
+}
+@keyframes fogMove {
+  from { transform: translateX(-8%); }
+  to { transform: translateX(8%); }
+}
 
 /* ═══════════════════════════════════════════
    LOADER
@@ -1147,6 +1215,7 @@ a{color:inherit;text-decoration:none;}
 
   <div class="logo-text">Chandu & Family</div>
   <div class="logo-sub">Est. 2023 · Celebrations of Love</div>
+  <h2 id="greeting" aria-live="polite">Hello 👋</h2>
 
   <div class="orn">
     <div class="orn-line orn-line-l"></div>
@@ -1382,6 +1451,7 @@ a{color:inherit;text-decoration:none;}
 
 </main>
 
+<script src="theme-engine.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════════════
    FAMILY DATA
