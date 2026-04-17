@@ -18,9 +18,12 @@
   const TEXT_PROXY_PREFIX = "https://r.jina.ai/http://";
 
   const FESTIVAL_PATTERNS = [
-    { test: /(diwali|deepavali)/i, theme: "diwali" },
-    { test: /(new\s*year)/i, theme: "newyear" },
-    { test: /(christmas|eid|holi|pongal|thanksgiving|independence\s*day|lunar\s*new\s*year)/i, theme: "festival" }
+    { test: /(new\s*year)/i, theme: "newyear", greeting: "Happy New Year 🎆" },
+    { test: /(ugadi|yugadi)/i, theme: "festival", greeting: "Happy Ugadi 🌿" },
+    { test: /(makar\s*sankranti|makara\s*sankranti|sankranti)/i, theme: "festival", greeting: "Happy Makar Sankranthi 🪁" },
+    { test: /(diwali|deepavali)/i, theme: "diwali", greeting: "Happy Diwali 🪔" },
+    { test: /(ganesh\s*chaturthi|vinayaka\s*chavithi|vinayaka\s*chaturthi)/i, theme: "festival", greeting: "Happy Ganesh Chaturthi 🐘" },
+    { test: /(christmas|eid|holi|pongal|thanksgiving|independence\s*day|lunar\s*new\s*year)/i, theme: "festival", greeting: "Happy Celebrations 🎉" }
   ];
 
   const ThemeEngine = {
@@ -33,7 +36,7 @@
 
       const festivalTheme = await this.getFestivalTheme(context);
       if (festivalTheme) {
-        this.applyTheme(festivalTheme, context);
+        this.applyTheme(festivalTheme.theme, context, festivalTheme.greeting);
         return;
       }
 
@@ -69,7 +72,7 @@
       };
     },
 
-    applyTheme(theme, context) {
+    applyTheme(theme, context, greetingOverride = null) {
       document.body.dataset.theme = theme;
 
       this.clearEffects();
@@ -77,7 +80,7 @@
 
       const greeting = document.getElementById("greeting");
       if (greeting) {
-        greeting.innerText = this.getGreeting(theme, context?.locale);
+        greeting.innerText = greetingOverride || this.getGreeting(theme, context?.locale);
       }
     },
 
@@ -220,10 +223,10 @@
 
         for (const holiday of todays) {
           const rule = FESTIVAL_PATTERNS.find((p) => p.test.test(holiday.localName || holiday.name || ""));
-          if (rule) return rule.theme;
+          if (rule) return { theme: rule.theme, greeting: rule.greeting };
         }
 
-        if (todays.length > 0) return "festival";
+        if (todays.length > 0) return { theme: "festival", greeting: "Happy Festival 🎉" };
         return null;
       } catch {
         return null;
