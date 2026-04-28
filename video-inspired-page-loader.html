@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cinematic Page Loader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Great+Vibes&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-0: #040507;
+      --bg-1: #13182b;
+      --gold-0: #ffedbf;
+      --gold-1: #ddb670;
+      --rose: #d7a2a4;
+      --white: #f4f0e8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(120% 85% at 50% 68%, var(--bg-1), var(--bg-0) 62%);
+      color: var(--white);
+      font-family: "Cinzel", serif;
+      overflow: hidden;
+    }
+
+    #loader {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 999;
+      background:
+        radial-gradient(700px 340px at 50% 46%, rgba(255, 237, 191, 0.1), transparent 68%),
+        radial-gradient(900px 450px at 50% 62%, rgba(215, 162, 164, 0.08), transparent 70%),
+        radial-gradient(120% 85% at 50% 68%, var(--bg-1), var(--bg-0) 62%);
+      transition: opacity 0.9s ease, visibility 0.9s ease;
+    }
+
+    #loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .grain,
+    .vignette,
+    .shine {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .grain {
+      opacity: 0.18;
+      mix-blend-mode: soft-light;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.04' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+      animation: grain 2.1s steps(2) infinite;
+    }
+
+    .vignette {
+      background: radial-gradient(circle at center, transparent 42%, rgba(0,0,0,0.58) 100%);
+    }
+
+    .shine {
+      background: linear-gradient(105deg,
+        transparent 34%,
+        rgba(255,255,255,0.2) 45%,
+        rgba(255,237,191,0.18) 48%,
+        rgba(255,255,255,0.04) 54%,
+        transparent 64%);
+      transform: translateX(-140%);
+      mix-blend-mode: screen;
+      animation: shine 5.2s ease-in-out infinite 1.1s;
+    }
+
+    .loader-card {
+      position: relative;
+      text-align: center;
+      padding: 1.8rem;
+      width: min(88vw, 620px);
+      z-index: 2;
+      transform-style: preserve-3d;
+      animation: hover 6.4s ease-in-out infinite;
+    }
+
+    .with {
+      margin: 0;
+      font-family: "Great Vibes", cursive;
+      font-size: clamp(2rem, 6vw, 4.4rem);
+      color: var(--rose);
+      opacity: 0;
+      transform: translateY(14px);
+      animation: fadeUp 1s ease forwards 0.3s;
+    }
+
+    .love {
+      margin: 0.2rem 0 0;
+      font-size: clamp(2.6rem, 10vw, 7rem);
+      letter-spacing: clamp(0.09em, 0.4vw, 0.2em);
+      line-height: 0.9;
+      text-transform: uppercase;
+      color: var(--gold-0);
+      text-shadow:
+        0 1px 0 #fff7de,
+        0 2px 0 #f4d9a0,
+        0 3px 0 #d9af6b,
+        0 14px 30px rgba(0,0,0,0.56);
+      opacity: 0;
+      transform: translateY(24px) scale(1.04);
+      animation: titleIn 1.55s cubic-bezier(.16,1,.28,1) forwards 0.8s;
+    }
+
+    .loading-copy {
+      margin-top: 1rem;
+      font-size: 0.74rem;
+      letter-spacing: 0.36em;
+      text-transform: uppercase;
+      color: rgba(244, 240, 232, 0.82);
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 1.6s;
+    }
+
+    .progress-track {
+      width: min(76vw, 420px);
+      height: 2px;
+      margin: 1rem auto 0;
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+      overflow: hidden;
+      opacity: 0;
+      animation: fadeUp 0.8s ease forwards 1.8s;
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--rose), var(--gold-1), var(--gold-0));
+      animation: load 3.7s cubic-bezier(.25,.1,.25,1) forwards 2s;
+    }
+
+    .content {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+      opacity: 0;
+      transform: scale(1.02);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      text-align: center;
+    }
+
+    body.ready .content {
+      opacity: 1;
+      transform: none;
+    }
+
+    .content h1 {
+      margin: 0;
+      font-size: clamp(1.8rem, 6vw, 3.8rem);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold-0);
+    }
+
+    .content p {
+      margin-top: 0.8rem;
+      letter-spacing: 0.08em;
+      color: rgba(244,240,232,0.82);
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes titleIn {
+      0% { opacity: 0; transform: translateY(24px) scale(1.08); }
+      60% { opacity: 1; transform: translateY(-2px) scale(0.99); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes load {
+      to { width: 100%; }
+    }
+
+    @keyframes hover {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    @keyframes grain {
+      0% { transform: translate(0,0); }
+      33% { transform: translate(-1.3%, 0.8%); }
+      66% { transform: translate(1.1%, -1%); }
+      100% { transform: translate(-0.9%, 0.6%); }
+    }
+
+    @keyframes shine {
+      0%, 28% { transform: translateX(-140%); }
+      52%, 100% { transform: translateX(140%); }
+    }
+  </style>
+</head>
+<body>
+  <section id="loader" aria-label="Page loader animation">
+    <div class="loader-card">
+      <p class="with">with</p>
+      <h1 class="love">LOVE</h1>
+      <p class="loading-copy">Loading Experience</p>
+      <div class="progress-track" aria-hidden="true">
+        <div class="progress-bar"></div>
+      </div>
+    </div>
+    <div class="grain" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+    <div class="shine" aria-hidden="true"></div>
+  </section>
+
+  <main class="content" aria-live="polite">
+    <div>
+      <h1>Family Hub</h1>
+      <p>Your page has loaded.</p>
+    </div>
+  </main>
+
+  <script>
+    const loader = document.getElementById('loader');
+    setTimeout(() => {
+      loader.classList.add('hidden');
+      document.body.classList.add('ready');
+    }, 6100);
+  </script>
+</body>
+</html>
