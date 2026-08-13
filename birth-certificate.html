@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script src="location-guard.js"></script>
+<title>Yokshith — Birth Certificate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Nunito:wght@400;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ivory:#fffdf7;--pearl:#f8f4ea;--champagne:#d8b76a;--gold:#ad8130;--ink:#241b12;--muted:#7f725e;--glass:rgba(255,255,255,.56);--line:rgba(201,161,76,.28);--shadow:0 28px 90px rgba(55,41,18,.18);--ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px;-webkit-text-size-adjust:100%}body{min-height:100dvh;font-family:Nunito,sans-serif;color:var(--ink);overflow-x:hidden;background:radial-gradient(circle at 16% 12%,rgba(255,239,197,.8),transparent 28%),radial-gradient(circle at 85% 18%,rgba(255,255,255,.95),transparent 25%),linear-gradient(140deg,#fffdf7,#f8f3e7 55%,#fffaf0)}button,a{font:inherit}button{border:0;background:none;cursor:pointer}a{color:inherit;text-decoration:none}.no-select{user-select:none;-webkit-user-select:none}.bg-orb{position:fixed;border-radius:50%;filter:blur(10px);pointer-events:none;opacity:.55;animation:orb 12s ease-in-out infinite alternate}.orb-a{width:340px;height:340px;left:-90px;top:8%;background:radial-gradient(circle,rgba(255,229,169,.65),transparent 68%)}.orb-b{width:430px;height:430px;right:-150px;bottom:3%;background:radial-gradient(circle,rgba(255,255,255,.9),transparent 70%);animation-delay:2s}.orb-c{width:210px;height:210px;left:58%;top:18%;background:radial-gradient(circle,rgba(216,183,106,.34),transparent 70%);animation-delay:4s}@keyframes orb{to{transform:translate3d(28px,-22px,0) scale(1.08)}}.petals,.particles{position:fixed;inset:0;pointer-events:none;overflow:hidden}.petal,.particle{position:absolute;will-change:transform,opacity}.petal{top:-40px;color:rgba(196,151,62,.46);font-size:18px;animation:fall linear forwards}.particle{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.9);box-shadow:0 0 14px rgba(216,183,106,.75);animation:glow ease-in-out infinite}@keyframes fall{to{transform:translate3d(var(--x),110dvh,0) rotate(360deg);opacity:.05}}@keyframes glow{50%{transform:translateY(-18px) scale(1.8);opacity:.25}}.loader{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:linear-gradient(140deg,#fffdf8,#f4ead4);transition:opacity .8s var(--ease),visibility .8s}.loader.out{opacity:0;visibility:hidden}.loader-gem{width:112px;height:112px;border-radius:34px;background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(255,229,170,.5));border:1px solid var(--line);box-shadow:var(--shadow),inset 0 1px 0 #fff;display:grid;place-items:center;animation:gem 1.9s ease-in-out infinite}.loader-gem::after{content:'✦';font-size:2.4rem;color:var(--gold);filter:drop-shadow(0 0 18px rgba(216,183,106,.8))}@keyframes gem{50%{transform:translateY(-10px) rotateX(10deg) rotateY(-10deg)}}.page{position:relative;z-index:2;min-height:100dvh;padding:clamp(18px,4vw,44px);display:flex;align-items:center;justify-content:center}.stage{width:min(1180px,100%);display:grid;grid-template-columns:minmax(280px,430px) 1fr;gap:clamp(18px,4vw,34px);align-items:stretch}.intro,.viewer{border:1px solid var(--line);background:linear-gradient(145deg,rgba(255,255,255,.68),rgba(255,250,238,.42));backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.9);border-radius:34px}.intro{padding:clamp(24px,4vw,42px);display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;position:relative}.intro::before{content:'';position:absolute;inset:auto -30% -35% -30%;height:55%;background:radial-gradient(circle,rgba(216,183,106,.24),transparent 70%)}.eyebrow{font-family:'Space Grotesk',sans-serif;font-size:.68rem;letter-spacing:.38em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:16px}.title{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,8vw,4.8rem);line-height:.95;font-weight:700;letter-spacing:-.04em}.copy{color:var(--muted);font-weight:700;line-height:1.85;margin:22px 0 32px}.back{display:inline-flex;align-items:center;gap:10px;width:max-content;padding:13px 20px;border-radius:999px;background:rgba(255,255,255,.72);border:1px solid var(--line);box-shadow:0 10px 30px rgba(88,65,24,.1);font-weight:800;color:#6f4f14;transition:transform .25s var(--spring)}.back:hover{transform:translateY(-3px)}.viewer{min-height:82dvh;padding:14px;display:flex;flex-direction:column;gap:12px;perspective:1600px}.bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border-radius:24px;background:rgba(255,255,255,.54);border:1px solid rgba(216,183,106,.22);box-shadow:0 12px 32px rgba(80,59,23,.1)}.bar-title{font-family:'Space Grotesk',sans-serif;font-size:.68rem;font-weight:800;letter-spacing:.33em;text-transform:uppercase;color:var(--gold);text-align:center;flex:1}.controls{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}.ctl{min-width:42px;height:42px;padding:0 14px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(255,240,204,.66));border:1px solid rgba(181,135,42,.28);color:#3e2d10;font-weight:900;box-shadow:0 8px 22px rgba(110,80,24,.1);transition:transform .2s var(--spring),opacity .2s}.ctl:hover:not(:disabled){transform:translateY(-2px) scale(1.03)}.ctl:disabled{opacity:.36;cursor:not-allowed}.canvas-wrap{position:relative;flex:1;display:grid;place-items:start center;overflow:auto;padding:clamp(12px,3vw,28px);border-radius:26px;background:linear-gradient(145deg,rgba(255,255,255,.48),rgba(239,229,206,.28));border:1px solid rgba(255,255,255,.72);transform-style:preserve-3d}.canvas-wrap::before{content:'';position:absolute;inset:18px;border-radius:22px;background:radial-gradient(circle at 50% 0,rgba(255,255,255,.74),transparent 46%);pointer-events:none}.cert-canvas{position:relative;z-index:1;background:#fff;border-radius:12px;box-shadow:0 34px 90px rgba(53,39,14,.22),0 0 0 1px rgba(184,138,45,.15);transform:rotateX(1.5deg) rotateY(-1.5deg);transition:transform .35s var(--ease),box-shadow .35s;pointer-events:none;-webkit-user-drag:none}.canvas-wrap:hover .cert-canvas{transform:rotateX(0) rotateY(0) translateY(-2px);box-shadow:0 42px 110px rgba(53,39,14,.25),0 0 0 1px rgba(184,138,45,.18)}.status{min-width:74px;text-align:center;color:#806124;font-family:'Space Grotesk',sans-serif;font-size:.72rem;font-weight:800}.notice{font-size:.78rem;color:var(--muted);font-weight:700;text-align:center;line-height:1.55}.viewer:fullscreen{width:100vw;height:100vh;border-radius:0}.viewer:fullscreen .canvas-wrap{border-radius:18px}@media(max-width:900px){.page{align-items:flex-start}.stage{grid-template-columns:1fr}.intro{min-height:auto}.viewer{min-height:72dvh}}@media(max-width:560px){.page{padding:10px}.intro,.viewer{border-radius:24px}.bar{align-items:stretch;flex-direction:column}.bar-title{order:-1}.ctl{min-width:40px;height:40px;padding:0 12px}.canvas-wrap{padding:10px}.notice{font-size:.72rem}}
+</style>
+</head>
+<body class="no-select">
+<div class="loader" id="loader"><div class="loader-gem" aria-label="Loading certificate viewer"></div></div>
+<div class="bg-orb orb-a"></div><div class="bg-orb orb-b"></div><div class="bg-orb orb-c"></div><div class="petals" id="petals"></div><div class="particles" id="particles"></div>
+<main class="page">
+  <section class="stage">
+    <aside class="intro">
+      <div>
+        <div class="eyebrow">Protected viewer</div>
+        <h1 class="title">Birth<br>Certificate</h1>
+        <p class="copy">A pearl-and-glass viewing room for Yokshith's birth certificate. This page renders the existing PDF into a custom canvas presentation with viewing-only controls.</p>
+      </div>
+      <a class="back" href="./yokshith.html">← Back to Celebration</a>
+    </aside>
+    <section class="viewer" id="certificate-viewer" aria-label="View-only birth certificate viewer" oncontextmenu="return false;" draggable="false">
+      <div class="bar">
+        <button class="ctl" id="close-btn" type="button" aria-label="Back to celebration">✕</button>
+        <div class="bar-title">Birth Certificate</div>
+        <button class="ctl" id="fullscreen-btn" type="button" aria-label="Fullscreen viewer">⛶</button>
+      </div>
+      <div class="canvas-wrap" id="canvas-wrap" draggable="false"><canvas class="cert-canvas" id="pdf-canvas" draggable="false" aria-label="Rendered certificate page"></canvas></div>
+      <div class="bar">
+        <div class="controls"><button class="ctl" id="prev-btn" type="button" aria-label="Previous page">‹</button><span class="status" id="page-status">—</span><button class="ctl" id="next-btn" type="button" aria-label="Next page">›</button></div>
+        <div class="controls"><button class="ctl" id="zoom-out-btn" type="button" aria-label="Zoom out">−</button><span class="status" id="zoom-status">100%</span><button class="ctl" id="zoom-in-btn" type="button" aria-label="Zoom in">+</button><button class="ctl" id="reset-btn" type="button" aria-label="Reset zoom">Reset</button></div>
+      </div>
+      <p class="notice">Viewing controls only. This is UI-level protection and does not make browser-delivered files impossible to extract.</p>
+    </section>
+  </section>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+'use strict';
+const PDF_URL = './assets/yokshith-birth-certificate.pdf';
+const state = { pdf:null, page:1, pages:1, zoom:1, rendering:false, pending:false };
+const viewer = document.getElementById('certificate-viewer');
+const canvas = document.getElementById('pdf-canvas');
+const wrap = document.getElementById('canvas-wrap');
+const pageStatus = document.getElementById('page-status');
+const zoomStatus = document.getElementById('zoom-status');
+const prevBtn = document.getElementById('prev-btn');
+const nextBtn = document.getElementById('next-btn');
+
+function decorate(){
+  const petals = document.getElementById('petals');
+  const particles = document.getElementById('particles');
+  for(let i=0;i<24;i++){ const p=document.createElement('span'); p.className='petal'; p.textContent=['✦','❋','✧'][i%3]; p.style.left=Math.random()*100+'%'; p.style.setProperty('--x',(Math.random()*160-80)+'px'); p.style.animationDuration=(12+Math.random()*12)+'s'; p.style.animationDelay=(Math.random()*10)+'s'; petals.appendChild(p); }
+  for(let i=0;i<34;i++){ const dot=document.createElement('span'); dot.className='particle'; dot.style.left=Math.random()*100+'%'; dot.style.top=Math.random()*100+'%'; dot.style.animationDuration=(3+Math.random()*5)+'s'; dot.style.animationDelay=(Math.random()*4)+'s'; particles.appendChild(dot); }
+}
+function updateControls(){ pageStatus.textContent = `${state.page} / ${state.pages}`; zoomStatus.textContent = `${Math.round(state.zoom*100)}%`; prevBtn.disabled = state.page <= 1; nextBtn.disabled = state.page >= state.pages; }
+async function renderPage(){
+  if(!state.pdf) return;
+  if(state.rendering){ state.pending = true; return; }
+  state.rendering = true;
+  try{
+    const page = await state.pdf.getPage(state.page);
+    const base = page.getViewport({scale:1});
+    const fit = Math.min((wrap.clientWidth - 10) / base.width, (wrap.clientHeight - 10) / base.height, 1.45);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const viewport = page.getViewport({scale:Math.max(.35, fit * state.zoom)});
+    canvas.width = Math.floor(viewport.width * dpr); canvas.height = Math.floor(viewport.height * dpr);
+    canvas.style.width = Math.floor(viewport.width)+'px'; canvas.style.height = Math.floor(viewport.height)+'px';
+    const ctx = canvas.getContext('2d', {alpha:false}); ctx.setTransform(dpr,0,0,dpr,0,0);
+    await page.render({canvasContext:ctx, viewport}).promise;
+  } finally { state.rendering = false; updateControls(); if(state.pending){ state.pending=false; renderPage(); } }
+}
+async function loadPdf(){
+  if(!window.pdfjsLib) throw new Error('PDF.js did not load');
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  state.pdf = await pdfjsLib.getDocument({url:PDF_URL}).promise; state.pages = state.pdf.numPages; await renderPage();
+}
+function zoom(delta){ state.zoom = Math.min(2.8, Math.max(.55, +(state.zoom + delta).toFixed(2))); renderPage(); }
+function blockViewerActions(e){ e.preventDefault(); e.stopPropagation(); }
+['contextmenu','dragstart','drop'].forEach(type=>viewer.addEventListener(type, blockViewerActions, true));
+document.addEventListener('keydown', e=>{ const key=e.key.toLowerCase(); if((e.ctrlKey || e.metaKey) && (key==='p' || key==='s')) blockViewerActions(e); });
+document.getElementById('close-btn').onclick = () => { location.href = './yokshith.html'; };
+document.getElementById('fullscreen-btn').onclick = () => { if(document.fullscreenElement) document.exitFullscreen(); else viewer.requestFullscreen && viewer.requestFullscreen(); };
+prevBtn.onclick = () => { if(state.page > 1){ state.page--; renderPage(); } };
+nextBtn.onclick = () => { if(state.page < state.pages){ state.page++; renderPage(); } };
+document.getElementById('zoom-out-btn').onclick = () => zoom(-.15);
+document.getElementById('zoom-in-btn').onclick = () => zoom(.15);
+document.getElementById('reset-btn').onclick = () => { state.zoom = 1; renderPage(); };
+window.addEventListener('resize', renderPage);
+decorate(); loadPdf().finally(()=>setTimeout(()=>document.getElementById('loader').classList.add('out'),500));
+</script>
+</body>
+</html>
