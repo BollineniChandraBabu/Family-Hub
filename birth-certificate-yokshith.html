@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<script src="location-guard.js"></script>
+<title>Yokshith — Birth Certificate Vault</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#07071a;--violet:#7c3cff;--cyan:#48e6ff;--gold:#ffd36a;--pink:#ff66c4;--mint:#58ffc7;
+  --glass:rgba(255,255,255,.12);--glass-strong:rgba(255,255,255,.2);--stroke:rgba(255,255,255,.28);--text:#fff;--soft:rgba(255,255,255,.72);
+  --shadow:0 30px 90px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.35);
+  --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{font-size:16px;scroll-behavior:smooth}body{min-height:100vh;font-family:'Nunito',sans-serif;color:var(--text);background:#07071a;overflow-x:hidden}a{color:inherit;text-decoration:none}.scene{position:fixed;inset:0;overflow:hidden;z-index:0;background:radial-gradient(circle at 18% 18%,rgba(124,60,255,.5),transparent 28%),radial-gradient(circle at 82% 22%,rgba(72,230,255,.35),transparent 24%),radial-gradient(circle at 50% 90%,rgba(255,102,196,.42),transparent 32%),linear-gradient(135deg,#050517 0%,#0a1030 48%,#15051f 100%)}
+.scene::before{content:"";position:absolute;inset:-40%;background:conic-gradient(from 120deg,transparent,rgba(255,255,255,.08),transparent,rgba(72,230,255,.1),transparent);animation:spin 18s linear infinite}.orb{position:absolute;border-radius:50%;filter:blur(16px);opacity:.75;animation:float 9s ease-in-out infinite}.orb.one{width:180px;height:180px;left:8%;top:18%;background:linear-gradient(135deg,var(--gold),var(--pink))}.orb.two{width:260px;height:260px;right:4%;top:12%;background:linear-gradient(135deg,var(--cyan),var(--violet));animation-delay:-3s}.orb.three{width:150px;height:150px;left:62%;bottom:8%;background:linear-gradient(135deg,var(--mint),var(--cyan));animation-delay:-5s}.grid{position:absolute;inset:auto -10% -22% -10%;height:45%;background:linear-gradient(rgba(255,255,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.14) 1px,transparent 1px);background-size:58px 58px;transform:perspective(520px) rotateX(62deg);opacity:.18}
+#loader{position:fixed;inset:0;z-index:99;display:grid;place-items:center;background:#050517;transition:opacity .9s ease,visibility .9s ease}#loader.out{opacity:0;visibility:hidden;pointer-events:none}.loader-card{position:relative;width:min(380px,86vw);height:260px;border:1px solid var(--stroke);border-radius:34px;background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(255,255,255,.06));backdrop-filter:blur(28px);box-shadow:var(--shadow);display:grid;place-items:center;transform-style:preserve-3d;animation:cardTilt 2.8s ease-in-out infinite}.loader-ring{position:absolute;width:140px;height:140px;border-radius:50%;border:2px solid transparent;border-top-color:var(--gold);border-right-color:var(--cyan);filter:drop-shadow(0 0 18px rgba(72,230,255,.7));animation:spin 1.4s linear infinite}.loader-ring.r2{width:188px;height:188px;border-top-color:var(--pink);border-left-color:var(--violet);animation-duration:2.1s;animation-direction:reverse}.loader-seal{font-size:3.2rem;transform:translateZ(48px);filter:drop-shadow(0 16px 26px rgba(0,0,0,.45))}.loader-text{position:absolute;bottom:34px;font-family:'Space Grotesk',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.35em;text-transform:uppercase;color:var(--soft)}
+main{position:relative;z-index:1;min-height:100vh;padding:24px clamp(16px,4vw,56px) 60px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:16px;max-width:1180px;margin:0 auto 42px}.back{display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border:1px solid var(--stroke);border-radius:999px;background:rgba(255,255,255,.1);backdrop-filter:blur(18px);box-shadow:0 14px 36px rgba(0,0,0,.22);font-family:'Space Grotesk',sans-serif;font-weight:700;transition:.3s var(--spring)}.back:hover{transform:translateY(-3px) scale(1.03);background:rgba(255,255,255,.18)}.brand{font-family:'Baloo 2',cursive;font-size:1.15rem;font-weight:900;color:var(--gold);text-shadow:0 0 22px rgba(255,211,106,.45)}
+.hero{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr minmax(300px,470px);gap:clamp(28px,5vw,70px);align-items:center}.copy{perspective:1000px}.eyebrow{display:inline-flex;gap:10px;align-items:center;padding:10px 16px;border:1px solid rgba(255,211,106,.36);border-radius:999px;background:rgba(255,211,106,.1);color:var(--gold);font-family:'Space Grotesk',sans-serif;font-size:.72rem;font-weight:800;letter-spacing:.25em;text-transform:uppercase;margin-bottom:24px}.title{font-family:'Baloo 2',cursive;font-weight:900;font-size:clamp(3.2rem,9vw,7.8rem);line-height:.88;letter-spacing:-.06em;background:linear-gradient(120deg,#fff 0%,#ffe8aa 26%,#80f3ff 54%,#ff91d4 82%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 24px 44px rgba(0,0,0,.42))}.subtitle{margin-top:26px;font-size:clamp(1rem,2.4vw,1.35rem);line-height:1.8;color:var(--soft);max-width:650px;font-weight:700}.actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}.cta{display:inline-flex;align-items:center;gap:12px;padding:16px 24px;border-radius:999px;font-family:'Space Grotesk',sans-serif;font-weight:800;border:1px solid var(--stroke);background:linear-gradient(135deg,rgba(255,211,106,.95),rgba(255,102,196,.9));color:#170719;box-shadow:0 18px 50px rgba(255,102,196,.3);transition:.3s var(--spring)}.cta.secondary{background:rgba(255,255,255,.12);color:#fff;box-shadow:0 18px 50px rgba(0,0,0,.2)}.cta:hover{transform:translateY(-5px) scale(1.04)}
+.vault{position:relative;min-height:620px;border:1px solid var(--stroke);border-radius:42px;background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(255,255,255,.07));backdrop-filter:blur(30px);box-shadow:var(--shadow);transform:perspective(1100px) rotateY(-8deg) rotateX(4deg);transform-style:preserve-3d;padding:24px;overflow:hidden}.vault::before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 0 34%,rgba(255,255,255,.24) 42%,transparent 52%);animation:sheen 4s ease-in-out infinite}.certificate-frame{position:relative;z-index:1;height:100%;min-height:572px;border-radius:28px;border:1px solid rgba(255,255,255,.34);background:rgba(255,255,255,.08);overflow:hidden;transform:translateZ(44px);box-shadow:inset 0 0 50px rgba(255,255,255,.06)}.pdf-view{width:100%;height:572px;border:0;background:rgba(255,255,255,.92)}.fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:30px;background:linear-gradient(135deg,rgba(255,255,255,.9),rgba(230,246,255,.82));color:#17203d}.fallback-inner{max-width:320px}.fallback-icon{font-size:4rem}.fallback h2{font-family:'Baloo 2',cursive;font-size:1.8rem;margin:12px 0 6px}.fallback p{font-weight:800;line-height:1.7;color:#44506d}.note{max-width:1180px;margin:44px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.note-card{padding:24px;border:1px solid var(--stroke);border-radius:26px;background:rgba(255,255,255,.1);backdrop-filter:blur(22px);box-shadow:0 20px 52px rgba(0,0,0,.22)}.note-card b{display:block;font-family:'Baloo 2',cursive;color:var(--gold);font-size:1.25rem;margin-bottom:8px}.note-card span{color:var(--soft);font-weight:700;line-height:1.7}@media(max-width:900px){.hero{grid-template-columns:1fr}.vault{transform:none}.note{grid-template-columns:1fr}.topbar{align-items:flex-start}.brand{text-align:right}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes float{50%{transform:translate3d(20px,-34px,0) scale(1.08)}}@keyframes cardTilt{50%{transform:perspective(800px) rotateX(7deg) rotateY(-9deg) translateY(-8px)}}@keyframes sheen{0%,35%{transform:translateX(-90%)}70%,100%{transform:translateX(90%)}}
+</style>
+</head>
+<body>
+<div class="scene" aria-hidden="true"><div class="orb one"></div><div class="orb two"></div><div class="orb three"></div><div class="grid"></div></div>
+<div id="loader"><div class="loader-card"><div class="loader-ring"></div><div class="loader-ring r2"></div><div class="loader-seal">👶🏽</div><div class="loader-text">Opening Certificate Vault</div></div></div>
+<main>
+  <nav class="topbar" aria-label="Birth certificate navigation"><a class="back" href="yokshith.html">← Back to Yokshith</a><div class="brand">Yokshith's Precious Record ✨</div></nav>
+  <section class="hero">
+    <div class="copy">
+      <div class="eyebrow">Birth Certificate · Premium Vault</div>
+      <h1 class="title">Yokshith's Birth Certificate</h1>
+      <p class="subtitle">A beautiful glass-morphism 3D keepsake page for the document that marks the first official chapter of our little superstar's story.</p>
+      <div class="actions"><a class="cta" href="assets/yokshith-birth-certificate.pdf" target="_blank" rel="noopener">📄 Open PDF</a><a class="cta secondary" href="#certificate">💎 View Vault</a></div>
+    </div>
+    <div class="vault" id="certificate" aria-label="Birth certificate PDF preview">
+      <div class="certificate-frame">
+        <object class="pdf-view" data="assets/yokshith-birth-certificate.pdf" type="application/pdf">
+          <div class="fallback"><div class="fallback-inner"><div class="fallback-icon">📜</div><h2>Certificate PDF Ready Slot</h2><p>Upload the birth certificate as <strong>assets/yokshith-birth-certificate.pdf</strong> and it will appear in this premium glass vault automatically.</p></div></div>
+        </object>
+      </div>
+    </div>
+  </section>
+  <section class="note" aria-label="Certificate highlights">
+    <div class="note-card"><b>3D Glass Vault</b><span>Layered blur, neon reflections, and depth transforms frame the certificate with a premium keepsake feel.</span></div>
+    <div class="note-card"><b>PDF Ready</b><span>The page already points to the future uploaded file, so navigation and preview are ready now.</span></div>
+    <div class="note-card"><b>Family Navigation</b><span>A polished back link returns directly to Yokshith's page without breaking the family site flow.</span></div>
+  </section>
+</main>
+<script>
+window.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>document.getElementById('loader').classList.add('out'),1800);});
+</script>
+</body>
+</html>
